@@ -1,0 +1,792 @@
+#!/usr/bin/env python3
+import argparse, os, sys, math, json, re, time
+from contextlib import contextmanager
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Tuple
+from pathlib import Path
+
+import pandas as pd
+import requests
+from openpyxl import load_workbook
+from openpyxl.styles.fills import PatternFill
+
+# ========= Config & constants =========
+
+ARTIFACTS = Path("artifacts"); ARTIFACTS.mkdir(exist_ok=True)
+TIMEOUT = 30
+
+# Track property map (API expects array[int])
+TRACK_PROP_MAP = {
+    "NONE": 1,
+    "REMIX OR DERIVATIVE": 2,
+    "SAMPLES OR STOCK": 3,
+    "MIX OR COMPILATION": 4,
+    "ALTERNATE VERSION": 5,
+    "SPECIAL GENRE": 6,
+    "NON MUSICAL CONTENT": 7,
+    "INCLUDES AI": 8,
+}
+
+# RoleName -> roleId (partial seed for the common ones; we’ll load your full table below)
+ROLE_FALLBACK = {
+    "Primary Artist": 49,
+    "Featuring": 5,
+    "Remixer": 6,
+    "With": 7,
+}
+
+# Fallback language & genre maps (used if API lookup fails)
+LANGUAGE_FALLBACK = {
+    1:"English",2:"Hebrew",3:"French",4:"Afrikaans",5:"Arabic",6:"Bulgarian",8:"Catalan",9:"Croatian",
+    10:"Czech",11:"Danish",12:"Dutch",13:"Estonian",14:"Finnish",15:"German",16:"Greek",17:"Hindi",
+    18:"Hungarian",19:"Icelandic",20:"Indonesian",21:"Italian",22:"Japanese",23:"Kazakh",24:"Korean",
+    25:"Lao",26:"Latvian",27:"Lithuanian",28:"Malay",29:"Norwegian",30:"Polish",31:"Portuguese",
+    32:"Romanian",34:"Russian",35:"Slovak",36:"Slovenian",37:"Spanish",38:"Swedish",39:"Tagalog",
+    40:"Tamil",41:"Telugu",42:"Thai",43:"Turkish",44:"Ukrainian",45:"Urdu",46:"Vietnamese",47:"Zulu",
+    48:"Instrumental",49:"Chinese Simplified",50:"Chinese Traditional",52:"Cantonese",53:"Bengali",
+    54:"Haitian",55:"Irish",56:"Latin",57:"Persian",58:"Punjabi",59:"Sanskrit",60:"Spanish (Latin America)",
+    61:"Amharic",62:"Oromo",63:"Tigrinya",66:"Abkhazian",67:"Afar",68:"Akan",69:"Albanian",70:"Aragonese",
+    71:"Armenian",72:"Assamese",73:"Avaric",74:"Avestan",75:"Aymara",76:"Azerbaijani",77:"Bambara",78:"Bashkir",
+    79:"Basque",80:"Belarusian",81:"Bihari languages",82:"Bislama",83:"Bosnian",84:"Breton",85:"Burmese",
+    86:"Chamorro",87:"Chechen",88:"Chichewa",89:"Chuvash",90:"Cornish",91:"Corsican",92:"Cree",93:"Divehi",
+    94:"Dzongkha",95:"Esperanto",96:"Ewe",97:"Faroese",98:"Fijian",99:"Fulah",100:"Galician",101:"Georgian",
+    102:"Guarani",103:"Gujarati",104:"Hausa",105:"Herero",106:"Hiri Motu",107:"Interlingua",108:"Interlingue",
+    109:"Igbo",110:"Inupiaq",111:"Ido",112:"Inuktitut",113:"Javanese",114:"Kalaallisut",115:"Kannada",116:"Kanuri",
+    117:"Kashmiri",118:"Central Khmer",119:"Kikuyu",120:"Kinyarwanda",121:"Kirghiz",122:"Komi",123:"Kongo",
+    124:"Kurdish",125:"Kuanyama",126:"Luxembourgish",127:"Ganda",128:"Limburgan",129:"Lingala",130:"Luba-Katanga",
+    131:"Manx",132:"Macedonian",133:"Malagasy",134:"Malayalam",135:"Maltese",136:"Maori",137:"Marathi",
+    138:"Marshallese",139:"Mongolian",140:"Nauru",141:"Navajo",142:"North Ndebele",143:"Nepali",144:"Ndonga",
+    145:"Norwegian Bokmål",146:"Norwegian Nynorsk",147:"Sichuan Yi",148:"South Ndebele",149:"Occitan",150:"Ojibwa",
+    151:"Church Slavic",152:"Oromo",153:"Oriya",154:"Ossetian",155:"Pali",156:"Pashto",157:"Quechua",158:"Romansh",
+    159:"Rundi",160:"Sardinian",161:"Sindhi",162:"Northern Sami",163:"Samoan",164:"Sango",165:"Serbian",
+    166:"Gaelic",167:"Shona",168:"Sinhala",169:"Somali",170:"Southern Sotho",171:"Sundanese",172:"Swahili",
+    173:"Swati",174:"Tajik",175:"Tibetan",176:"Turkmen",177:"Tswana",178:"Tonga",179:"Tsonga",180:"Tatar",
+    181:"Twi",182:"Tahitian",183:"Uighur",184:"Uzbek",185:"Venda",186:"Volapük",187:"Walloon",188:"Welsh",
+    189:"Wolof",190:"Western Frisian",191:"Xhosa",192:"Yiddish",193:"Yoruba",194:"Zhuang",195:"Bhojpuri",
+    196:"Haryanvi",197:"Konkani",198:"Rajasthani",199:"Bhojpuri",200:"Haryanvi",201:"Konkani",202:"Rajasthani",
+}
+# inverted name->id
+LANG_NAME_TO_ID_FALLBACK = {v.lower(): k for k,v in LANGUAGE_FALLBACK.items()}
+
+MUSICSTYLE_FALLBACK = {
+    10:"Pop",11:"Rock",12:"Electronic",13:"Reggae",14:"Singer/Songwriter",15:"World",16:"Dance",
+    17:"Salsa y Tropical",18:"Latin",19:"New Age",20:"Holiday",21:"Arabic",22:"Jazz",23:"Children's Music",
+    24:"R&B/Soul",25:"Alternative",26:"Anime",28:"Blues",29:"Brazilian",30:"Chinese",31:"Christian & Gospel",
+    32:"Classical",33:"Comedy",34:"Country",35:"Folk",37:"Fitness & Workout",38:"French Pop",39:"German Folk",
+    40:"German Pop",41:"Hip Hop/Rap",43:"Indian",45:"J-Pop",46:"K-Pop",47:"Karaoke",48:"Korean",49:"Opera",
+    52:"Soundtrack",53:"Vocal",54:"Disney",55:"Easy Listening",56:"Inspirational",57:"Instrumental",
+    58:"Marching Bands",59:"Spoken Word",60:"College Rock",61:"Goth Rock",62:"Grunge",63:"Indie Rock",
+    64:"New Wave",65:"Punk",
+    # (trimmed for brevity; you can paste the full list here if you prefer strict offline fallback)
+}
+MUSICSTYLE_NAME_TO_ID_FALLBACK = {v.lower(): k for k,v in MUSICSTYLE_FALLBACK.items()}
+
+# ========= Helpers =========
+
+class Progress:
+    """Lightweight step tracker for transparent progress & debugging.
+    Usage:
+        progress = Progress()
+        with progress.step("Read sheets") as s:
+            # ... work ...
+            s.info(sheets=9)
+        progress.write_log()
+    """
+    def __init__(self):
+        self.records: List[Dict[str, Any]] = []
+
+    @contextmanager
+    def step(self, name: str):
+        start = time.time()
+        rec: Dict[str, Any] = {"name": name, "status": "running", "start_ts": start}
+        print(f"[STEP] → {name}")
+        class StepCtx:
+            def __init__(self, rec: Dict[str, Any]):
+                self._rec = rec
+            def info(self, **kwargs):
+                self._rec.setdefault("meta", {}).update(kwargs)
+                if kwargs:
+                    kv = ", ".join(f"{k}={v}" for k,v in kwargs.items())
+                    print(f"[INFO] {name}: {kv}")
+        ctx = StepCtx(rec)
+        try:
+            yield ctx
+            rec["status"] = "ok"
+        except Exception as e:
+            rec["status"] = "error"
+            rec["error"] = str(e)
+            raise
+        finally:
+            rec["duration_sec"] = round(time.time() - start, 3)
+            self.records.append(rec)
+            print(f"[STEP] ✓ {name} → {rec['status']} in {rec['duration_sec']}s")
+
+    def write_log(self, path: Path = ARTIFACTS / "run_log.json"):
+        try:
+            path.write_text(json.dumps(self.records, indent=2))
+            print(f"[LOG] Wrote step log to {path.resolve()}")
+        except Exception as e:
+            print(f"[WARN] Failed writing run log: {e}")
+
+def getenv_required(name: str) -> str:
+    v = os.getenv(name)
+    if not v:
+        print(f"[FATAL] Missing env var: {name}")
+        sys.exit(2)
+    return v
+
+def http(session: requests.Session, method: str, url: str, token: str, json_body=None, params=None, headers=None) -> requests.Response:
+    h = {"Authorization": f"Bearer {token}"}
+    if headers: h.update(headers)
+    resp = session.request(method, url, json=json_body, params=params, headers=h, timeout=TIMEOUT)
+    return resp
+
+def yes_no(prompt: str) -> bool:
+    while True:
+        ans = input(f"{prompt} [y/n]: ").strip().lower()
+        if ans in ("y","yes"): return True
+        if ans in ("n","no"): return False
+
+def is_nan(x): 
+    return x is None or (isinstance(x, float) and math.isnan(x)) or (isinstance(x, str) and x.strip()=="")
+
+def norm_bool(x) -> Optional[bool]:
+    if x is None: return None
+    s = str(x).strip().lower()
+    if s in ("1","true","yes","y"): return True
+    if s in ("0","false","no","n"): return False
+    return None
+
+def norm_int(x) -> Optional[int]:
+    if is_nan(x): return None
+    try: return int(float(str(x).strip()))
+    except: return None
+
+def norm_float(x) -> Optional[float]:
+    if is_nan(x): return None
+    try: return float(str(x).strip())
+    except: return None
+
+def norm_str(x) -> Optional[str]:
+    if is_nan(x): return None
+    return str(x).strip()
+
+def parse_header_and_requirements(xlsx_path: str, sheet_name: str) -> Tuple[List[str], Dict[str,bool], int]:
+    """Return (headers, required_map, data_start_row_index). Headers are normalized.
+       required_map[col] = True if REQUIRED FIELD. We check rows 1..4."""
+    wb = load_workbook(xlsx_path, data_only=True)
+    ws = wb[sheet_name]
+    candidate_rows = []
+    for r in range(1,5):
+        titles = [ (ws.cell(row=r, column=c).value, c) for c in range(1, ws.max_column+1) ]
+        nonempty = [t for t in titles if t[0] is not None and str(t[0]).strip()!=""]
+        candidate_rows.append((r, len(nonempty)))
+    # pick the densest non-empty row as header
+    header_row = max(candidate_rows, key=lambda x: x[1])[0]
+    headers = []
+    col_index_map = {}
+    for c in range(1, ws.max_column+1):
+        val = ws.cell(row=header_row, column=c).value
+        headers.append("" if val is None else str(val).strip())
+        col_index_map[c] = headers[-1]
+
+    # requirements row: next row if exists (within first 4 rows)
+    req_row = header_row+1 if header_row < 4 else header_row
+    required = {}
+    for c in range(1, ws.max_column+1):
+        head = col_index_map[c]
+        if not head: continue
+        cell = ws.cell(row=req_row, column=c)
+        txt = str(cell.value).strip().upper() if cell.value else ""
+        # detect fills (yellow/blue) as backup
+        fill: PatternFill = cell.fill
+        is_required = False
+        if "= REQUIRED FIELD" in txt:
+            is_required = True
+        elif "= OPTIONAL FIELD" in txt:
+            is_required = False
+        else:
+            # use color heuristic (pale yellow often 'FFFF00' or variants)
+            fg = getattr(fill, "fgColor", None)
+            rgb = getattr(fg, "rgb", None) if fg else None
+            if rgb:
+                if rgb.startswith("FFFF00") or rgb.endswith("FF00"): # rough heuristic
+                    is_required = True
+        required[head] = is_required
+
+    # data start row: skip header + subheader rows
+    data_start = header_row+2 if header_row < 4 else header_row+1
+    return headers, required, data_start
+
+def df_from_sheet(xlsx_path: str, sheet_name: str) -> Tuple[pd.DataFrame, Dict[str,bool]]:
+    headers, req_map, data_start = parse_header_and_requirements(xlsx_path, sheet_name)
+    df = pd.read_excel(xlsx_path, sheet_name=sheet_name, header=None)
+    # build rename map
+    rename = {}
+    for idx, h in enumerate(headers):
+        if h:
+            rename[idx] = h
+    df = df.iloc[data_start-1:, :]  # pandas 1-index vs 0-index care
+    df = df.rename(columns=rename)
+    # keep only known headers
+    keep_cols = [c for c in df.columns if isinstance(c, str) and c in req_map]
+    df = df[keep_cols]
+    # drop fully empty rows
+    df = df.dropna(how="all")
+    return df.reset_index(drop=True), req_map
+
+def require_columns(df: pd.DataFrame, req_map: Dict[str,bool]) -> List[Tuple[int,str]]:
+    errs = []
+    required_cols = [c for c,req in req_map.items() if req and c in df.columns]
+    for i,row in df.iterrows():
+        for col in required_cols:
+            v = row.get(col, None)
+            if is_nan(v):
+                errs.append((i+2, f"Missing required '{col}'"))
+    return errs
+
+def parse_year_holder(year, holder) -> Optional[str]:
+    y = norm_int(year); h = norm_str(holder)
+    if y and h: return f"{y} {h}"
+    return None
+
+def resolve_language_id(name: Optional[str], session: requests.Session, base_url: str, token: str) -> Optional[int]:
+    if not name: return None
+    try:
+        resp = http(session, "GET", f"{base_url}/common/lookup/languages", token)
+        if resp.ok:
+            items = resp.json()
+            for it in items:
+                if it.get("name","").strip().lower() == name.strip().lower():
+                    return int(it.get("languageId"))
+    except Exception:
+        pass
+    return LANG_NAME_TO_ID_FALLBACK.get(name.strip().lower())
+
+def resolve_musicstyle_id(name: Optional[str], session: requests.Session, base_url: str, token: str) -> Optional[int]:
+    if not name: return None
+    try:
+        resp = http(session, "GET", f"{base_url}/common/lookup/musicstyles", token)
+        if resp.ok:
+            items = resp.json()
+            for it in items:
+                if it.get("name","").strip().lower() == name.strip().lower():
+                    return int(it.get("musicStyleId"))
+    except Exception:
+        pass
+    return MUSICSTYLE_NAME_TO_ID_FALLBACK.get(name.strip().lower())
+
+def ingest_image_by_url(url: str, session: requests.Session, base_url: str, token: str) -> Optional[Dict[str,Any]]:
+    if not url: return None
+    # If Revelator has image pull-by-URL, use it; else, just store the URL in dry-run.
+    # Placeholder: assuming upload by URL-like endpoint isn’t public; we keep URL in dry-run and return mock structure.
+    return {"fileId": None, "filename": os.path.basename(url), "sourceUrl": url}
+
+def ingest_audio_by_url(url: str, filetype: str, session: requests.Session, base_url: str, token: str, live: bool) -> Optional[Dict[str,Any]]:
+    if not url: return None
+    fmt = (filetype or "").strip().upper()
+    fileFormat = {"WAV":1, "FLAC":2, "MP3":3}.get(fmt)
+    # If a pull-external audio endpoint exists, call it here. Otherwise, dry-run structure:
+    return {"audioId": None, "audioFilename": os.path.basename(url), "fileFormat": fileFormat}
+
+def map_track_properties(row: Dict[str,Any]) -> Optional[List[int]]:
+    # Columns are like 'REMIX or \nDERIVATIVE' etc. Normalize keys to upper and strip whitespace.
+    labels = [
+        "REMIX OR DERIVATIVE","SAMPLES OR STOCK","MIX OR COMPILATION","ALTERNATE VERSION",
+        "SPECIAL GENRE","NON MUSICAL CONTENT","INCLUDES AI","NONE APPLY"
+    ]
+    set_ids = []
+    any_true = False
+    for lab in labels:
+        v = row.get(lab) or row.get(lab.replace("  "," "))
+        v = norm_bool(v)
+        if v:
+            any_true = True
+            key = lab.upper()
+            if key == "NONE APPLY":
+                set_ids = [1]  # exclusive
+                break
+            # add mapped
+            set_ids.append(TRACK_PROP_MAP[key])
+    if not any_true:
+        return None
+    # dedupe & sort
+    return sorted(set(set_ids))
+
+# ========= Main pipeline =========
+
+def main():
+    parser = argparse.ArgumentParser(description="Catalog spreadsheet parser (dry-run first).")
+    parser.add_argument("xlsx", help="Path to the XLSX")
+    parser.add_argument("--base-url", default=os.getenv("REVELATOR_BASE_URL", "https://api.revelator.com"))
+    parser.add_argument("--token", default=os.getenv("REVELATOR_TOKEN", ""))
+    parser.add_argument("--live", action="store_true", help="Execute HTTP calls (otherwise dry-run)")
+    parser.add_argument("--role-map", default="roles.json", help="JSON file with RoleName->roleId mapping (optional).")
+    args = parser.parse_args()
+
+    token = args.token or getenv_required("REVELATOR_TOKEN")
+    base_url = args.base_url.rstrip("/")
+
+    # ---- Enterprise/Tenant prompt & validation
+    print("Before we start, please provide target account identifiers.")
+    ent = input("EnterpriseId: ").strip()
+    ten = input("TenantId: ").strip()
+    if not ent.isdigit() or not ten.isdigit():
+        print("[FATAL] EnterpriseId and TenantId must be integers.")
+        sys.exit(2)
+    enterpriseId = int(ent); tenantId = int(ten)
+
+    with requests.Session() as session:
+        progress = Progress()
+
+        # Validate enterprise
+        with progress.step("Validate enterprise") as s:
+            r = http(session, "GET", f"{base_url}/enterprise/clients/{enterpriseId}", token)
+            if not r.ok:
+                print(f"[FATAL] Enterprise check failed ({r.status_code}): {r.text[:500]}")
+                sys.exit(2)
+            ent_info = r.json()
+            name = ent_info.get("name","?")
+            s.info(enterpriseId=enterpriseId, tenantId=tenantId, enterpriseName=name)
+            print(f"Resolved EnterpriseId={enterpriseId} → name='{name}'")
+            if not yes_no("Proceed ingesting catalog for this enterprise?"):
+                print("Aborting as requested.")
+                sys.exit(0)
+
+        # Load role map
+        with progress.step("Load role map") as s:
+            role_map = ROLE_FALLBACK.copy()
+            if Path(args.role_map).exists():
+                try:
+                    role_map.update(json.loads(Path(args.role_map).read_text()))
+                except Exception:
+                    print("[WARN] Could not parse roles.json, using fallback map only.")
+            s.info(roles=len(role_map))
+
+        # ===== Read sheets
+        xlsx_path = args.xlsx
+
+        s1 = "1) Artists list"
+        s2 = "2) Labels list"
+        s3 = "3) Release_Label"
+        s4 = "4) Release_Artist(s)"
+        s5 = "5) Release_Track"
+        s6 = "6) Track_Artist(s)"
+        s7 = "7) Comp ContributorPublisher li"
+        s8 = "8) Track_Composition(s)"
+        s9 = "9) Audio_Properties"
+
+        with progress.step("Read sheets") as s:
+            try:
+                df_art, req_art = df_from_sheet(xlsx_path, s1)
+                df_lab, req_lab = df_from_sheet(xlsx_path, s2)
+                df_rel, req_rel = df_from_sheet(xlsx_path, s3)
+                df_relart, req_relart = df_from_sheet(xlsx_path, s4)
+                df_reltrk, req_reltrk = df_from_sheet(xlsx_path, s5)
+                df_trkart, req_trkart = df_from_sheet(xlsx_path, s6)
+                df_comp_masters, req_comp_masters = df_from_sheet(xlsx_path, s7)
+                df_trkcomp, req_trkcomp = df_from_sheet(xlsx_path, s8)
+                df_props, req_props = df_from_sheet(xlsx_path, s9)
+            except KeyError as e:
+                print(f"[FATAL] Sheet not found: {e}")
+                raise
+            s.info(artists=len(df_art), labels=len(df_lab), releases=len(df_rel), rel_artists=len(df_relart), rel_tracks=len(df_reltrk), track_artists=len(df_trkart), comps=len(df_trkcomp), props=len(df_props))
+
+        # ===== Preflight validations
+        report: List[Dict[str,Any]] = []
+
+        # Required-field checks (yellow)
+        for name, df, req in [
+            (s1, df_art, req_art),
+            (s2, df_lab, req_lab),
+            (s3, df_rel, req_rel),
+            (s4, df_relart, req_relart),
+            (s5, df_reltrk, req_reltrk),
+            (s6, df_trkart, req_trkart),
+            (s7, df_comp_masters, req_comp_masters),
+            (s8, df_trkcomp, req_trkcomp),
+            (s9, df_props, req_props),
+        ]:
+            errs = require_columns(df, req)
+            for rownum, msg in errs:
+                report.append({"sheet": name, "row": rownum, "error": msg})
+
+        # Cross-tab keys & integrity
+        # Releases must have UPC / EAN / JAN (join key), Tracks must have ISRC/vISRC
+        def expect_col(df, name):
+            return name in df.columns
+
+        UPC_COL = "UPC / EAN / JAN"
+        ISRC_COL = "ISRC/vISRC"
+
+        if expect_col(df_rel, UPC_COL):
+            for i,rw in df_rel.iterrows():
+                if is_nan(rw.get(UPC_COL)):
+                    report.append({"sheet": s3, "row": i+2, "error": "Missing release key 'UPC / EAN / JAN'"})
+
+        if expect_col(df_reltrk, UPC_COL) and expect_col(df_reltrk, ISRC_COL):
+            # also check track order is present
+            for i,rw in df_reltrk.iterrows():
+                if is_nan(rw.get(UPC_COL)):
+                    report.append({"sheet": s5, "row": i+2, "error": "Release_Track missing UPC to join Release"})
+                if is_nan(rw.get(ISRC_COL)):
+                    report.append({"sheet": s5, "row": i+2, "error": "Release_Track missing ISRC/vISRC"})
+
+        if expect_col(df_trkcomp, ISRC_COL) and ("SHARE%" in df_trkcomp.columns):
+            # shares sum to 100 by (ISRC)
+            by_isrc = {}
+            for i,rw in df_trkcomp.iterrows():
+                isrc = norm_str(rw.get(ISRC_COL))
+                share_s = norm_str(rw.get("SHARE%"))
+                share = None
+                try:
+                    share = float(share_s) if share_s is not None else None
+                except:
+                    pass
+                if isrc and share is not None:
+                    by_isrc.setdefault(isrc, 0.0)
+                    by_isrc[isrc] += share
+            for isrc, total in by_isrc.items():
+                if abs(total - 100.0) > 1e-6:
+                    report.append({"sheet": s8, "row": "-", "error": f"Composition shares for ISRC {isrc} sum to {total}, expected 100"})
+
+        # Property conflicts
+        if expect_col(df_props, ISRC_COL):
+            for i,rw in df_props.iterrows():
+                arr = map_track_properties(rw.to_dict())
+                if arr and 1 in arr and len(arr)>1:
+                    report.append({"sheet": s9, "row": i+2, "error": "Track properties: 'None' cannot be combined with other flags"})
+
+        # Stop if any blocking issues
+        with progress.step("Preflight validations") as s:
+            s.info(issues=len(report))
+            if report:
+                out = ARTIFACTS / "preflight_report.json"
+                out.write_text(json.dumps(report, indent=2))
+                print(f"[BLOCKED] Preflight failed with {len(report)} issue(s). See {out.resolve()}")
+                progress.write_log()
+                sys.exit(1)
+
+        # ===== Build master maps (Artists, Labels, Composers, Publishers)
+        # Artists
+        with progress.step("Build artists & labels & master entities") as s:
+            artists_payload = []
+            artist_name_to_obj = {}
+            for i,rw in df_art.iterrows():
+                name = norm_str(rw.get("Artist Name"))
+                if not name: continue
+                img_url = norm_str(rw.get("Artist Image url"))
+                apple = norm_str(rw.get("Apple ArtistId"))
+                spotify = norm_str(rw.get("Spotify Artist URI"))
+                meta = norm_str(rw.get("Meta ArtistId"))
+                sc = norm_str(rw.get("SoundCloud ProfileId"))
+                ext = []
+                if apple: ext.append({"distributorStoreId":1, "profileId":apple})
+                if spotify: ext.append({"distributorStoreId":9, "profileId":spotify})
+                if sc: ext.append({"distributorStoreId":68, "profileId":sc})
+                if meta: ext.append({"distributorStoreId":309, "profileId":meta})
+                img = ingest_image_by_url(img_url, session, base_url, token) if img_url else None
+                payload = {"name": name}
+                if ext: payload["artistExternalIds"] = ext
+                if img: payload["image"] = {"fileId": img["fileId"], "filename": img["filename"]}
+                artists_payload.append(payload)
+                artist_name_to_obj[name.lower()] = payload
+
+        # Labels
+            labels_payload = []
+            label_name_to_id = {}
+            for i,rw in df_lab.iterrows():
+                lname = norm_str(rw.get("Label Name"))
+                if not lname: continue
+                labels_payload.append({"name": lname})
+
+        # Publishers & Composers
+            publishers_payload = []
+            composers_payload = []
+            pub_names = set(); comp_names = set()
+            if "Publisher Name" in df_comp_masters.columns:
+                for _,rw in df_comp_masters.iterrows():
+                    pn = norm_str(rw.get("Publisher Name"))
+                    if pn and pn.lower() not in pub_names:
+                        publishers_payload.append({"name": pn}); pub_names.add(pn.lower())
+            if "Composition Contributor" in df_comp_masters.columns:
+                for _,rw in df_comp_masters.iterrows():
+                    cn = norm_str(rw.get("Composition Contributor"))
+                    if cn and cn.lower() not in comp_names:
+                        composers_payload.append({"name": cn}); comp_names.add(cn.lower())
+            s.info(artists=len(artists_payload), labels=len(labels_payload), publishers=len(publishers_payload), composers=len(composers_payload))
+
+        # ===== Releases & Tracks
+        with progress.step("Build releases") as s:
+            releases_payload = []
+            tracks_payload = []  # list of (release_key, payload)
+            upc_dupes_logged = []
+
+            for i,rw in df_rel.iterrows():
+                upc = norm_str(rw.get(UPC_COL))
+                title = norm_str(rw.get("RELEASE TITLE"))
+                version = norm_str(rw.get("RELEASE VERSION"))
+                title_lang = norm_str(rw.get("TITLE LANGUAGE"))
+                img_url = norm_str(rw.get("COVER IMAGE URL"))
+                p_year = rw.get("(P) Copyright Year"); p_holder = rw.get("(P) Copyright Holder")
+                c_year = rw.get("(C) Copyright Year"); c_holder = rw.get("(C) Copyright Holder")
+                p_line = parse_year_holder(p_year, p_holder)
+                c_line = parse_year_holder(c_year, c_holder)
+                g1 = norm_str(rw.get("GENRE 1")); g2 = norm_str(rw.get("GENRE 2"))
+                label_name = norm_str(rw.get("LABEL"))
+
+                lang_id = resolve_language_id(title_lang, session, base_url, token)
+                g1_id = resolve_musicstyle_id(g1, session, base_url, token)
+                g2_id = resolve_musicstyle_id(g2, session, base_url, token)
+
+                img = ingest_image_by_url(img_url, session, base_url, token) if img_url else None
+                rel = {
+                    "name": title, "version": version,
+                    "previouslyReleased": bool(norm_str(rw.get("ORIGINAL\nRELEASE DATE"))),
+                    "releaseDate": norm_str(rw.get("ORIGINAL\nRELEASE DATE")),
+                }
+                if upc: rel["upc"] = upc
+                if p_line: rel["copyrightP"] = p_line
+                if c_line: rel["copyrightC"] = c_line
+                if lang_id: rel.setdefault("releaseLocals", []).append({"languageId": lang_id, "name": title})
+                if g1_id: rel["primaryMusicStyleId"] = g1_id
+                if g2_id: rel["secondaryMusicStyleId"] = g2_id
+                if label_name:
+                    rel["hasRecordLabel"] = True
+                    rel["labelName"] = label_name
+                if img:
+                    rel["image"] = {"fileId": img["fileId"], "filename": img["filename"]}
+                releases_payload.append(rel)
+            s.info(releases=len(releases_payload))
+
+        # Release contributors
+        with progress.step("Parse release contributors") as s:
+            release_contribs_by_upc: Dict[str,List[Dict[str,Any]]] = {}
+            if UPC_COL in df_relart.columns and "ARTIST" in df_relart.columns and "ARTIST ROLE" in df_relart.columns:
+                for _,rw in df_relart.iterrows():
+                    upc = norm_str(rw.get(UPC_COL)); artist = norm_str(rw.get("ARTIST")); role = norm_str(rw.get("ARTIST ROLE"))
+                    if not upc or not artist or not role: continue
+                    rid = role_map.get(role, None)
+                    if rid is None:
+                        print(f"[WARN] Unknown role '{role}' for release UPC {upc}")
+                        continue
+                    release_contribs_by_upc.setdefault(upc, []).append({
+                        "artistName": artist, "roleId": rid
+                    })
+            total = sum(len(v) for v in release_contribs_by_upc.values())
+            s.info(contributors=total)
+
+        # Tracks (by Release_Track)
+        with progress.step("Build tracks from Release_Track") as s:
+            track_rows = []
+            for _,rw in df_reltrk.iterrows():
+                upc = norm_str(rw.get(UPC_COL)); isrc = norm_str(rw.get(ISRC_COL))
+                if not upc or not isrc: continue
+                t_title = norm_str(rw.get("TRACK TITLE")); t_version = norm_str(rw.get("TRACK VERSION"))
+                lang = norm_str(rw.get("LANGUAGE OF LYRICS"))
+                explicit = norm_bool(rw.get("EXPLICIT"))
+                ttype = norm_str(rw.get("TYPE"))
+                ttype_id = {"original":1,"cover":2,"public domain":3}.get((ttype or "").strip().lower())
+                audio_url = norm_str(rw.get("AUDIO FILE URL")); audio_type = norm_str(rw.get("AUDIO TYPE"))
+                preview = norm_int(rw.get("TRACK PREVIEW"))
+                trknum = norm_int(rw.get("TRACK"))  # track number
+                lang_id = resolve_language_id(lang, session, base_url, token)
+
+                audio = ingest_audio_by_url(audio_url, audio_type, session, base_url, token, args.live) if audio_url else None
+                track = {
+                    "name": t_title,
+                    "version": t_version,
+                    "languageId": lang_id,
+                    "explicit": explicit,
+                    "trackType": ttype_id,
+                    "trackNumber": trknum,
+                    "previewStartSeconds": preview,
+                    "trackRecordingVersions": [{
+                        "isrc": isrc,
+                        "audioFiles": ([{"audioId": audio["audioId"], "audioFilename": audio["audioFilename"], "fileFormat": audio["fileFormat"]}] if audio else [])
+                    }]
+                }
+                track_rows.append((upc, isrc, track))
+            s.info(tracks=len(track_rows))
+
+        # Track contributors
+        with progress.step("Parse track contributors") as s:
+            track_contribs_by_isrc: Dict[str,List[Dict[str,Any]]] = {}
+            if ISRC_COL in df_trkart.columns and "ARTIST" in df_trkart.columns and "ARTIST ROLE" in df_trkart.columns:
+                for _,rw in df_trkart.iterrows():
+                    isrc = norm_str(rw.get(ISRC_COL)); artist = norm_str(rw.get("ARTIST")); role = norm_str(rw.get("ARTIST ROLE"))
+                    if not isrc or not artist or not role: continue
+                    rid = role_map.get(role, None)
+                    if rid is None:
+                        print(f"[WARN] Unknown role '{role}' for track ISRC {isrc}")
+                        continue
+                    track_contribs_by_isrc.setdefault(isrc, []).append({
+                        "artistName": artist, "roleId": rid
+                    })
+            total = sum(len(v) for v in track_contribs_by_isrc.values())
+            s.info(contributors=total)
+
+        # Track compositions
+        with progress.step("Parse track compositions") as s:
+            trk_comp_by_isrc: Dict[str,List[Dict[str,Any]]] = {}
+            for _,rw in df_trkcomp.iterrows():
+                isrc = norm_str(rw.get(ISRC_COL)); comp = norm_str(rw.get("COMPOSITION CONTRIBUTOR"))
+                role = norm_str(rw.get("ROLE")); share_s = norm_str(rw.get("SHARE%"))
+                rights = norm_str(rw.get("PUBLISHING")); publisher = norm_str(rw.get("PUBLISHER"))
+                if not isrc or not comp or not role or not share_s: continue
+                # share remains string for API, but we validated numerically earlier
+                rightsId = None
+                if rights:
+                    rs = rights.strip().lower()
+                    if rs in ("copyright control","self-published","self published","1","yes (self)"): rightsId = 1
+                    elif rs in ("published","2","yes (publisher)"): rightsId = 2
+                    elif rs in ("public domain","3","no publisher"): rightsId = 3
+                entry = {"composerName": comp, "roleName": role, "share": share_s}
+                if rightsId: entry["rightsId"] = rightsId
+                if rightsId == 2 and publisher:
+                    entry["publisherName"] = publisher
+                trk_comp_by_isrc.setdefault(isrc, []).append(entry)
+            total = sum(len(v) for v in trk_comp_by_isrc.values())
+            s.info(compositions=total)
+
+        # Track properties
+        with progress.step("Parse track properties") as s:
+            props_by_isrc: Dict[str,List[int]] = {}
+            for _,rw in df_props.iterrows():
+                isrc = norm_str(rw.get(ISRC_COL))
+                if not isrc: continue
+                arr = map_track_properties(rw.to_dict())
+                if arr: props_by_isrc[isrc] = arr
+            s.info(with_properties=len(props_by_isrc))
+
+        # Attach contributors/compositions/properties
+        with progress.step("Attach track contributors/compositions/properties") as s:
+            for idx,(upc,isrc,track) in enumerate(track_rows):
+                # Contributors
+                if isrc in track_contribs_by_isrc:
+                    applied = []
+                    for c in track_contribs_by_isrc[isrc]:
+                        applied.append({"roleId": c["roleId"], "artist": {"name": c["artistName"]}})
+                    if applied:
+                        track["contributors"] = applied
+                # Compositions
+                if isrc in trk_comp_by_isrc:
+                    comp_out = []
+                    for cc in trk_comp_by_isrc[isrc]:
+                        item = {
+                            "share": str(cc["share"]),
+                            "roleName": cc["roleName"],
+                            "composer": {"name": cc["composerName"]}
+                        }
+                        if "rightsId" in cc: item["rightsId"] = cc["rightsId"]
+                        if "publisherName" in cc: item["publisher"] = {"name": cc["publisherName"]}
+                        comp_out.append(item)
+                    if comp_out:
+                        track["composerContentsDTO"] = comp_out
+                # Properties
+                if isrc in props_by_isrc:
+                    track["trackProperties"] = props_by_isrc[isrc]
+                tracks_payload.append((upc, track))
+            s.info(tracks=len(tracks_payload))
+
+        # Attach release contributors
+        with progress.step("Attach release contributors") as s:
+            for rel in releases_payload:
+                upc = rel.get("upc")
+                if not upc: continue
+                if upc in release_contribs_by_upc:
+                    applied = []
+                    for c in release_contribs_by_upc[upc]:
+                        applied.append({"roleId": c["roleId"], "artist": {"name": c["artistName"]}})
+                    if applied:
+                        rel["contributors"] = applied
+            s.info(releases=len(releases_payload))
+
+        # ===== Emit dry-run artifacts
+        with progress.step("Write dry-run artifacts") as s:
+            (ARTIFACTS/"artists.json").write_text(json.dumps(artists_payload, indent=2, ensure_ascii=False))
+            (ARTIFACTS/"labels.json").write_text(json.dumps(labels_payload, indent=2, ensure_ascii=False))
+            (ARTIFACTS/"publishers.json").write_text(json.dumps(publishers_payload, indent=2, ensure_ascii=False))
+            (ARTIFACTS/"composers.json").write_text(json.dumps(composers_payload, indent=2, ensure_ascii=False))
+            (ARTIFACTS/"releases.json").write_text(json.dumps(releases_payload, indent=2, ensure_ascii=False))
+            (ARTIFACTS/"tracks.json").write_text(json.dumps([{"upc": u, **t} for u,t in tracks_payload], indent=2, ensure_ascii=False))
+            s.info(artists=len(artists_payload), labels=len(labels_payload), publishers=len(publishers_payload), composers=len(composers_payload), releases=len(releases_payload), tracks=len(tracks_payload))
+            print(f"[OK] Dry-run artifacts written under {ARTIFACTS.resolve()}")
+
+        if not args.live:
+            progress.write_log()
+            print("Dry-run complete. Re-run with --live to execute API calls.")
+            return
+
+        # ===== Live execution (upserts + creation)
+        headers_common = {
+            "X-EnterpriseId": str(enterpriseId),
+            "X-TenantId": str(tenantId),
+        }
+
+        def create_simple_list(items, url_path):
+            created = 0; failed = 0
+            for it in items:
+                resp = http(session, "POST", f"{base_url}{url_path}", token, json_body=it, headers=headers_common)
+                if not resp.ok:
+                    failed += 1
+                    print(f"[WARN] POST {url_path} failed {resp.status_code}: {resp.text[:300]}")
+                else:
+                    created += 1
+            return created, failed
+
+        # Masters
+        with progress.step("Create masters (artists/labels/publishers/composers)") as s:
+            a_ok, a_fail = create_simple_list(artists_payload, "/artists")
+            l_ok, l_fail = create_simple_list(labels_payload, "/content/label/save")
+            p_ok, p_fail = create_simple_list(publishers_payload, "/content/publisher/save")
+            c_ok, c_fail = create_simple_list(composers_payload, "/content/composer/save")
+            s.info(artists_ok=a_ok, artists_fail=a_fail, labels_ok=l_ok, labels_fail=l_fail, publishers_ok=p_ok, publishers_fail=p_fail, composers_ok=c_ok, composers_fail=c_fail)
+
+        # Releases (with UPC duplicate handling)
+        with progress.step("Create releases") as s:
+            upc_to_release_id: Dict[str,str] = {}
+            rel_created = 0; rel_failed = 0
+            for rel in releases_payload:
+                body = dict(rel)  # copy
+                url = f"{base_url}/content/release/save"
+                resp = http(session, "POST", url, token, json_body=body, headers=headers_common)
+                if not resp.ok:
+                    txt = (resp.text or "").lower()
+                    # If duplicate UPC error → retry without upc and log
+                    if "upc" in txt and ("exist" in txt or "duplicate" in txt or resp.status_code in (400,409)):
+                        upc_val = body.pop("upc", None)
+                        upc_dupes_logged.append(upc_val)
+                        print(f"[INFO] UPC '{upc_val}' appears to exist; retrying without UPC as requested.")
+                        resp = http(session, "POST", url, token, json_body=body, headers=headers_common)
+                if not resp.ok:
+                    rel_failed += 1
+                    print(f"[ERROR] Release create failed {resp.status_code}: {resp.text[:300]}")
+                else:
+                    rel_created += 1
+                    rid = resp.json().get("releaseId")
+                    if rel.get("upc"): upc_to_release_id[rel["upc"]] = rid
+            s.info(created=rel_created, failed=rel_failed)
+
+        # Tracks per release
+        with progress.step("Create tracks") as s:
+            t_created = 0; t_failed = 0
+            for upc, track in tracks_payload:
+                # If we know releaseId, include association if API needs it; otherwise the endpoint may infer.
+                t_resp = http(session, "POST", f"{base_url}/content/track/save", token, json_body=track, headers=headers_common)
+                if not t_resp.ok:
+                    t_failed += 1
+                    print(f"[ERROR] Track create failed {t_resp.status_code}: {t_resp.text[:300]}")
+                else:
+                    t_created += 1
+            s.info(created=t_created, failed=t_failed)
+
+        if upc_dupes_logged:
+            (ARTIFACTS/"upc_skipped_for_duplicates.json").write_text(json.dumps(upc_dupes_logged, indent=2))
+            print(f"[INFO] UPCs skipped (already existed): {len(upc_dupes_logged)} → logged to upc_skipped_for_duplicates.json")
+
+        progress.write_log()
+        print("[DONE] Live execution finished.")
+
+if __name__ == "__main__":
+    main()
