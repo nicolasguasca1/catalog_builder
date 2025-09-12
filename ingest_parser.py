@@ -9,6 +9,7 @@ import pandas as pd
 import requests
 from openpyxl import load_workbook
 from openpyxl.styles.fills import PatternFill
+from roles import roles_dict
 
 # ========= Config & constants =========
 
@@ -27,13 +28,8 @@ TRACK_PROP_MAP = {
     "INCLUDES AI": 8,
 }
 
-# RoleName -> roleId (partial seed for the common ones; we’ll load your full table below)
-ROLE_FALLBACK = {
-    "Primary Artist": 49,
-    "Featuring": 5,
-    "Remixer": 6,
-    "With": 7,
-}
+# Build a name->id role map from roles.py (case-insensitive)
+ROLE_FALLBACK = { (str(v).strip().lower()): k for k, v in roles_dict.items() }
 
 # Fallback language & genre maps (used if API lookup fails)
 LANGUAGE_FALLBACK = {
@@ -169,36 +165,36 @@ def norm_float(x) -> Optional[float]:
 
 def norm_str(x) -> Optional[str]:
     if is_nan(x): return None
-    return str(x).strip()
+    s = str(x)
+    # normalize non-breaking spaces and collapse runs of whitespace
+    s = s.replace("\u00A0", " ")
+    s = re.sub(r"\s+", " ", s)
+    s = s.strip()
+    return s if s != "" else None
 
 def parse_header_and_requirements(xlsx_path: str, sheet_name: str) -> Tuple[List[str], Dict[str,bool], int]:
-    """Return (headers, required_map, data_start_row_index). Headers are normalized.
-       required_map[col] = True if REQUIRED FIELD. We check rows 1..4."""
+    """Return (headers, required_map, data_start_row_index) using row 3 as headers and row 4 for notes.
+       required_map[col] = True if REQUIRED FIELD (based on text or fill heuristics)."""
     wb = load_workbook(xlsx_path, data_only=True)
     ws = wb[sheet_name]
-    candidate_rows = []
-    for r in range(1,5):
-        titles = [ (ws.cell(row=r, column=c).value, c) for c in range(1, ws.max_column+1) ]
-        nonempty = [t for t in titles if t[0] is not None and str(t[0]).strip()!=""]
-        candidate_rows.append((r, len(nonempty)))
-    # pick the densest non-empty row as header
-    header_row = max(candidate_rows, key=lambda x: x[1])[0]
-    headers = []
-    col_index_map = {}
+    header_row = 3
+    req_row = 4
+    data_start = 5
+    headers: List[str] = []
+    col_index_map: Dict[int, str] = {}
     for c in range(1, ws.max_column+1):
         val = ws.cell(row=header_row, column=c).value
-        headers.append("" if val is None else str(val).strip())
-        col_index_map[c] = headers[-1]
+        head = "" if val is None else str(val).strip()
+        headers.append(head)
+        col_index_map[c] = head
 
-    # requirements row: next row if exists (within first 4 rows)
-    req_row = header_row+1 if header_row < 4 else header_row
-    required = {}
+    required: Dict[str, bool] = {}
     for c in range(1, ws.max_column+1):
         head = col_index_map[c]
-        if not head: continue
+        if not head:
+            continue
         cell = ws.cell(row=req_row, column=c)
         txt = str(cell.value).strip().upper() if cell.value else ""
-        # detect fills (yellow/blue) as backup
         fill: PatternFill = cell.fill
         is_required = False
         if "= REQUIRED FIELD" in txt:
@@ -206,16 +202,15 @@ def parse_header_and_requirements(xlsx_path: str, sheet_name: str) -> Tuple[List
         elif "= OPTIONAL FIELD" in txt:
             is_required = False
         else:
-            # use color heuristic (pale yellow often 'FFFF00' or variants)
             fg = getattr(fill, "fgColor", None)
             rgb = getattr(fg, "rgb", None) if fg else None
-            if rgb:
-                if rgb.startswith("FFFF00") or rgb.endswith("FF00"): # rough heuristic
-                    is_required = True
+            if rgb and (rgb.startswith("FFFF00") or rgb.endswith("FF00")):
+                is_required = True
         required[head] = is_required
 
-    # data start row: skip header + subheader rows
-    data_start = header_row+2 if header_row < 4 else header_row+1
+    # stash meta inside req map for logging later
+    required["_header_row_value"] = header_row
+    required["_data_start_value"] = data_start
     return headers, required, data_start
 
 def df_from_sheet(xlsx_path: str, sheet_name: str) -> Tuple[pd.DataFrame, Dict[str,bool]]:
@@ -226,13 +221,17 @@ def df_from_sheet(xlsx_path: str, sheet_name: str) -> Tuple[pd.DataFrame, Dict[s
     for idx, h in enumerate(headers):
         if h:
             rename[idx] = h
-    df = df.iloc[data_start-1:, :]  # pandas 1-index vs 0-index care
+    # Force data to start at row 5 per template (rows 1-4 are fixed header/subheaders)
+    effective_start = 5
+    df = df.iloc[effective_start-1:, :]  # pandas 1-index vs 0-index care
     df = df.rename(columns=rename)
     # keep only known headers
     keep_cols = [c for c in df.columns if isinstance(c, str) and c in req_map]
     df = df[keep_cols]
     # drop fully empty rows
     df = df.dropna(how="all")
+    # stash effective start for logging
+    req_map["_effective_data_start"] = effective_start
     return df.reset_index(drop=True), req_map
 
 def require_columns(df: pd.DataFrame, req_map: Dict[str,bool]) -> List[Tuple[int,str]]:
@@ -290,28 +289,99 @@ def ingest_audio_by_url(url: str, filetype: str, session: requests.Session, base
     return {"audioId": None, "audioFilename": os.path.basename(url), "fileFormat": fileFormat}
 
 def map_track_properties(row: Dict[str,Any]) -> Optional[List[int]]:
-    # Columns are like 'REMIX or \nDERIVATIVE' etc. Normalize keys to upper and strip whitespace.
+    # Normalize incoming row keys: collapse whitespace/newlines, uppercase
+    def norm_key(k: str) -> str:
+        return COLSPACE_RE.sub(" ", str(k or "").strip()).upper()
+
+    row_norm = {norm_key(k): v for k, v in row.items()}
+
     labels = [
         "REMIX OR DERIVATIVE","SAMPLES OR STOCK","MIX OR COMPILATION","ALTERNATE VERSION",
-        "SPECIAL GENRE","NON MUSICAL CONTENT","INCLUDES AI","NONE APPLY"
+        "SPECIAL GENRE","NON MUSICAL CONTENT","INCLUDES AI","NONE APPLY","NONE"
     ]
-    set_ids = []
+    set_ids: List[int] = []
     any_true = False
     for lab in labels:
-        v = row.get(lab) or row.get(lab.replace("  "," "))
+        v = row_norm.get(norm_key(lab))
         v = norm_bool(v)
         if v:
             any_true = True
             key = lab.upper()
-            if key == "NONE APPLY":
+            if key in ("NONE APPLY", "NONE"):
                 set_ids = [1]  # exclusive
                 break
-            # add mapped
-            set_ids.append(TRACK_PROP_MAP[key])
+            # add mapped (TRACK_PROP_MAP keys are already normalized)
+            set_ids.append(TRACK_PROP_MAP[key if key != "NONE APPLY" else "NONE"])
     if not any_true:
         return None
     # dedupe & sort
     return sorted(set(set_ids))
+
+# Column name normalization (case + whitespace resilient)
+COLSPACE_RE = re.compile(r"[\s_]+")
+def norm_colkey(s: str) -> str:
+    return COLSPACE_RE.sub(" ", (s or "").strip()).lower()
+
+# Build a map of normalized column names to real names
+def make_colmap(df: pd.DataFrame) -> Dict[str,str]:
+    return {norm_colkey(c): c for c in df.columns if isinstance(c, str)}
+
+def has_col(df: pd.DataFrame, *names: str) -> bool:
+    cmap = make_colmap(df)
+    return any(norm_colkey(n) in cmap for n in names)
+
+def get_val(row: pd.Series, cmap: Dict[str,str], *names: str):
+    for n in names:
+        col = cmap.get(norm_colkey(n))
+        if col is not None:
+            return row.get(col)
+    return None
+
+# Resolve a column by trying exact normalized name then token-based partial match
+TOK_RE = re.compile(r"[a-z0-9]+")
+def _tokens(s: str) -> List[str]:
+    return TOK_RE.findall(norm_colkey(s))
+
+def resolve_colkey(df: pd.DataFrame, *candidates: str) -> Optional[str]:
+    if df is None or df.empty:
+        return None
+    cmap = make_colmap(df)
+    # Exact first
+    for n in candidates:
+        col = cmap.get(norm_colkey(n))
+        if col is not None:
+            return col
+    # Token containment fallback
+    cand_tokens = [(n, set(_tokens(n))) for n in candidates]
+    best: Tuple[float, Optional[str]] = (0.0, None)
+    for norm_name, real in cmap.items():
+        real_tokens = set(_tokens(real))
+        for name, toks in cand_tokens:
+            if not toks:
+                continue
+            # score: fraction of target tokens present in real col
+            inter = len(toks & real_tokens)
+            score = inter / len(toks)
+            if score == 1.0:  # all tokens present
+                # prefer the candidate with most tokens matched (tie by real length)
+                weight = (len(toks), len(real_tokens))
+                # encode into a float while preserving ordering; simpler keep best by score then token count
+                if score > best[0] or (score == best[0] and len(toks) > 0):
+                    best = (score, real)
+    return best[1]
+
+def first_nonempty(df: pd.DataFrame, col: Optional[str]) -> Optional[str]:
+    if not col or col not in df.columns:
+        return None
+    for v in df[col].tolist():
+        nv = norm_str(v)
+        if nv is not None:
+            return nv
+    return None
+
+def resolve_and_peek(df: pd.DataFrame, *candidates: str) -> Tuple[Optional[str], Optional[str]]:
+    col = resolve_colkey(df, *candidates)
+    return col, first_nonempty(df, col)
 
 # ========= Main pipeline =========
 
@@ -355,10 +425,22 @@ def main():
 
         # Load role map
         with progress.step("Load role map") as s:
+            # ROLE_FALLBACK is name->id from roles.py
             role_map = ROLE_FALLBACK.copy()
             if Path(args.role_map).exists():
                 try:
-                    role_map.update(json.loads(Path(args.role_map).read_text()))
+                    file_map = json.loads(Path(args.role_map).read_text())
+                    if isinstance(file_map, dict):
+                        # Accept both name->id and id->name; normalize to name->id
+                        normalized: Dict[str,int] = {}
+                        for k,v in file_map.items():
+                            if isinstance(k, str) and isinstance(v, int):
+                                nm = (norm_str(k) or "").lower()
+                                if nm: normalized[nm] = v
+                            elif isinstance(k, (int, float)) and isinstance(v, str):
+                                nm = (norm_str(v) or "").lower()
+                                if nm: normalized[nm] = int(k)
+                        role_map.update(normalized)
                 except Exception:
                     print("[WARN] Could not parse roles.json, using fallback map only.")
             s.info(roles=len(role_map))
@@ -390,7 +472,53 @@ def main():
             except KeyError as e:
                 print(f"[FATAL] Sheet not found: {e}")
                 raise
-            s.info(artists=len(df_art), labels=len(df_lab), releases=len(df_rel), rel_artists=len(df_relart), rel_tracks=len(df_reltrk), track_artists=len(df_trkart), comps=len(df_trkcomp), props=len(df_props))
+            # capture header/data start from req maps
+            def meta(req):
+                return {
+                    "header_row": req.get("_header_row_value"),
+                    "data_start": req.get("_data_start_value"),
+                    "effective_start": 5,
+                }
+            # Column peeks: show the first data point found under key columns
+            art_name_col, art_name_first = resolve_and_peek(df_art, "Artist Name", "ARTIST NAME", "Artist")
+            lab_name_col, lab_name_first = resolve_and_peek(df_lab, "Label Name", "LABEL NAME", "Label")
+            upc_rel_col, upc_rel_first = resolve_and_peek(df_rel, "UPC / EAN / JAN")
+            upc_reltrk_col, upc_reltrk_first = resolve_and_peek(df_reltrk, "UPC / EAN / JAN")
+            isrc_reltrk_col, isrc_reltrk_first = resolve_and_peek(df_reltrk, "ISRC/vISRC")
+            isrc_trkart_col, isrc_trkart_first = resolve_and_peek(df_trkart, "ISRC/vISRC")
+            artist_trkart_col, artist_trkart_first = resolve_and_peek(df_trkart, "ARTIST")
+            role_trkart_col, role_trkart_first = resolve_and_peek(df_trkart, "ARTIST ROLE")
+            isrc_trkcomp_col, isrc_trkcomp_first = resolve_and_peek(df_trkcomp, "ISRC/vISRC")
+            comp_trkcomp_col, comp_trkcomp_first = resolve_and_peek(df_trkcomp, "COMPOSITION CONTRIBUTOR")
+            share_trkcomp_col, share_trkcomp_first = resolve_and_peek(df_trkcomp, "SHARE%")
+            isrc_props_col, isrc_props_first = resolve_and_peek(df_props, "ISRC/vISRC")
+            s.info(
+                artists=len(df_art), labels=len(df_lab), releases=len(df_rel), rel_artists=len(df_relart), rel_tracks=len(df_reltrk), track_artists=len(df_trkart), comps=len(df_trkcomp), props=len(df_props),
+                artists_meta=meta(req_art), labels_meta=meta(req_lab), releases_meta=meta(req_rel),
+                peek={
+                    "artists": {"col": art_name_col, "first": art_name_first},
+                    "labels": {"col": lab_name_col, "first": lab_name_first},
+                    "releases": {"upc_col": upc_rel_col, "first_upc": upc_rel_first},
+                    "rel_tracks": {"upc_col": upc_reltrk_col, "first_upc": upc_reltrk_first, "isrc_col": isrc_reltrk_col, "first_isrc": isrc_reltrk_first},
+                    "track_artists": {"isrc_col": isrc_trkart_col, "first_isrc": isrc_trkart_first, "artist_col": artist_trkart_col, "first_artist": artist_trkart_first, "role_col": role_trkart_col, "first_role": role_trkart_first},
+                    "track_comps": {"isrc_col": isrc_trkcomp_col, "first_isrc": isrc_trkcomp_first, "comp_col": comp_trkcomp_col, "first_comp": comp_trkcomp_first, "share_col": share_trkcomp_col, "first_share": share_trkcomp_first},
+                    "props": {"isrc_col": isrc_props_col, "first_isrc": isrc_props_first}
+                }
+            )
+
+            # Dump headers snapshot for debugging
+            headers_snapshot = {
+                s1: {"raw": list(df_art.columns), "norm": [norm_colkey(c) for c in df_art.columns]},
+                s2: {"raw": list(df_lab.columns), "norm": [norm_colkey(c) for c in df_lab.columns]},
+                s3: {"raw": list(df_rel.columns), "norm": [norm_colkey(c) for c in df_rel.columns]},
+                s4: {"raw": list(df_relart.columns), "norm": [norm_colkey(c) for c in df_relart.columns]},
+                s5: {"raw": list(df_reltrk.columns), "norm": [norm_colkey(c) for c in df_reltrk.columns]},
+                s6: {"raw": list(df_trkart.columns), "norm": [norm_colkey(c) for c in df_trkart.columns]},
+                s7: {"raw": list(df_comp_masters.columns), "norm": [norm_colkey(c) for c in df_comp_masters.columns]},
+                s8: {"raw": list(df_trkcomp.columns), "norm": [norm_colkey(c) for c in df_trkcomp.columns]},
+                s9: {"raw": list(df_props.columns), "norm": [norm_colkey(c) for c in df_props.columns]},
+            }
+            (ARTIFACTS/"headers.json").write_text(json.dumps(headers_snapshot, indent=2, ensure_ascii=False))
 
         # ===== Preflight validations
         report: List[Dict[str,Any]] = []
@@ -414,47 +542,54 @@ def main():
         # Cross-tab keys & integrity
         # Releases must have UPC / EAN / JAN (join key), Tracks must have ISRC/vISRC
         def expect_col(df, name):
-            return name in df.columns
+            return has_col(df, name)
 
         UPC_COL = "UPC / EAN / JAN"
         ISRC_COL = "ISRC/vISRC"
 
         if expect_col(df_rel, UPC_COL):
-            for i,rw in df_rel.iterrows():
-                if is_nan(rw.get(UPC_COL)):
+            cm_rel = make_colmap(df_rel)
+            for i, rw in df_rel.iterrows():
+                if is_nan(get_val(rw, cm_rel, UPC_COL)):
                     report.append({"sheet": s3, "row": i+2, "error": "Missing release key 'UPC / EAN / JAN'"})
 
         if expect_col(df_reltrk, UPC_COL) and expect_col(df_reltrk, ISRC_COL):
+            cm_reltrk = make_colmap(df_reltrk)
             # also check track order is present
-            for i,rw in df_reltrk.iterrows():
-                if is_nan(rw.get(UPC_COL)):
+            for i, rw in df_reltrk.iterrows():
+                if is_nan(get_val(rw, cm_reltrk, UPC_COL)):
                     report.append({"sheet": s5, "row": i+2, "error": "Release_Track missing UPC to join Release"})
-                if is_nan(rw.get(ISRC_COL)):
+                if is_nan(get_val(rw, cm_reltrk, ISRC_COL)):
                     report.append({"sheet": s5, "row": i+2, "error": "Release_Track missing ISRC/vISRC"})
 
-        if expect_col(df_trkcomp, ISRC_COL) and ("SHARE%" in df_trkcomp.columns):
-            # shares sum to 100 by (ISRC)
-            by_isrc = {}
-            for i,rw in df_trkcomp.iterrows():
-                isrc = norm_str(rw.get(ISRC_COL))
-                share_s = norm_str(rw.get("SHARE%"))
+        if expect_col(df_trkcomp, ISRC_COL) and has_col(df_trkcomp, "SHARE%"):
+            # shares sum to 100 by (ISRC) or 1.0 when decimal representation is used
+            cm_trkcomp = make_colmap(df_trkcomp)
+            by_isrc: Dict[str, float] = {}
+            for i, rw in df_trkcomp.iterrows():
+                isrc = norm_str(get_val(rw, cm_trkcomp, ISRC_COL))
+                share_s = norm_str(get_val(rw, cm_trkcomp, "SHARE%"))
                 share = None
                 try:
                     share = float(share_s) if share_s is not None else None
-                except:
+                except Exception:
                     pass
                 if isrc and share is not None:
-                    by_isrc.setdefault(isrc, 0.0)
-                    by_isrc[isrc] += share
+                    by_isrc[isrc] = by_isrc.get(isrc, 0.0) + share
             for isrc, total in by_isrc.items():
-                if abs(total - 100.0) > 1e-6:
-                    report.append({"sheet": s8, "row": "-", "error": f"Composition shares for ISRC {isrc} sum to {total}, expected 100"})
+                # Accept either 100-based or decimal-based totals (1.0 == 100%)
+                tol = 1e-3
+                ok_100 = abs(total - 100.0) <= tol
+                ok_1 = abs(total - 1.0) <= tol
+                if not (ok_100 or ok_1):
+                    report.append({"sheet": s8, "row": "-", "error": f"Composition shares for ISRC {isrc} sum to {total}, expected ~100 or ~1.0"})
 
         # Property conflicts
         if expect_col(df_props, ISRC_COL):
-            for i,rw in df_props.iterrows():
+            cm_props = make_colmap(df_props)
+            for i, rw in df_props.iterrows():
                 arr = map_track_properties(rw.to_dict())
-                if arr and 1 in arr and len(arr)>1:
+                if arr and 1 in arr and len(arr) > 1:
                     report.append({"sheet": s9, "row": i+2, "error": "Track properties: 'None' cannot be combined with other flags"})
 
         # Stop if any blocking issues
@@ -470,16 +605,37 @@ def main():
         # ===== Build master maps (Artists, Labels, Composers, Publishers)
         # Artists
         with progress.step("Build artists & labels & master entities") as s:
+            cm_art = make_colmap(df_art)
+            # Try robust resolution of the artist name column with several aliases
+            art_name_col = resolve_colkey(
+                df_art,
+                "Artist Name", "ARTIST NAME", "Artist",
+                "Artist Full Name", "ArtistName", "Name"
+            )
+            # Ultimate fallback: choose the first column whose header contains 'artist' and 'name' tokens
+            if not art_name_col:
+                for c in df_art.columns:
+                    if isinstance(c, str):
+                        key = norm_colkey(c)
+                        if "artist" in key and ("name" in key or key.endswith("artist")):
+                            art_name_col = c
+                            break
+            if not art_name_col:
+                print("[WARN] Could not resolve 'Artist Name' column; artist list may be empty.")
             artists_payload = []
             artist_name_to_obj = {}
+            dropped_art_missing_name = 0
             for i,rw in df_art.iterrows():
-                name = norm_str(rw.get("Artist Name"))
-                if not name: continue
-                img_url = norm_str(rw.get("Artist Image url"))
-                apple = norm_str(rw.get("Apple ArtistId"))
-                spotify = norm_str(rw.get("Spotify Artist URI"))
-                meta = norm_str(rw.get("Meta ArtistId"))
-                sc = norm_str(rw.get("SoundCloud ProfileId"))
+                # fallback: use resolved column if present
+                name = norm_str(rw.get(art_name_col)) if art_name_col else norm_str(get_val(rw, cm_art, "Artist Name", "ARTIST NAME", "Artist"))
+                if not name:
+                    dropped_art_missing_name += 1
+                    continue
+                img_url = norm_str(get_val(rw, cm_art, "Artist Image url", "Artist Image URL"))
+                apple = norm_str(get_val(rw, cm_art, "Apple ArtistId"))
+                spotify = norm_str(get_val(rw, cm_art, "Spotify Artist URI"))
+                meta = norm_str(get_val(rw, cm_art, "Meta ArtistId"))
+                sc = norm_str(get_val(rw, cm_art, "SoundCloud ProfileId", "SoundCloud Profile ID"))
                 ext = []
                 if apple: ext.append({"distributorStoreId":1, "profileId":apple})
                 if spotify: ext.append({"distributorStoreId":9, "profileId":spotify})
@@ -493,47 +649,78 @@ def main():
                 artist_name_to_obj[name.lower()] = payload
 
         # Labels
+            cm_lab = make_colmap(df_lab)
+            lab_name_col = resolve_colkey(df_lab, "Label Name", "LABEL NAME", "Label")
             labels_payload = []
             label_name_to_id = {}
+            dropped_lab_missing_name = 0
             for i,rw in df_lab.iterrows():
-                lname = norm_str(rw.get("Label Name"))
-                if not lname: continue
+                lname = norm_str(rw.get(lab_name_col)) if lab_name_col else norm_str(get_val(rw, cm_lab, "Label Name", "LABEL NAME", "Label"))
+                if not lname:
+                    dropped_lab_missing_name += 1
+                    continue
                 labels_payload.append({"name": lname})
 
         # Publishers & Composers
+            cm_cm = make_colmap(df_comp_masters)
+            pub_col = resolve_colkey(df_comp_masters, "Publisher Name", "PUBLISHER NAME", "Publisher")
+            comp_col = resolve_colkey(df_comp_masters, "Composition Contributor", "COMPOSITION CONTRIBUTOR", "Contributor")
             publishers_payload = []
             composers_payload = []
             pub_names = set(); comp_names = set()
-            if "Publisher Name" in df_comp_masters.columns:
-                for _,rw in df_comp_masters.iterrows():
-                    pn = norm_str(rw.get("Publisher Name"))
+            if pub_col:
+                for _, rw in df_comp_masters.iterrows():
+                    pn = norm_str(rw.get(pub_col))
                     if pn and pn.lower() not in pub_names:
                         publishers_payload.append({"name": pn}); pub_names.add(pn.lower())
-            if "Composition Contributor" in df_comp_masters.columns:
-                for _,rw in df_comp_masters.iterrows():
-                    cn = norm_str(rw.get("Composition Contributor"))
+            if comp_col:
+                for _, rw in df_comp_masters.iterrows():
+                    cn = norm_str(rw.get(comp_col))
                     if cn and cn.lower() not in comp_names:
                         composers_payload.append({"name": cn}); comp_names.add(cn.lower())
-            s.info(artists=len(artists_payload), labels=len(labels_payload), publishers=len(publishers_payload), composers=len(composers_payload))
+            # Include small samples in the log for quick visibility
+            art_samples = []
+            if art_name_col:
+                for i in range(min(3, len(df_art))):
+                    art_samples.append(norm_str(df_art.iloc[i].get(art_name_col)))
+            lab_samples = []
+            if lab_name_col:
+                for i in range(min(3, len(df_lab))):
+                    lab_samples.append(norm_str(df_lab.iloc[i].get(lab_name_col)))
+            pub_samples = []
+            if pub_col:
+                for i in range(min(3, len(df_comp_masters))):
+                    pub_samples.append(norm_str(df_comp_masters.iloc[i].get(pub_col)))
+            comp_samples = []
+            if comp_col:
+                for i in range(min(3, len(df_comp_masters))):
+                    comp_samples.append(norm_str(df_comp_masters.iloc[i].get(comp_col)))
+            s.info(
+                artists=len(artists_payload), labels=len(labels_payload), publishers=len(publishers_payload), composers=len(composers_payload),
+                artists_seen=len(df_art), labels_seen=len(df_lab), dropped_art_missing_name=dropped_art_missing_name, dropped_lab_missing_name=dropped_lab_missing_name,
+                artist_name_col=art_name_col, label_name_col=lab_name_col, publisher_col=pub_col, composer_col=comp_col,
+                artist_samples=art_samples, label_samples=lab_samples, publisher_samples=pub_samples, composer_samples=comp_samples
+            )
 
         # ===== Releases & Tracks
         with progress.step("Build releases") as s:
+            cm_rel = make_colmap(df_rel)
             releases_payload = []
             tracks_payload = []  # list of (release_key, payload)
             upc_dupes_logged = []
 
             for i,rw in df_rel.iterrows():
-                upc = norm_str(rw.get(UPC_COL))
-                title = norm_str(rw.get("RELEASE TITLE"))
-                version = norm_str(rw.get("RELEASE VERSION"))
-                title_lang = norm_str(rw.get("TITLE LANGUAGE"))
-                img_url = norm_str(rw.get("COVER IMAGE URL"))
+                upc = norm_str(get_val(rw, cm_rel, UPC_COL))
+                title = norm_str(get_val(rw, cm_rel, "RELEASE TITLE"))
+                version = norm_str(get_val(rw, cm_rel, "RELEASE VERSION"))
+                title_lang = norm_str(get_val(rw, cm_rel, "TITLE LANGUAGE"))
+                img_url = norm_str(get_val(rw, cm_rel, "COVER IMAGE URL", "COVER IMAGE url"))
                 p_year = rw.get("(P) Copyright Year"); p_holder = rw.get("(P) Copyright Holder")
                 c_year = rw.get("(C) Copyright Year"); c_holder = rw.get("(C) Copyright Holder")
                 p_line = parse_year_holder(p_year, p_holder)
                 c_line = parse_year_holder(c_year, c_holder)
-                g1 = norm_str(rw.get("GENRE 1")); g2 = norm_str(rw.get("GENRE 2"))
-                label_name = norm_str(rw.get("LABEL"))
+                g1 = norm_str(get_val(rw, cm_rel, "GENRE 1")); g2 = norm_str(get_val(rw, cm_rel, "GENRE 2"))
+                label_name = norm_str(get_val(rw, cm_rel, "LABEL", "Label Name", "LABEL NAME"))
 
                 lang_id = resolve_language_id(title_lang, session, base_url, token)
                 g1_id = resolve_musicstyle_id(g1, session, base_url, token)
@@ -542,8 +729,8 @@ def main():
                 img = ingest_image_by_url(img_url, session, base_url, token) if img_url else None
                 rel = {
                     "name": title, "version": version,
-                    "previouslyReleased": bool(norm_str(rw.get("ORIGINAL\nRELEASE DATE"))),
-                    "releaseDate": norm_str(rw.get("ORIGINAL\nRELEASE DATE")),
+                    "previouslyReleased": bool(norm_str(get_val(rw, cm_rel, "ORIGINAL RELEASE DATE", "ORIGINAL\nRELEASE DATE"))),
+                    "releaseDate": norm_str(get_val(rw, cm_rel, "ORIGINAL RELEASE DATE", "ORIGINAL\nRELEASE DATE")),
                 }
                 if upc: rel["upc"] = upc
                 if p_line: rel["copyrightP"] = p_line
@@ -557,16 +744,24 @@ def main():
                 if img:
                     rel["image"] = {"fileId": img["fileId"], "filename": img["filename"]}
                 releases_payload.append(rel)
-            s.info(releases=len(releases_payload))
+            sample_releases = []
+            for i in range(min(3, len(releases_payload))):
+                rr = releases_payload[i]
+                sample_releases.append({k: rr.get(k) for k in ("name","version","upc","labelName")})
+            s.info(releases=len(releases_payload), sample_releases=sample_releases)
 
         # Release contributors
         with progress.step("Parse release contributors") as s:
+            cm_relart = make_colmap(df_relart)
             release_contribs_by_upc: Dict[str,List[Dict[str,Any]]] = {}
-            if UPC_COL in df_relart.columns and "ARTIST" in df_relart.columns and "ARTIST ROLE" in df_relart.columns:
+            if has_col(df_relart, UPC_COL) and has_col(df_relart, "ARTIST") and has_col(df_relart, "ARTIST ROLE"):
                 for _,rw in df_relart.iterrows():
-                    upc = norm_str(rw.get(UPC_COL)); artist = norm_str(rw.get("ARTIST")); role = norm_str(rw.get("ARTIST ROLE"))
-                    if not upc or not artist or not role: continue
-                    rid = role_map.get(role, None)
+                    upc = norm_str(get_val(rw, cm_relart, UPC_COL))
+                    artist = norm_str(get_val(rw, cm_relart, "ARTIST"))
+                    role = norm_str(get_val(rw, cm_relart, "ARTIST ROLE"))
+                    if not upc or not artist or not role:
+                        continue
+                    rid = role_map.get((role or '').strip().lower(), None)
                     if rid is None:
                         print(f"[WARN] Unknown role '{role}' for release UPC {upc}")
                         continue
@@ -574,22 +769,26 @@ def main():
                         "artistName": artist, "roleId": rid
                     })
             total = sum(len(v) for v in release_contribs_by_upc.values())
-            s.info(contributors=total)
+            sample_rel_contribs = []
+            for upc, arr in list(release_contribs_by_upc.items())[:2]:
+                sample_rel_contribs.append({"upc": upc, "first": arr[0] if arr else None})
+            s.info(contributors=total, sample=sample_rel_contribs)
 
         # Tracks (by Release_Track)
         with progress.step("Build tracks from Release_Track") as s:
+            cm_reltrk = make_colmap(df_reltrk)
             track_rows = []
             for _,rw in df_reltrk.iterrows():
-                upc = norm_str(rw.get(UPC_COL)); isrc = norm_str(rw.get(ISRC_COL))
+                upc = norm_str(get_val(rw, cm_reltrk, UPC_COL)); isrc = norm_str(get_val(rw, cm_reltrk, ISRC_COL))
                 if not upc or not isrc: continue
-                t_title = norm_str(rw.get("TRACK TITLE")); t_version = norm_str(rw.get("TRACK VERSION"))
-                lang = norm_str(rw.get("LANGUAGE OF LYRICS"))
-                explicit = norm_bool(rw.get("EXPLICIT"))
-                ttype = norm_str(rw.get("TYPE"))
+                t_title = norm_str(get_val(rw, cm_reltrk, "TRACK TITLE")); t_version = norm_str(get_val(rw, cm_reltrk, "TRACK VERSION"))
+                lang = norm_str(get_val(rw, cm_reltrk, "LANGUAGE OF LYRICS", "LANGUAGE"))
+                explicit = norm_bool(get_val(rw, cm_reltrk, "EXPLICIT"))
+                ttype = norm_str(get_val(rw, cm_reltrk, "TYPE"))
                 ttype_id = {"original":1,"cover":2,"public domain":3}.get((ttype or "").strip().lower())
-                audio_url = norm_str(rw.get("AUDIO FILE URL")); audio_type = norm_str(rw.get("AUDIO TYPE"))
-                preview = norm_int(rw.get("TRACK PREVIEW"))
-                trknum = norm_int(rw.get("TRACK"))  # track number
+                audio_url = norm_str(get_val(rw, cm_reltrk, "AUDIO FILE URL")); audio_type = norm_str(get_val(rw, cm_reltrk, "AUDIO TYPE"))
+                preview = norm_int(get_val(rw, cm_reltrk, "TRACK PREVIEW", "PREVIEW START"))
+                trknum = norm_int(get_val(rw, cm_reltrk, "TRACK", "TRACK #", "TRACK NUMBER"))  # track number
                 lang_id = resolve_language_id(lang, session, base_url, token)
 
                 audio = ingest_audio_by_url(audio_url, audio_type, session, base_url, token, args.live) if audio_url else None
@@ -607,16 +806,24 @@ def main():
                     }]
                 }
                 track_rows.append((upc, isrc, track))
-            s.info(tracks=len(track_rows))
+            sample_tracks = []
+            for i in range(min(3, len(track_rows))):
+                upc,isrc,track = track_rows[i]
+                sample_tracks.append({"upc": upc, "isrc": isrc, "name": track.get("name"), "trackNumber": track.get("trackNumber")})
+            s.info(tracks=len(track_rows), sample_tracks=sample_tracks)
 
         # Track contributors
         with progress.step("Parse track contributors") as s:
+            cm_trkart = make_colmap(df_trkart)
             track_contribs_by_isrc: Dict[str,List[Dict[str,Any]]] = {}
-            if ISRC_COL in df_trkart.columns and "ARTIST" in df_trkart.columns and "ARTIST ROLE" in df_trkart.columns:
+            if has_col(df_trkart, ISRC_COL) and has_col(df_trkart, "ARTIST") and has_col(df_trkart, "ARTIST ROLE"):
                 for _,rw in df_trkart.iterrows():
-                    isrc = norm_str(rw.get(ISRC_COL)); artist = norm_str(rw.get("ARTIST")); role = norm_str(rw.get("ARTIST ROLE"))
-                    if not isrc or not artist or not role: continue
-                    rid = role_map.get(role, None)
+                    isrc = norm_str(get_val(rw, cm_trkart, ISRC_COL))
+                    artist = norm_str(get_val(rw, cm_trkart, "ARTIST"))
+                    role = norm_str(get_val(rw, cm_trkart, "ARTIST ROLE"))
+                    if not isrc or not artist or not role:
+                        continue
+                    rid = role_map.get((role or '').strip().lower(), None)
                     if rid is None:
                         print(f"[WARN] Unknown role '{role}' for track ISRC {isrc}")
                         continue
@@ -624,15 +831,19 @@ def main():
                         "artistName": artist, "roleId": rid
                     })
             total = sum(len(v) for v in track_contribs_by_isrc.values())
-            s.info(contributors=total)
+            sample_trk_contribs = []
+            for isrc, arr in list(track_contribs_by_isrc.items())[:2]:
+                sample_trk_contribs.append({"isrc": isrc, "first": arr[0] if arr else None})
+            s.info(contributors=total, sample=sample_trk_contribs)
 
         # Track compositions
         with progress.step("Parse track compositions") as s:
+            cm_trkcomp = make_colmap(df_trkcomp)
             trk_comp_by_isrc: Dict[str,List[Dict[str,Any]]] = {}
             for _,rw in df_trkcomp.iterrows():
-                isrc = norm_str(rw.get(ISRC_COL)); comp = norm_str(rw.get("COMPOSITION CONTRIBUTOR"))
-                role = norm_str(rw.get("ROLE")); share_s = norm_str(rw.get("SHARE%"))
-                rights = norm_str(rw.get("PUBLISHING")); publisher = norm_str(rw.get("PUBLISHER"))
+                isrc = norm_str(get_val(rw, cm_trkcomp, ISRC_COL)); comp = norm_str(get_val(rw, cm_trkcomp, "COMPOSITION CONTRIBUTOR"))
+                role = norm_str(get_val(rw, cm_trkcomp, "ROLE")); share_s = norm_str(get_val(rw, cm_trkcomp, "SHARE%"))
+                rights = norm_str(get_val(rw, cm_trkcomp, "PUBLISHING")); publisher = norm_str(get_val(rw, cm_trkcomp, "PUBLISHER"))
                 if not isrc or not comp or not role or not share_s: continue
                 # share remains string for API, but we validated numerically earlier
                 rightsId = None
@@ -647,17 +858,26 @@ def main():
                     entry["publisherName"] = publisher
                 trk_comp_by_isrc.setdefault(isrc, []).append(entry)
             total = sum(len(v) for v in trk_comp_by_isrc.values())
-            s.info(compositions=total)
+            sample_comps = []
+            for isrc, arr in list(trk_comp_by_isrc.items())[:2]:
+                sample_comps.append({"isrc": isrc, "first": arr[0] if arr else None})
+            s.info(compositions=total, sample=sample_comps)
 
         # Track properties
         with progress.step("Parse track properties") as s:
+            cm_props = make_colmap(df_props)
             props_by_isrc: Dict[str,List[int]] = {}
-            for _,rw in df_props.iterrows():
-                isrc = norm_str(rw.get(ISRC_COL))
-                if not isrc: continue
+            for _, rw in df_props.iterrows():
+                isrc = norm_str(get_val(rw, cm_props, ISRC_COL))
+                if not isrc: 
+                    continue
                 arr = map_track_properties(rw.to_dict())
-                if arr: props_by_isrc[isrc] = arr
-            s.info(with_properties=len(props_by_isrc))
+                if arr:
+                    props_by_isrc[isrc] = arr
+            sample_props = []
+            for isrc, arr in list(props_by_isrc.items())[:2]:
+                sample_props.append({"isrc": isrc, "props": arr})
+            s.info(with_properties=len(props_by_isrc), sample=sample_props)
 
         # Attach contributors/compositions/properties
         with progress.step("Attach track contributors/compositions/properties") as s:
@@ -724,12 +944,21 @@ def main():
             "X-TenantId": str(tenantId),
         }
 
+        http_errors: List[Dict[str, Any]] = []
         def create_simple_list(items, url_path):
             created = 0; failed = 0
             for it in items:
                 resp = http(session, "POST", f"{base_url}{url_path}", token, json_body=it, headers=headers_common)
                 if not resp.ok:
                     failed += 1
+                    err = {
+                        "when": "create_simple_list",
+                        "path": url_path,
+                        "status": resp.status_code,
+                        "request": {k: it.get(k) for k in ("name","upc") if k in it},
+                        "response": (resp.text or "")[:1000]
+                    }
+                    http_errors.append(err)
                     print(f"[WARN] POST {url_path} failed {resp.status_code}: {resp.text[:300]}")
                 else:
                     created += 1
@@ -761,6 +990,12 @@ def main():
                         resp = http(session, "POST", url, token, json_body=body, headers=headers_common)
                 if not resp.ok:
                     rel_failed += 1
+                    http_errors.append({
+                        "when": "create_release",
+                        "status": resp.status_code,
+                        "request": {k: rel.get(k) for k in ("name","upc","labelName") if k in rel},
+                        "response": (resp.text or "")[:1500]
+                    })
                     print(f"[ERROR] Release create failed {resp.status_code}: {resp.text[:300]}")
                 else:
                     rel_created += 1
@@ -776,6 +1011,12 @@ def main():
                 t_resp = http(session, "POST", f"{base_url}/content/track/save", token, json_body=track, headers=headers_common)
                 if not t_resp.ok:
                     t_failed += 1
+                    http_errors.append({
+                        "when": "create_track",
+                        "status": t_resp.status_code,
+                        "request": {k: track.get(k) for k in ("name","version","trackNumber") if k in track},
+                        "response": (t_resp.text or "")[:1500]
+                    })
                     print(f"[ERROR] Track create failed {t_resp.status_code}: {t_resp.text[:300]}")
                 else:
                     t_created += 1
@@ -784,6 +1025,10 @@ def main():
         if upc_dupes_logged:
             (ARTIFACTS/"upc_skipped_for_duplicates.json").write_text(json.dumps(upc_dupes_logged, indent=2))
             print(f"[INFO] UPCs skipped (already existed): {len(upc_dupes_logged)} → logged to upc_skipped_for_duplicates.json")
+
+        if http_errors:
+            (ARTIFACTS/"http_errors.json").write_text(json.dumps(http_errors, indent=2, ensure_ascii=False))
+            print(f"[LOG] Wrote HTTP error details to {(ARTIFACTS/ 'http_errors.json').resolve()}")
 
         progress.write_log()
         print("[DONE] Live execution finished.")

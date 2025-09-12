@@ -1,0 +1,86 @@
+{
+  "artists": {
+    "resolved_name_col": null,
+    "rows": [
+      {
+        "row": 2,
+        "name": null,
+        "raw": {
+          "2": "Spotify Artist URI",
+          "List all Artists to Import": "Artist Image url",
+          "0": null,
+          "EnterpriseId=": "Duplicate Names",
+          "414849.0": null,
+          "SELECT * FROM Artists where EntId=414849": null
+        }
+      },
+      {
+        "row": 3,
+        "name": null,
+        "raw": {
+          "2": "Enter Artist's Spotify URI link \nor 'NEW'=new Spotify URI link",
+          "List all Artists to Import": "public URL triggering DIRECT DOWNLOAD of file",
+          "0": null,
+          "EnterpriseId=": 0,
+          "414849.0": null,
+          "SELECT * FROM Artists where EntId=414849": null
+        }
+      }
+    ]
+  },
+  "labels": {
+    "resolved_name_col": null,
+    "rows": [
+      {
+        "row": 2,
+        "name": null,
+        "raw": {
+          "List all Labels to Import": "Label Name",
+          "2": 0
+        }
+      },
+      {
+        "row": 3,
+        "name": null,
+        "raw": {
+          "List all Labels to Import": "Written EXACTLY\nas per label copy",
+          "2": null
+        }
+      }
+    ]
+  },
+  "composers_publishers": {
+    "resolved_cols": {
+      "publisher": null,
+      "composer": null
+    },
+    "rows": [
+      {
+        "row": 2,
+        "publisher": null,
+        "composer": null,
+        "raw": {
+          "List all Composition Parties to Import": "Composition Contributor",
+          "2": 0,
+          "List all Compostion Publishers to Import": "Publisher Name",
+          "0": 0,
+          "select * from Composers where EnterpriseId=414849": null,
+          "select * from Publishers where EnterpriseId=414849": null
+        }
+      },
+      {
+        "row": 3,
+        "publisher": null,
+        "composer": null,
+        "raw": {
+          "List all Composition Parties to Import": "Must be a person's LEGAL NAME \n(first and last name)",
+          "2": null,
+          "List all Compostion Publishers to Import": "Only publishers that manage compositions.\nDo not include publishers that are self-publishing.",
+          "0": null,
+          "select * from Composers where EnterpriseId=414849": null,
+          "select * from Publishers where EnterpriseId=414849": null
+        }
+      }
+    ]
+  }
+}

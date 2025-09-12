@@ -1,0 +1,210 @@
+{
+  "1) Artists list": {
+    "raw": [
+      "Artist Name",
+      "Artist Image url",
+      "Apple ArtistId",
+      "Spotify Artist URI",
+      "Meta ArtistId",
+      "SoundCloud ProfileId",
+      "Duplicate Names"
+    ],
+    "norm": [
+      "artist name",
+      "artist image url",
+      "apple artistid",
+      "spotify artist uri",
+      "meta artistid",
+      "soundcloud profileid",
+      "duplicate names"
+    ]
+  },
+  "2) Labels list": {
+    "raw": [
+      "Label Name",
+      "0"
+    ],
+    "norm": [
+      "label name",
+      "0"
+    ]
+  },
+  "3) Release_Label": {
+    "raw": [
+      "LABEL",
+      "COVER IMAGE URL",
+      "IMAGE TYPE",
+      "UPC / EAN / JAN",
+      "CATALOG RELEASE ID",
+      "RELEASE TITLE",
+      "TITLE LANGUAGE",
+      "RELEASE VERSION",
+      "RELEASE TYPE",
+      "(P) Copyright",
+      "(C) Copyright",
+      "ORIGINAL\nRELEASE DATE",
+      "GENRE 1",
+      "GENRE 2"
+    ],
+    "norm": [
+      "label",
+      "cover image url",
+      "image type",
+      "upc / ean / jan",
+      "catalog release id",
+      "release title",
+      "title language",
+      "release version",
+      "release type",
+      "(p) copyright",
+      "(c) copyright",
+      "original release date",
+      "genre 1",
+      "genre 2"
+    ]
+  },
+  "4) Release_Artist(s)": {
+    "raw": [
+      "UPC / EAN / JAN",
+      "CATALOG RELEASE ID",
+      "RELEASE TITLE",
+      "RELEASE VERSION",
+      "ARTIST",
+      "ARTIST ROLE",
+      "ARTIST ROLE\nCATEGORY",
+      "0"
+    ],
+    "norm": [
+      "upc / ean / jan",
+      "catalog release id",
+      "release title",
+      "release version",
+      "artist",
+      "artist role",
+      "artist role category",
+      "0"
+    ]
+  },
+  "5) Release_Track": {
+    "raw": [
+      "UPC / EAN / JAN",
+      "CATALOG RELEASE ID",
+      "RELEASE TITLE",
+      "RELEASE VERSION",
+      "TRACK",
+      "ISRC/vISRC",
+      "CATALOG TRACK ID",
+      "TRACK TITLE",
+      "TRACK VERSION",
+      "LANGUAGE OF LYRICS",
+      "EXPLICIT",
+      "TYPE",
+      "AUDIO FILE URL",
+      "AUDIO TYPE",
+      "TRACK PREVIEW",
+      "COMPOSITION\n ISWC"
+    ],
+    "norm": [
+      "upc / ean / jan",
+      "catalog release id",
+      "release title",
+      "release version",
+      "track",
+      "isrc/visrc",
+      "catalog track id",
+      "track title",
+      "track version",
+      "language of lyrics",
+      "explicit",
+      "type",
+      "audio file url",
+      "audio type",
+      "track preview",
+      "composition iswc"
+    ]
+  },
+  "6) Track_Artist(s)": {
+    "raw": [
+      "ISRC/vISRC",
+      "CATALOG TRACK ID",
+      "TRACK TITLE",
+      "TRACK VERSION",
+      "ARTIST",
+      "ARTIST ROLE",
+      "ARTIST ROLE\nCATEGORY",
+      "0",
+      "set TracksCount=(select count (distinct TrackId) from Tracks where ArtistId=(select max(ArtistId) from Artists where Name=N'' and EnterpriseId=\"&EntId&\")))"
+    ],
+    "norm": [
+      "isrc/visrc",
+      "catalog track id",
+      "track title",
+      "track version",
+      "artist",
+      "artist role",
+      "artist role category",
+      "0",
+      "set trackscount=(select count (distinct trackid) from tracks where artistid=(select max(artistid) from artists where name=n'' and enterpriseid=\"&entid&\")))"
+    ]
+  },
+  "7) Comp ContributorPublisher li": {
+    "raw": [
+      "Composition Contributor",
+      "0",
+      "0",
+      "Publisher Name",
+      "0",
+      "0"
+    ],
+    "norm": [
+      "composition contributor",
+      "0",
+      "0",
+      "publisher name",
+      "0",
+      "0"
+    ]
+  },
+  "8) Track_Composition(s)": {
+    "raw": [
+      "ISRC/vISRC",
+      "CATALOG TRACK ID",
+      "TRACK TITLE",
+      "TRACK VERSION",
+      "COMPOSITION CONTRIBUTOR",
+      "ROLE",
+      "SHARE%",
+      "TOTAL%",
+      "PUBLISHING",
+      "PUBLISHER"
+    ],
+    "norm": [
+      "isrc/visrc",
+      "catalog track id",
+      "track title",
+      "track version",
+      "composition contributor",
+      "role",
+      "share%",
+      "total%",
+      "publishing",
+      "publisher"
+    ]
+  },
+  "9) Audio_Properties": {
+    "raw": [
+      "ISRC/vISRC",
+      "CATALOG TRACK ID",
+      "TRACK TITLE",
+      "TRACK VERSION",
+      "SPECIAL AUDIO PROPERTIES"
+    ],
+    "norm": [
+      "isrc/visrc",
+      "catalog track id",
+      "track title",
+      "track version",
+      "special audio properties"
+    ]
+  }
+}

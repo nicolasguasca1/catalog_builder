@@ -1,0 +1,106 @@
+[
+  {
+    "upc": "789294845633",
+    "name": "Receba",
+    "version": null,
+    "languageId": 31,
+    "explicit": false,
+    "trackType": 1,
+    "trackNumber": 1,
+    "previewStartSeconds": null,
+    "trackRecordingVersions": [
+      {
+        "isrc": "QZW9M2221000",
+        "audioFiles": [
+          {
+            "audioId": null,
+            "audioFilename": "Receba-789294845633-UPC.flac?rlkey=mxh9w3x6d82jmu7mmv2a9trio&st=i02exo9k&dl=1",
+            "fileFormat": 2
+          }
+        ]
+      }
+    ],
+    "contributors": [
+      {
+        "roleId": 34,
+        "artist": {
+          "name": "JKZ"
+        }
+      },
+      {
+        "roleId": 19,
+        "artist": {
+          "name": "JKZ"
+        }
+      }
+    ],
+    "composerContentsDTO": [
+      {
+        "share": "0.6",
+        "roleName": "Composer & Lyricist",
+        "composer": {
+          "name": "Agnaldo Paulino de Jesus Júnior"
+        }
+      },
+      {
+        "share": "0.4",
+        "roleName": "Composer & Lyricist",
+        "composer": {
+          "name": "Jackson Bertholdo Dos Santos"
+        }
+      }
+    ]
+  },
+  {
+    "upc": "789294962088",
+    "name": "A Cláusula do Contrato",
+    "version": null,
+    "languageId": 31,
+    "explicit": false,
+    "trackType": 1,
+    "trackNumber": 1,
+    "previewStartSeconds": null,
+    "trackRecordingVersions": [
+      {
+        "isrc": "QZW9M2236571",
+        "audioFiles": [
+          {
+            "audioId": null,
+            "audioFilename": "A-Cl-usula-do-Contrato-789294962088-UPC.flac?rlkey=hr2u9fvf5lq6u33enhqm3ui3f&st=m6hlmmgt&dl=1",
+            "fileFormat": 2
+          }
+        ]
+      }
+    ],
+    "contributors": [
+      {
+        "roleId": 34,
+        "artist": {
+          "name": "Flash Beats Manow"
+        }
+      },
+      {
+        "roleId": 19,
+        "artist": {
+          "name": "Flash Beats Manow"
+        }
+      }
+    ],
+    "composerContentsDTO": [
+      {
+        "share": "0.5",
+        "roleName": "Composer & Lyricist",
+        "composer": {
+          "name": "Jackson Bertholdo Dos Santos"
+        }
+      },
+      {
+        "share": "0.5",
+        "roleName": "Composer & Lyricist",
+        "composer": {
+          "name": "Agnaldo Paulino de Jesus Júnior"
+        }
+      }
+    ]
+  }
+]

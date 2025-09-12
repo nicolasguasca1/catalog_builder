@@ -1,0 +1,304 @@
+[
+  {
+    "name": "Validate enterprise",
+    "status": "ok",
+    "start_ts": 1757637412.3012412,
+    "meta": {
+      "enterpriseId": 414849,
+      "tenantId": 332920,
+      "enterpriseName": "Nico test label"
+    },
+    "duration_sec": 3.586
+  },
+  {
+    "name": "Load role map",
+    "status": "ok",
+    "start_ts": 1757637415.8878,
+    "meta": {
+      "roles": 399
+    },
+    "duration_sec": 0.0
+  },
+  {
+    "name": "Read sheets",
+    "status": "ok",
+    "start_ts": 1757637415.888217,
+    "meta": {
+      "artists": 3,
+      "labels": 2,
+      "releases": 2,
+      "rel_artists": 6,
+      "rel_tracks": 2,
+      "track_artists": 6,
+      "comps": 4,
+      "props": 2,
+      "artists_meta": {
+        "header_row": 3,
+        "data_start": 5,
+        "effective_start": 5
+      },
+      "labels_meta": {
+        "header_row": 3,
+        "data_start": 5,
+        "effective_start": 5
+      },
+      "releases_meta": {
+        "header_row": 3,
+        "data_start": 5,
+        "effective_start": 5
+      },
+      "peek": {
+        "artists": {
+          "col": "Artist Name",
+          "first": "JKZ"
+        },
+        "labels": {
+          "col": "Label Name",
+          "first": "TokyoRecords"
+        },
+        "releases": {
+          "upc_col": "UPC / EAN / JAN",
+          "first_upc": "789294845633"
+        },
+        "rel_tracks": {
+          "upc_col": "UPC / EAN / JAN",
+          "first_upc": "789294845633",
+          "isrc_col": "ISRC/vISRC",
+          "first_isrc": "QZW9M2221000"
+        },
+        "track_artists": {
+          "isrc_col": "ISRC/vISRC",
+          "first_isrc": "QZW9M2221000",
+          "artist_col": "ARTIST",
+          "first_artist": "JKZ",
+          "role_col": "ARTIST ROLE",
+          "first_role": "Main Primary Artist"
+        },
+        "track_comps": {
+          "isrc_col": "ISRC/vISRC",
+          "first_isrc": "QZW9M2221000",
+          "comp_col": "COMPOSITION CONTRIBUTOR",
+          "first_comp": "Agnaldo Paulino de Jesus J\u00fanior",
+          "share_col": "SHARE%",
+          "first_share": "0.6"
+        },
+        "props": {
+          "isrc_col": "ISRC/vISRC",
+          "first_isrc": "QZW9M2221000"
+        }
+      }
+    },
+    "duration_sec": 3.142
+  },
+  {
+    "name": "Preflight validations",
+    "status": "ok",
+    "start_ts": 1757637419.031142,
+    "meta": {
+      "issues": 0
+    },
+    "duration_sec": 0.0
+  },
+  {
+    "name": "Build artists & labels & master entities",
+    "status": "ok",
+    "start_ts": 1757637419.031188,
+    "meta": {
+      "artists": 3,
+      "labels": 2,
+      "publishers": 0,
+      "composers": 2,
+      "artists_seen": 3,
+      "labels_seen": 2,
+      "dropped_art_missing_name": 0,
+      "dropped_lab_missing_name": 0,
+      "artist_name_col": "Artist Name",
+      "label_name_col": "Label Name",
+      "publisher_col": "Publisher Name",
+      "composer_col": "Composition Contributor",
+      "artist_samples": [
+        "JKZ",
+        "Flash Beats Manow",
+        "Various Artists"
+      ],
+      "label_samples": [
+        "TokyoRecords",
+        "PEJOTA10*"
+      ],
+      "publisher_samples": [
+        null,
+        null
+      ],
+      "composer_samples": [
+        "Agnaldo Paulino de Jesus J\u00fanior",
+        "Jackson Bertholdo Dos Santos"
+      ]
+    },
+    "duration_sec": 0.001
+  },
+  {
+    "name": "Build releases",
+    "status": "ok",
+    "start_ts": 1757637419.0317938,
+    "meta": {
+      "releases": 2,
+      "sample_releases": [
+        {
+          "name": "Receba",
+          "version": null,
+          "upc": "789294845633",
+          "labelName": "TokyoRecords"
+        },
+        {
+          "name": "A Cl\u00e1usula do Contrato",
+          "version": null,
+          "upc": "789294962088",
+          "labelName": "PEJOTA10*"
+        }
+      ]
+    },
+    "duration_sec": 0.257
+  },
+  {
+    "name": "Parse release contributors",
+    "status": "ok",
+    "start_ts": 1757637419.2888021,
+    "meta": {
+      "contributors": 4,
+      "sample": [
+        {
+          "upc": "789294845633",
+          "first": {
+            "artistName": "JKZ",
+            "roleId": 34
+          }
+        },
+        {
+          "upc": "789294962088",
+          "first": {
+            "artistName": "Flash Beats Manow",
+            "roleId": 34
+          }
+        }
+      ]
+    },
+    "duration_sec": 0.001
+  },
+  {
+    "name": "Build tracks from Release_Track",
+    "status": "ok",
+    "start_ts": 1757637419.289558,
+    "meta": {
+      "tracks": 2,
+      "sample_tracks": [
+        {
+          "upc": "789294845633",
+          "isrc": "QZW9M2221000",
+          "name": "Receba",
+          "trackNumber": 1
+        },
+        {
+          "upc": "789294962088",
+          "isrc": "QZW9M2236571",
+          "name": "A Cl\u00e1usula do Contrato",
+          "trackNumber": 1
+        }
+      ]
+    },
+    "duration_sec": 0.123
+  },
+  {
+    "name": "Parse track contributors",
+    "status": "ok",
+    "start_ts": 1757637419.4121852,
+    "meta": {
+      "contributors": 4,
+      "sample": [
+        {
+          "isrc": "QZW9M2221000",
+          "first": {
+            "artistName": "JKZ",
+            "roleId": 34
+          }
+        },
+        {
+          "isrc": "QZW9M2236571",
+          "first": {
+            "artistName": "Flash Beats Manow",
+            "roleId": 34
+          }
+        }
+      ]
+    },
+    "duration_sec": 0.001
+  },
+  {
+    "name": "Parse track compositions",
+    "status": "ok",
+    "start_ts": 1757637419.4129379,
+    "meta": {
+      "compositions": 4,
+      "sample": [
+        {
+          "isrc": "QZW9M2221000",
+          "first": {
+            "composerName": "Agnaldo Paulino de Jesus J\u00fanior",
+            "roleName": "Composer & Lyricist",
+            "share": "0.6"
+          }
+        },
+        {
+          "isrc": "QZW9M2236571",
+          "first": {
+            "composerName": "Jackson Bertholdo Dos Santos",
+            "roleName": "Composer & Lyricist",
+            "share": "0.5"
+          }
+        }
+      ]
+    },
+    "duration_sec": 0.0
+  },
+  {
+    "name": "Parse track properties",
+    "status": "ok",
+    "start_ts": 1757637419.4133272,
+    "meta": {
+      "with_properties": 0,
+      "sample": []
+    },
+    "duration_sec": 0.0
+  },
+  {
+    "name": "Attach track contributors/compositions/properties",
+    "status": "ok",
+    "start_ts": 1757637419.413578,
+    "meta": {
+      "tracks": 2
+    },
+    "duration_sec": 0.0
+  },
+  {
+    "name": "Attach release contributors",
+    "status": "ok",
+    "start_ts": 1757637419.413623,
+    "meta": {
+      "releases": 2
+    },
+    "duration_sec": 0.0
+  },
+  {
+    "name": "Write dry-run artifacts",
+    "status": "ok",
+    "start_ts": 1757637419.413662,
+    "meta": {
+      "artists": 3,
+      "labels": 2,
+      "publishers": 0,
+      "composers": 2,
+      "releases": 2,
+      "tracks": 2
+    },
+    "duration_sec": 0.003
+  }
+]
