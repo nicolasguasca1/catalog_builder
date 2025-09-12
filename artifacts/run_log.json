@@ -2,18 +2,18 @@
   {
     "name": "Validate enterprise",
     "status": "ok",
-    "start_ts": 1757637412.3012412,
+    "start_ts": 1757681963.366988,
     "meta": {
       "enterpriseId": 414849,
       "tenantId": 332920,
       "enterpriseName": "Nico test label"
     },
-    "duration_sec": 3.586
+    "duration_sec": 2.154
   },
   {
     "name": "Load role map",
     "status": "ok",
-    "start_ts": 1757637415.8878,
+    "start_ts": 1757681965.521665,
     "meta": {
       "roles": 399
     },
@@ -22,7 +22,7 @@
   {
     "name": "Read sheets",
     "status": "ok",
-    "start_ts": 1757637415.888217,
+    "start_ts": 1757681965.522176,
     "meta": {
       "artists": 3,
       "labels": 2,
@@ -88,12 +88,12 @@
         }
       }
     },
-    "duration_sec": 3.142
+    "duration_sec": 3.25
   },
   {
     "name": "Preflight validations",
     "status": "ok",
-    "start_ts": 1757637419.031142,
+    "start_ts": 1757681968.773738,
     "meta": {
       "issues": 0
     },
@@ -102,7 +102,7 @@
   {
     "name": "Build artists & labels & master entities",
     "status": "ok",
-    "start_ts": 1757637419.031188,
+    "start_ts": 1757681968.7737842,
     "meta": {
       "artists": 3,
       "labels": 2,
@@ -139,7 +139,7 @@
   {
     "name": "Build releases",
     "status": "ok",
-    "start_ts": 1757637419.0317938,
+    "start_ts": 1757681968.774379,
     "meta": {
       "releases": 2,
       "sample_releases": [
@@ -157,14 +157,15 @@
         }
       ]
     },
-    "duration_sec": 0.257
+    "duration_sec": 0.245
   },
   {
     "name": "Parse release contributors",
     "status": "ok",
-    "start_ts": 1757637419.2888021,
+    "start_ts": 1757681969.0191722,
     "meta": {
       "contributors": 4,
+      "primaries": 2,
       "sample": [
         {
           "upc": "789294845633",
@@ -180,14 +181,24 @@
             "roleId": 34
           }
         }
+      ],
+      "sample_primary": [
+        {
+          "upc": "789294845633",
+          "artistName": "JKZ"
+        },
+        {
+          "upc": "789294962088",
+          "artistName": "Flash Beats Manow"
+        }
       ]
     },
-    "duration_sec": 0.001
+    "duration_sec": 0.002
   },
   {
     "name": "Build tracks from Release_Track",
     "status": "ok",
-    "start_ts": 1757637419.289558,
+    "start_ts": 1757681969.020824,
     "meta": {
       "tracks": 2,
       "sample_tracks": [
@@ -205,14 +216,15 @@
         }
       ]
     },
-    "duration_sec": 0.123
+    "duration_sec": 0.117
   },
   {
     "name": "Parse track contributors",
     "status": "ok",
-    "start_ts": 1757637419.4121852,
+    "start_ts": 1757681969.138129,
     "meta": {
       "contributors": 4,
+      "primaries": 2,
       "sample": [
         {
           "isrc": "QZW9M2221000",
@@ -228,14 +240,24 @@
             "roleId": 34
           }
         }
+      ],
+      "sample_primary": [
+        {
+          "isrc": "QZW9M2221000",
+          "artistName": "JKZ"
+        },
+        {
+          "isrc": "QZW9M2236571",
+          "artistName": "Flash Beats Manow"
+        }
       ]
     },
-    "duration_sec": 0.001
+    "duration_sec": 0.002
   },
   {
     "name": "Parse track compositions",
     "status": "ok",
-    "start_ts": 1757637419.4129379,
+    "start_ts": 1757681969.1401138,
     "meta": {
       "compositions": 4,
       "sample": [
@@ -257,22 +279,22 @@
         }
       ]
     },
-    "duration_sec": 0.0
+    "duration_sec": 0.001
   },
   {
     "name": "Parse track properties",
     "status": "ok",
-    "start_ts": 1757637419.4133272,
+    "start_ts": 1757681969.14121,
     "meta": {
       "with_properties": 0,
       "sample": []
     },
-    "duration_sec": 0.0
+    "duration_sec": 0.001
   },
   {
     "name": "Attach track contributors/compositions/properties",
     "status": "ok",
-    "start_ts": 1757637419.413578,
+    "start_ts": 1757681969.1418722,
     "meta": {
       "tracks": 2
     },
@@ -281,7 +303,7 @@
   {
     "name": "Attach release contributors",
     "status": "ok",
-    "start_ts": 1757637419.413623,
+    "start_ts": 1757681969.141998,
     "meta": {
       "releases": 2
     },
@@ -290,7 +312,7 @@
   {
     "name": "Write dry-run artifacts",
     "status": "ok",
-    "start_ts": 1757637419.413662,
+    "start_ts": 1757681969.142117,
     "meta": {
       "artists": 3,
       "labels": 2,
@@ -299,6 +321,55 @@
       "releases": 2,
       "tracks": 2
     },
-    "duration_sec": 0.003
+    "duration_sec": 0.005
+  },
+  {
+    "name": "Upsert masters (artists/labels) and create publishers/composers",
+    "status": "ok",
+    "start_ts": 1757681969.147451,
+    "meta": {
+      "labels_created": 2,
+      "labels_reused": 0,
+      "labels_failed": 0,
+      "artists_created": 0,
+      "artists_reused": 3,
+      "artists_failed": 0,
+      "publishers_ok": 0,
+      "publishers_fail": 0,
+      "composers_ok": 2,
+      "composers_fail": 0
+    },
+    "duration_sec": 1.469
+  },
+  {
+    "name": "Wire labelId/artistId into payloads",
+    "status": "ok",
+    "start_ts": 1757681970.616593,
+    "meta": {
+      "release_label_ids": 2,
+      "release_contrib_ids": 4,
+      "track_contrib_ids": 4
+    },
+    "duration_sec": 0.0
+  },
+  {
+    "name": "Create releases",
+    "status": "ok",
+    "start_ts": 1757681970.6166668,
+    "meta": {
+      "created": 0,
+      "failed": 2
+    },
+    "duration_sec": 0.15
+  },
+  {
+    "name": "Create tracks",
+    "status": "ok",
+    "start_ts": 1757681970.7664099,
+    "meta": {
+      "created": 0,
+      "failed": 2
+    },
+    "duration_sec": 0.341
   }
 ]

@@ -137,6 +137,108 @@ def http(session: requests.Session, method: str, url: str, token: str, json_body
     resp = session.request(method, url, json=json_body, params=params, headers=h, timeout=TIMEOUT)
     return resp
 
+def fetch_all_labels(session: requests.Session, base_url: str, token: str, headers: Dict[str,str]) -> Dict[str, Dict[str,Any]]:
+    out: Dict[str, Dict[str,Any]] = {}
+    page = 1; page_size = 100
+    while True:
+        url = f"{base_url}/content/label/all"
+        resp = http(session, "GET", url, token, params={"pageNumber": page, "pageSize": page_size}, headers=headers)
+        if not resp.ok:
+            break
+        data = resp.json() or {}
+        items = data.get("items", []) or []
+        for it in items:
+            name = (it.get("name") or "").strip()
+            if name:
+                out[name.lower()] = it
+        total = data.get("totalItemsCount", 0)
+        if page * page_size >= total or not items:
+            break
+        page += 1
+    return out
+
+def find_artist_id(session: requests.Session, base_url: str, token: str, enterpriseId: int, name: str, headers: Dict[str,str]) -> Optional[int]:
+    if not name:
+        return None
+    url = f"{base_url}/api/enterprises/{enterpriseId}/artists"
+    resp = http(session, "GET", url, token, params={"name": name, "pageSize": 1}, headers=headers)
+    if not resp.ok:
+        return None
+    data = resp.json() or {}
+    items = data.get("items", []) or []
+    if not items:
+        return None
+    for it in items:
+        if (it.get("name") or "").strip().lower() == name.strip().lower():
+            return it.get("artistId")
+    return None
+
+def create_or_reuse_artists(session: requests.Session, base_url: str, token: str, headers: Dict[str,str], enterpriseId: int, artists_payload: List[Dict[str,Any]], http_errors: List[Dict[str,Any]]):
+    name_to_id: Dict[str,int] = {}
+    created = 0; reused = 0; failed = 0
+    # First attempt to resolve existing by name, then create missing
+    for it in artists_payload:
+        name = (it.get("name") or "").strip()
+        if not name:
+            continue
+        existing = find_artist_id(session, base_url, token, enterpriseId, name, headers)
+        if existing:
+            name_to_id[name.lower()] = int(existing)
+            reused += 1
+            continue
+        endpoint = f"{base_url}/artists"
+        resp = http(session, "POST", endpoint, token, json_body=it, headers=headers)
+        if not resp.ok:
+            failed += 1
+            http_errors.append({
+                "when": "create_artist",
+                "endpoint": endpoint,
+                "status": resp.status_code,
+                "request": it,
+                "response": (resp.text or "")[:1500]
+            })
+        else:
+            try:
+                aid = int((resp.json() or {}).get("artistId"))
+                name_to_id[name.lower()] = aid
+                created += 1
+            except Exception:
+                created += 1
+    return name_to_id, created, reused, failed
+
+def create_or_reuse_labels(session: requests.Session, base_url: str, token: str, headers: Dict[str,str], labels_payload: List[Dict[str,Any]], http_errors: List[Dict[str,Any]]):
+    existing = fetch_all_labels(session, base_url, token, headers)
+    name_to_id: Dict[str,int] = {}
+    created = 0; reused = 0; failed = 0
+    for it in labels_payload:
+        name = (it.get("name") or "").strip()
+        if not name:
+            continue
+        key = name.lower()
+        if key in existing:
+            name_to_id[key] = int(existing[key].get("labelId"))
+            reused += 1
+            continue
+        endpoint = f"{base_url}/content/label/save"
+        resp = http(session, "POST", endpoint, token, json_body=it, headers=headers)
+        if not resp.ok:
+            failed += 1
+            http_errors.append({
+                "when": "create_label",
+                "endpoint": endpoint,
+                "status": resp.status_code,
+                "request": it,
+                "response": (resp.text or "")[:1500]
+            })
+        else:
+            try:
+                lid = int((resp.json() or {}).get("labelId"))
+                name_to_id[key] = lid
+                created += 1
+            except Exception:
+                created += 1
+    return name_to_id, created, reused, failed
+
 def yes_no(prompt: str) -> bool:
     while True:
         ans = input(f"{prompt} [y/n]: ").strip().lower()
@@ -285,8 +387,60 @@ def ingest_audio_by_url(url: str, filetype: str, session: requests.Session, base
     if not url: return None
     fmt = (filetype or "").strip().upper()
     fileFormat = {"WAV":1, "FLAC":2, "MP3":3}.get(fmt)
-    # If a pull-external audio endpoint exists, call it here. Otherwise, dry-run structure:
-    return {"audioId": None, "audioFilename": os.path.basename(url), "fileFormat": fileFormat}
+    # If a pull-external audio endpoint exists, call it here. Otherwise, dry-run structure with sourceUrl for diagnostics:
+    return {"audioId": None, "audioFilename": os.path.basename(url), "fileFormat": fileFormat, "sourceUrl": url}
+
+def extract_spotify_artist_id(val: Optional[str]) -> Optional[str]:
+    """Return the canonical Spotify artist ID from a URI or URL.
+    Examples:
+      'spotify:artist:1Gnh4...' -> '1Gnh4...'
+      'https://open.spotify.com/artist/1Gnh4...?si=...' -> '1Gnh4...'
+      '1Gnh4...' -> '1Gnh4...'
+    """
+    if not val:
+        return None
+    s = str(val).strip()
+    if s.startswith("spotify:"):
+        parts = s.split(":")
+        return parts[-1] or None
+    low = s.lower()
+    if "open.spotify.com/artist/" in low:
+        try:
+            tail = s.split("/artist/")[1]
+            tail = tail.split("?")[0]
+            tail = tail.split("/")[0]
+            return tail or None
+        except Exception:
+            return None
+    return s or None
+
+def normalize_audio_url(url: Optional[str]) -> Optional[str]:
+    """Normalize known share URLs to direct-download when possible (e.g., Dropbox dl=1)."""
+    s = norm_str(url)
+    if not s:
+        return None
+    try:
+        low = s.lower()
+        # Dropbox: ensure dl=1 for direct download
+        if "dropbox.com/" in low:
+            if "?" in s:
+                base, qs = s.split("?", 1)
+                # preserve existing params but force dl=1
+                params = []
+                seen_dl = False
+                for part in qs.split("&"):
+                    if part.startswith("dl="):
+                        params.append("dl=1"); seen_dl = True
+                    else:
+                        params.append(part)
+                if not seen_dl:
+                    params.append("dl=1")
+                s = base + "?" + "&".join(params)
+            else:
+                s = s + "?dl=1"
+        return s
+    except Exception:
+        return url
 
 def map_track_properties(row: Dict[str,Any]) -> Optional[List[int]]:
     # Normalize incoming row keys: collapse whitespace/newlines, uppercase
@@ -634,11 +788,12 @@ def main():
                 img_url = norm_str(get_val(rw, cm_art, "Artist Image url", "Artist Image URL"))
                 apple = norm_str(get_val(rw, cm_art, "Apple ArtistId"))
                 spotify = norm_str(get_val(rw, cm_art, "Spotify Artist URI"))
+                spotify_id = extract_spotify_artist_id(spotify) if spotify else None
                 meta = norm_str(get_val(rw, cm_art, "Meta ArtistId"))
                 sc = norm_str(get_val(rw, cm_art, "SoundCloud ProfileId", "SoundCloud Profile ID"))
                 ext = []
                 if apple: ext.append({"distributorStoreId":1, "profileId":apple})
-                if spotify: ext.append({"distributorStoreId":9, "profileId":spotify})
+                if spotify_id: ext.append({"distributorStoreId":9, "profileId":spotify_id})
                 if sc: ext.append({"distributorStoreId":68, "profileId":sc})
                 if meta: ext.append({"distributorStoreId":309, "profileId":meta})
                 img = ingest_image_by_url(img_url, session, base_url, token) if img_url else None
@@ -741,7 +896,8 @@ def main():
                 if label_name:
                     rel["hasRecordLabel"] = True
                     rel["labelName"] = label_name
-                if img:
+                # Only attach image if we have a valid fileId; otherwise, skip to avoid 400s on null GUID
+                if img and img.get("fileId"):
                     rel["image"] = {"fileId": img["fileId"], "filename": img["filename"]}
                 releases_payload.append(rel)
             sample_releases = []
@@ -754,6 +910,7 @@ def main():
         with progress.step("Parse release contributors") as s:
             cm_relart = make_colmap(df_relart)
             release_contribs_by_upc: Dict[str,List[Dict[str,Any]]] = {}
+            release_primary_artist_by_upc: Dict[str,str] = {}
             if has_col(df_relart, UPC_COL) and has_col(df_relart, "ARTIST") and has_col(df_relart, "ARTIST ROLE"):
                 for _,rw in df_relart.iterrows():
                     upc = norm_str(get_val(rw, cm_relart, UPC_COL))
@@ -761,7 +918,12 @@ def main():
                     role = norm_str(get_val(rw, cm_relart, "ARTIST ROLE"))
                     if not upc or not artist or not role:
                         continue
-                    rid = role_map.get((role or '').strip().lower(), None)
+                    role_norm = (role or '').strip().lower()
+                    # Special case: 'Main Primary Artist' sets release.artistName, not a contributor
+                    if role_norm == "main primary artist":
+                        release_primary_artist_by_upc.setdefault(upc, artist)
+                        continue
+                    rid = role_map.get(role_norm, None)
                     if rid is None:
                         print(f"[WARN] Unknown role '{role}' for release UPC {upc}")
                         continue
@@ -772,12 +934,20 @@ def main():
             sample_rel_contribs = []
             for upc, arr in list(release_contribs_by_upc.items())[:2]:
                 sample_rel_contribs.append({"upc": upc, "first": arr[0] if arr else None})
-            s.info(contributors=total, sample=sample_rel_contribs)
+            sample_rel_primary = []
+            for upc, name in list(release_primary_artist_by_upc.items())[:2]:
+                sample_rel_primary.append({"upc": upc, "artistName": name})
+            s.info(contributors=total, primaries=len(release_primary_artist_by_upc), sample=sample_rel_contribs, sample_primary=sample_rel_primary)
 
         # Tracks (by Release_Track)
+        audio_url_map: Dict[str, Optional[str]] = {}
         with progress.step("Build tracks from Release_Track") as s:
             cm_reltrk = make_colmap(df_reltrk)
+            audio_url_col = resolve_colkey(df_reltrk, "AUDIO FILE URL", "AUDIO URL", "AUDIO DOWNLOAD URL", "AUDIO FILE", "FILE URL", "AUDIO")
+            audio_type_col = resolve_colkey(df_reltrk, "AUDIO TYPE", "FILE TYPE", "AUDIO FORMAT", "FORMAT")
             track_rows = []
+            first_audio_url_seen = None
+            isrc_to_track: Dict[str, Dict[str,Any]] = {}
             for _,rw in df_reltrk.iterrows():
                 upc = norm_str(get_val(rw, cm_reltrk, UPC_COL)); isrc = norm_str(get_val(rw, cm_reltrk, ISRC_COL))
                 if not upc or not isrc: continue
@@ -786,12 +956,18 @@ def main():
                 explicit = norm_bool(get_val(rw, cm_reltrk, "EXPLICIT"))
                 ttype = norm_str(get_val(rw, cm_reltrk, "TYPE"))
                 ttype_id = {"original":1,"cover":2,"public domain":3}.get((ttype or "").strip().lower())
-                audio_url = norm_str(get_val(rw, cm_reltrk, "AUDIO FILE URL")); audio_type = norm_str(get_val(rw, cm_reltrk, "AUDIO TYPE"))
+                audio_url_raw = norm_str(rw.get(audio_url_col)) if audio_url_col else norm_str(get_val(rw, cm_reltrk, "AUDIO FILE URL"))
+                audio_url = normalize_audio_url(audio_url_raw)
+                audio_type = norm_str(rw.get(audio_type_col)) if audio_type_col else norm_str(get_val(rw, cm_reltrk, "AUDIO TYPE"))
                 preview = norm_int(get_val(rw, cm_reltrk, "TRACK PREVIEW", "PREVIEW START"))
                 trknum = norm_int(get_val(rw, cm_reltrk, "TRACK", "TRACK #", "TRACK NUMBER"))  # track number
                 lang_id = resolve_language_id(lang, session, base_url, token)
 
                 audio = ingest_audio_by_url(audio_url, audio_type, session, base_url, token, args.live) if audio_url else None
+                if first_audio_url_seen is None and audio_url:
+                    first_audio_url_seen = audio_url
+                if isrc:
+                    audio_url_map[isrc] = audio_url
                 track = {
                     "name": t_title,
                     "version": t_version,
@@ -802,20 +978,24 @@ def main():
                     "previewStartSeconds": preview,
                     "trackRecordingVersions": [{
                         "isrc": isrc,
-                        "audioFiles": ([{"audioId": audio["audioId"], "audioFilename": audio["audioFilename"], "fileFormat": audio["fileFormat"]}] if audio else [])
+                        # Only attach audioFiles objects when we have an uploaded audioId.
+                        # Sending null GUIDs causes 400; external URLs are not accepted directly here.
+                        "audioFiles": ([{"audioId": audio["audioId"], "audioFilename": audio["audioFilename"], "fileFormat": audio["fileFormat"]}] if (audio and audio.get("audioId")) else [])
                     }]
                 }
                 track_rows.append((upc, isrc, track))
+                isrc_to_track[isrc] = track
             sample_tracks = []
             for i in range(min(3, len(track_rows))):
                 upc,isrc,track = track_rows[i]
                 sample_tracks.append({"upc": upc, "isrc": isrc, "name": track.get("name"), "trackNumber": track.get("trackNumber")})
-            s.info(tracks=len(track_rows), sample_tracks=sample_tracks)
+            s.info(tracks=len(track_rows), sample_tracks=sample_tracks, first_audio_url=first_audio_url_seen, audio_url_col=audio_url_col, audio_type_col=audio_type_col)
 
         # Track contributors
         with progress.step("Parse track contributors") as s:
             cm_trkart = make_colmap(df_trkart)
             track_contribs_by_isrc: Dict[str,List[Dict[str,Any]]] = {}
+            track_primary_artist_by_isrc: Dict[str,str] = {}
             if has_col(df_trkart, ISRC_COL) and has_col(df_trkart, "ARTIST") and has_col(df_trkart, "ARTIST ROLE"):
                 for _,rw in df_trkart.iterrows():
                     isrc = norm_str(get_val(rw, cm_trkart, ISRC_COL))
@@ -823,7 +1003,11 @@ def main():
                     role = norm_str(get_val(rw, cm_trkart, "ARTIST ROLE"))
                     if not isrc or not artist or not role:
                         continue
-                    rid = role_map.get((role or '').strip().lower(), None)
+                    role_norm = (role or '').strip().lower()
+                    if role_norm == "main primary artist":
+                        track_primary_artist_by_isrc.setdefault(isrc, artist)
+                        continue
+                    rid = role_map.get(role_norm, None)
                     if rid is None:
                         print(f"[WARN] Unknown role '{role}' for track ISRC {isrc}")
                         continue
@@ -834,7 +1018,10 @@ def main():
             sample_trk_contribs = []
             for isrc, arr in list(track_contribs_by_isrc.items())[:2]:
                 sample_trk_contribs.append({"isrc": isrc, "first": arr[0] if arr else None})
-            s.info(contributors=total, sample=sample_trk_contribs)
+            sample_trk_primary = []
+            for isrc, name in list(track_primary_artist_by_isrc.items())[:2]:
+                sample_trk_primary.append({"isrc": isrc, "artistName": name})
+            s.info(contributors=total, primaries=len(track_primary_artist_by_isrc), sample=sample_trk_contribs, sample_primary=sample_trk_primary)
 
         # Track compositions
         with progress.step("Parse track compositions") as s:
@@ -889,6 +1076,9 @@ def main():
                         applied.append({"roleId": c["roleId"], "artist": {"name": c["artistName"]}})
                     if applied:
                         track["contributors"] = applied
+                # Primary artistName from Track_Artist(s)
+                if 'artistName' not in track and isrc in track_primary_artist_by_isrc:
+                    track['artistName'] = track_primary_artist_by_isrc[isrc]
                 # Compositions
                 if isrc in trk_comp_by_isrc:
                     comp_out = []
@@ -914,6 +1104,9 @@ def main():
             for rel in releases_payload:
                 upc = rel.get("upc")
                 if not upc: continue
+                # Apply primary artistName from Release_Artist(s)
+                if 'artistName' not in rel and upc in release_primary_artist_by_upc:
+                    rel['artistName'] = release_primary_artist_by_upc[upc]
                 if upc in release_contribs_by_upc:
                     applied = []
                     for c in release_contribs_by_upc[upc]:
@@ -930,6 +1123,12 @@ def main():
             (ARTIFACTS/"composers.json").write_text(json.dumps(composers_payload, indent=2, ensure_ascii=False))
             (ARTIFACTS/"releases.json").write_text(json.dumps(releases_payload, indent=2, ensure_ascii=False))
             (ARTIFACTS/"tracks.json").write_text(json.dumps([{"upc": u, **t} for u,t in tracks_payload], indent=2, ensure_ascii=False))
+            # Aid troubleshooting: dump resolved audio URLs per ISRC
+            try:
+                if 'audio_url_map' in globals() or 'audio_url_map' in locals():
+                    (ARTIFACTS/"audio_urls.json").write_text(json.dumps(audio_url_map, indent=2, ensure_ascii=False))
+            except Exception:
+                pass
             s.info(artists=len(artists_payload), labels=len(labels_payload), publishers=len(publishers_payload), composers=len(composers_payload), releases=len(releases_payload), tracks=len(tracks_payload))
             print(f"[OK] Dry-run artifacts written under {ARTIFACTS.resolve()}")
 
@@ -948,14 +1147,16 @@ def main():
         def create_simple_list(items, url_path):
             created = 0; failed = 0
             for it in items:
-                resp = http(session, "POST", f"{base_url}{url_path}", token, json_body=it, headers=headers_common)
+                endpoint = f"{base_url}{url_path}"
+                resp = http(session, "POST", endpoint, token, json_body=it, headers=headers_common)
                 if not resp.ok:
                     failed += 1
                     err = {
                         "when": "create_simple_list",
                         "path": url_path,
+                        "endpoint": endpoint,
                         "status": resp.status_code,
-                        "request": {k: it.get(k) for k in ("name","upc") if k in it},
+                        "request": it,
                         "response": (resp.text or "")[:1000]
                     }
                     http_errors.append(err)
@@ -964,13 +1165,88 @@ def main():
                     created += 1
             return created, failed
 
-        # Masters
-        with progress.step("Create masters (artists/labels/publishers/composers)") as s:
-            a_ok, a_fail = create_simple_list(artists_payload, "/artists")
-            l_ok, l_fail = create_simple_list(labels_payload, "/content/label/save")
+        # Upsert masters and create others
+        with progress.step("Upsert masters (artists/labels) and create publishers/composers") as s:
+            label_map, l_created, l_reused, l_failed = create_or_reuse_labels(session, base_url, token, headers_common, labels_payload, http_errors)
+            artist_map, a_created, a_reused, a_failed = create_or_reuse_artists(session, base_url, token, headers_common, enterpriseId, artists_payload, http_errors)
             p_ok, p_fail = create_simple_list(publishers_payload, "/content/publisher/save")
             c_ok, c_fail = create_simple_list(composers_payload, "/content/composer/save")
-            s.info(artists_ok=a_ok, artists_fail=a_fail, labels_ok=l_ok, labels_fail=l_fail, publishers_ok=p_ok, publishers_fail=p_fail, composers_ok=c_ok, composers_fail=c_fail)
+            s.info(labels_created=l_created, labels_reused=l_reused, labels_failed=l_failed,
+                   artists_created=a_created, artists_reused=a_reused, artists_failed=a_failed,
+                   publishers_ok=p_ok, publishers_fail=p_fail, composers_ok=c_ok, composers_fail=c_fail)
+
+        # Inject known IDs into release/track payloads before creation
+        with progress.step("Wire labelId/artistId into payloads") as s:
+            # Labels on releases
+            try:
+                for rel in releases_payload:
+                    lname = (rel.get("labelName") or "").strip()
+                    if lname:
+                        lid = None
+                        try:
+                            lid = label_map.get(lname.lower())
+                        except Exception:
+                            lid = None
+                        if lid:
+                            rel["labelId"] = int(lid)
+                            rel["hasRecordLabel"] = True
+                            # Keep labelName for readability; API should prefer labelId
+                # Contributors on releases
+                for rel in releases_payload:
+                    contribs = rel.get("contributors") or []
+                    for c in contribs:
+                        art = c.get("artist") or {}
+                        nm = (art.get("name") or "").strip()
+                        if nm:
+                            aid = None
+                            try:
+                                aid = artist_map.get(nm.lower())
+                            except Exception:
+                                aid = None
+                            if aid:
+                                c["artist"] = {"artistId": int(aid)}
+                # Contributors on tracks
+                for i, (upc, track) in enumerate(tracks_payload):
+                    contribs = track.get("contributors") or []
+                    for c in contribs:
+                        art = c.get("artist") or {}
+                        nm = (art.get("name") or "").strip()
+                        if nm:
+                            aid = None
+                            try:
+                                aid = artist_map.get(nm.lower())
+                            except Exception:
+                                aid = None
+                            if aid:
+                                c["artist"] = {"artistId": int(aid)}
+            finally:
+                # Summaries
+                counted_rel_label_ids = sum(1 for rel in releases_payload if rel.get("labelId"))
+                counted_rel_contrib_ids = sum(1 for rel in releases_payload for c in (rel.get("contributors") or []) if isinstance(c.get("artist"), dict) and "artistId" in c.get("artist", {}))
+                counted_trk_contrib_ids = sum(1 for _, track in tracks_payload for c in (track.get("contributors") or []) if isinstance(c.get("artist"), dict) and "artistId" in c.get("artist", {}))
+                s.info(release_label_ids=counted_rel_label_ids, release_contrib_ids=counted_rel_contrib_ids, track_contrib_ids=counted_trk_contrib_ids)
+
+        # Block if any track lacks a valid uploaded audioId
+        with progress.step("Validate required media (audio)") as s:
+            missing = []
+            for upc, track in tracks_payload:
+                trk_recs = track.get("trackRecordingVersions") or []
+                isrc = trk_recs[0].get("isrc") if trk_recs else None
+                afs = (trk_recs[0].get("audioFiles") if trk_recs else None) or []
+                has_audio_id = any(isinstance(af, dict) and af.get("audioId") for af in afs)
+                if not has_audio_id:
+                    missing.append({
+                        "upc": upc,
+                        "isrc": isrc,
+                        "audioUrl": audio_url_map.get(isrc) if 'audio_url_map' in locals() or 'audio_url_map' in globals() else None
+                    })
+            s.info(missing=len(missing))
+            if missing:
+                out = ARTIFACTS/"missing_audio_ids.json"
+                out.write_text(json.dumps(missing, indent=2, ensure_ascii=False))
+                print(f"[BLOCKED] Missing audioId for {len(missing)} track(s). Upload audio to storage and retry. See {out.resolve()}")
+                progress.write_log()
+                sys.exit(1)
 
         # Releases (with UPC duplicate handling)
         with progress.step("Create releases") as s:
@@ -993,7 +1269,8 @@ def main():
                     http_errors.append({
                         "when": "create_release",
                         "status": resp.status_code,
-                        "request": {k: rel.get(k) for k in ("name","upc","labelName") if k in rel},
+                        "endpoint": url,
+                        "request": body,
                         "response": (resp.text or "")[:1500]
                     })
                     print(f"[ERROR] Release create failed {resp.status_code}: {resp.text[:300]}")
@@ -1003,18 +1280,20 @@ def main():
                     if rel.get("upc"): upc_to_release_id[rel["upc"]] = rid
             s.info(created=rel_created, failed=rel_failed)
 
-        # Tracks per release
-        with progress.step("Create tracks") as s:
+    # Tracks per release
+    with progress.step("Create tracks") as s:
             t_created = 0; t_failed = 0
             for upc, track in tracks_payload:
                 # If we know releaseId, include association if API needs it; otherwise the endpoint may infer.
-                t_resp = http(session, "POST", f"{base_url}/content/track/save", token, json_body=track, headers=headers_common)
+                t_url = f"{base_url}/content/track/save"
+                t_resp = http(session, "POST", t_url, token, json_body=track, headers=headers_common)
                 if not t_resp.ok:
                     t_failed += 1
                     http_errors.append({
                         "when": "create_track",
                         "status": t_resp.status_code,
-                        "request": {k: track.get(k) for k in ("name","version","trackNumber") if k in track},
+                        "endpoint": t_url,
+                        "request": track,
                         "response": (t_resp.text or "")[:1500]
                     })
                     print(f"[ERROR] Track create failed {t_resp.status_code}: {t_resp.text[:300]}")
