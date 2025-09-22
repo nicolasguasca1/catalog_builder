@@ -11,10 +11,11 @@
     "trackRecordingVersions": [
       {
         "isrc": "QZW9M2221000",
+        "recordingVersionType": 1,
         "audioFiles": [
           {
-            "audioId": null,
-            "audioFilename": "Receba-789294845633-UPC.flac?rlkey=mxh9w3x6d82jmu7mmv2a9trio&st=i02exo9k&dl=1",
+            "audioId": "0ca52a91-e73c-43d1-8530-c27513ea54e1",
+            "audioFilename": "Receba-789294845633-UPC.flac",
             "fileFormat": 2
           }
         ]
@@ -37,19 +38,22 @@
     "artistName": "JKZ",
     "composerContentsDTO": [
       {
-        "share": "0.6",
+        "share": "60",
         "roleName": "Composer & Lyricist",
         "composer": {
           "name": "Agnaldo Paulino de Jesus Júnior"
         }
       },
       {
-        "share": "0.4",
+        "share": "40",
         "roleName": "Composer & Lyricist",
         "composer": {
           "name": "Jackson Bertholdo Dos Santos"
         }
       }
+    ],
+    "trackProperties": [
+      1
     ]
   },
   {
@@ -64,10 +68,11 @@
     "trackRecordingVersions": [
       {
         "isrc": "QZW9M2236571",
+        "recordingVersionType": 1,
         "audioFiles": [
           {
-            "audioId": null,
-            "audioFilename": "A-Cl-usula-do-Contrato-789294962088-UPC.flac?rlkey=hr2u9fvf5lq6u33enhqm3ui3f&st=m6hlmmgt&dl=1",
+            "audioId": "a92aeeb6-c6c8-42dc-8f2a-376bbcd5a976",
+            "audioFilename": "A-Cl-usula-do-Contrato-789294962088-UPC.flac",
             "fileFormat": 2
           }
         ]
@@ -90,19 +95,22 @@
     "artistName": "Flash Beats Manow",
     "composerContentsDTO": [
       {
-        "share": "0.5",
+        "share": "50",
         "roleName": "Composer & Lyricist",
         "composer": {
           "name": "Jackson Bertholdo Dos Santos"
         }
       },
       {
-        "share": "0.5",
+        "share": "50",
         "roleName": "Composer & Lyricist",
         "composer": {
           "name": "Agnaldo Paulino de Jesus Júnior"
         }
       }
+    ],
+    "trackProperties": [
+      1
     ]
   }
 ]

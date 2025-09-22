@@ -18,10 +18,6 @@
       "primaryMusicStyleId": 41,
       "hasRecordLabel": true,
       "labelName": "TokyoRecords",
-      "image": {
-        "fileId": null,
-        "filename": "Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1"
-      },
       "artistName": "JKZ",
       "contributors": [
         {
@@ -37,6 +33,10 @@
           }
         }
       ],
+      "image": {
+        "fileId": "7564a019-6b42-444b-ab8a-a077698caa37",
+        "filename": "Receba-789294845633-UPC.jpg"
+      },
       "labelId": 1034385
     },
     "response": "{\"message\":\"An error has occured\",\"statusCode\":500,\"error\":\"Object reference not set to an instance of an object.\"}"
@@ -60,10 +60,6 @@
       "primaryMusicStyleId": 41,
       "hasRecordLabel": true,
       "labelName": "PEJOTA10*",
-      "image": {
-        "fileId": null,
-        "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg?rlkey=91bp85llgb8ho5lnfcs56105s&st=dn12pxrd&dl=1"
-      },
       "artistName": "Flash Beats Manow",
       "contributors": [
         {
@@ -79,124 +75,12 @@
           }
         }
       ],
+      "image": {
+        "fileId": "45b72822-0907-4032-b0ac-0be55a926d8b",
+        "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg"
+      },
       "labelId": 1034386
     },
     "response": "{\"message\":\"An error has occured\",\"statusCode\":500,\"error\":\"Object reference not set to an instance of an object.\"}"
-  },
-  {
-    "when": "create_track",
-    "status": 400,
-    "endpoint": "https://api.revelator.com/content/track/save",
-    "request": {
-      "name": "Receba",
-      "version": null,
-      "languageId": 31,
-      "explicit": false,
-      "trackType": 1,
-      "trackNumber": 1,
-      "previewStartSeconds": null,
-      "trackRecordingVersions": [
-        {
-          "isrc": "QZW9M2221000",
-          "audioFiles": [
-            {
-              "audioId": null,
-              "audioFilename": "Receba-789294845633-UPC.flac?rlkey=mxh9w3x6d82jmu7mmv2a9trio&st=i02exo9k&dl=1",
-              "fileFormat": 2
-            }
-          ]
-        }
-      ],
-      "contributors": [
-        {
-          "roleId": 34,
-          "artist": {
-            "artistId": 1669978
-          }
-        },
-        {
-          "roleId": 19,
-          "artist": {
-            "artistId": 1669978
-          }
-        }
-      ],
-      "artistName": "JKZ",
-      "composerContentsDTO": [
-        {
-          "share": "0.6",
-          "roleName": "Composer & Lyricist",
-          "composer": {
-            "name": "Agnaldo Paulino de Jesus Júnior"
-          }
-        },
-        {
-          "share": "0.4",
-          "roleName": "Composer & Lyricist",
-          "composer": {
-            "name": "Jackson Bertholdo Dos Santos"
-          }
-        }
-      ]
-    },
-    "response": "{\"message\":\"An error has occured\",\"statusCode\":400,\"error\":\"File with ID '00000000-0000-0000-0000-000000000000' is not present in storage please upload it again and attached it with the new file ID.\"}"
-  },
-  {
-    "when": "create_track",
-    "status": 400,
-    "endpoint": "https://api.revelator.com/content/track/save",
-    "request": {
-      "name": "A Cláusula do Contrato",
-      "version": null,
-      "languageId": 31,
-      "explicit": false,
-      "trackType": 1,
-      "trackNumber": 1,
-      "previewStartSeconds": null,
-      "trackRecordingVersions": [
-        {
-          "isrc": "QZW9M2236571",
-          "audioFiles": [
-            {
-              "audioId": null,
-              "audioFilename": "A-Cl-usula-do-Contrato-789294962088-UPC.flac?rlkey=hr2u9fvf5lq6u33enhqm3ui3f&st=m6hlmmgt&dl=1",
-              "fileFormat": 2
-            }
-          ]
-        }
-      ],
-      "contributors": [
-        {
-          "roleId": 34,
-          "artist": {
-            "artistId": 1669979
-          }
-        },
-        {
-          "roleId": 19,
-          "artist": {
-            "artistId": 1669979
-          }
-        }
-      ],
-      "artistName": "Flash Beats Manow",
-      "composerContentsDTO": [
-        {
-          "share": "0.5",
-          "roleName": "Composer & Lyricist",
-          "composer": {
-            "name": "Jackson Bertholdo Dos Santos"
-          }
-        },
-        {
-          "share": "0.5",
-          "roleName": "Composer & Lyricist",
-          "composer": {
-            "name": "Agnaldo Paulino de Jesus Júnior"
-          }
-        }
-      ]
-    },
-    "response": "{\"message\":\"An error has occured\",\"statusCode\":400,\"error\":\"File with ID '00000000-0000-0000-0000-000000000000' is not present in storage please upload it again and attached it with the new file ID.\"}"
   }
 ]

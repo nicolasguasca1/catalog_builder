@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-import argparse, os, sys, math, json, re, time
+import argparse, os, sys, math, json, re, time, tempfile, shutil
+from urllib.parse import urlparse, parse_qsl, urlunparse, urlencode
+from urllib.parse import urlparse
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
@@ -14,11 +16,12 @@ from roles import roles_dict
 # ========= Config & constants =========
 
 ARTIFACTS = Path("artifacts"); ARTIFACTS.mkdir(exist_ok=True)
+SOURCE_ARTWORKS = Path("source_artworks"); SOURCE_ARTWORKS.mkdir(exist_ok=True)
 TIMEOUT = 30
 
 # Track property map (API expects array[int])
 TRACK_PROP_MAP = {
-    "NONE": 1,
+    "NONE APPLY": 1,
     "REMIX OR DERIVATIVE": 2,
     "SAMPLES OR STOCK": 3,
     "MIX OR COMPILATION": 4,
@@ -138,6 +141,9 @@ def http(session: requests.Session, method: str, url: str, token: str, json_body
     return resp
 
 def fetch_all_labels(session: requests.Session, base_url: str, token: str, headers: Dict[str,str]) -> Dict[str, Dict[str,Any]]:
+    """Return a map name.lower() -> label object.
+    Supports both paginated { items, totalItemsCount } and plain array responses.
+    """
     out: Dict[str, Dict[str,Any]] = {}
     page = 1; page_size = 100
     while True:
@@ -145,16 +151,61 @@ def fetch_all_labels(session: requests.Session, base_url: str, token: str, heade
         resp = http(session, "GET", url, token, params={"pageNumber": page, "pageSize": page_size}, headers=headers)
         if not resp.ok:
             break
-        data = resp.json() or {}
-        items = data.get("items", []) or []
-        for it in items:
-            name = (it.get("name") or "").strip()
-            if name:
-                out[name.lower()] = it
-        total = data.get("totalItemsCount", 0)
-        if page * page_size >= total or not items:
+        try:
+            data = resp.json()
+        except Exception:
+            data = None
+        # Handle plain array or paginated object
+        if isinstance(data, list):
+            items = data
+            total = len(items)
+            paginated = False
+        else:
+            data = data or {}
+            items = (data.get("items") or data.get("data") or [])
+            total = data.get("totalItemsCount", len(items))
+            paginated = True if "items" in data or "totalItemsCount" in data else False
+        for it in items or []:
+            try:
+                name = (it.get("name") or "").strip()
+                if name:
+                    out[name.lower()] = it
+            except Exception:
+                continue
+        # Stop if no pagination or end reached
+        if not items:
+            break
+        if not paginated or (page * page_size) >= (total or 0):
             break
         page += 1
+    # Fallback 1: if empty, retry without pagination params
+    if not out:
+        try:
+            url = f"{base_url}/content/label/all"
+            resp = http(session, "GET", url, token, headers=headers)
+            if resp.ok:
+                data = resp.json()
+                items = data if isinstance(data, list) else (data or {}).get("items") or (data or {}).get("data") or []
+                for it in items or []:
+                    name = (it.get("name") or "").strip()
+                    if name:
+                        out[name.lower()] = it
+        except Exception:
+            pass
+    # Fallback 2: alternative plural path
+    if not out:
+        try:
+            url = f"{base_url}/content/labels/all"
+            resp = http(session, "GET", url, token, headers=headers)
+            if resp.ok:
+                data = resp.json()
+                items = data if isinstance(data, list) else (data or {}).get("items") or (data or {}).get("data") or []
+                for it in items or []:
+                    name = (it.get("name") or "").strip()
+                    if name:
+                        out[name.lower()] = it
+        except Exception:
+            pass
     return out
 
 def find_artist_id(session: requests.Session, base_url: str, token: str, enterpriseId: int, name: str, headers: Dict[str,str]) -> Optional[int]:
@@ -249,11 +300,24 @@ def is_nan(x):
     return x is None or (isinstance(x, float) and math.isnan(x)) or (isinstance(x, str) and x.strip()=="")
 
 def norm_bool(x) -> Optional[bool]:
-    if x is None: return None
+    if x is None:
+        return None
+    # Numeric handling (covers 1.0/0.0 and ints)
+    if isinstance(x, (int, float)):
+        try:
+            return bool(int(round(float(x))))
+        except Exception:
+            return None
     s = str(x).strip().lower()
-    if s in ("1","true","yes","y"): return True
-    if s in ("0","false","no","n"): return False
-    return None
+    if s in ("1","true","yes","y","x","✓","✔","t","on"):
+        return True
+    if s in ("0","false","no","n","off"):
+        return False
+    # Attempt float parse like "1.0"/"0.0"
+    try:
+        return bool(int(round(float(s))))
+    except Exception:
+        return None
 
 def norm_int(x) -> Optional[int]:
     if is_nan(x): return None
@@ -383,12 +447,27 @@ def ingest_image_by_url(url: str, session: requests.Session, base_url: str, toke
     # Placeholder: assuming upload by URL-like endpoint isn’t public; we keep URL in dry-run and return mock structure.
     return {"fileId": None, "filename": os.path.basename(url), "sourceUrl": url}
 
-def ingest_audio_by_url(url: str, filetype: str, session: requests.Session, base_url: str, token: str, live: bool) -> Optional[Dict[str,Any]]:
-    if not url: return None
+def ingest_audio_by_url(url: str, filetype: str, session: requests.Session, base_url: str, token: str, live: bool, headers: Dict[str,str], isrc: Optional[str]=None, upload_log: Optional[List[Dict[str,Any]]]=None) -> Optional[Dict[str,Any]]:
+    """Delegate audio ingestion to the pull-external endpoint and return a simple descriptor.
+    This preserves previous call sites but routes uploads via /media/audio/pullexternal/{ext}.
+    """
+    if not url:
+        return None
     fmt = (filetype or "").strip().upper()
-    fileFormat = {"WAV":1, "FLAC":2, "MP3":3}.get(fmt)
-    # If a pull-external audio endpoint exists, call it here. Otherwise, dry-run structure with sourceUrl for diagnostics:
-    return {"audioId": None, "audioFilename": os.path.basename(url), "fileFormat": fileFormat, "sourceUrl": url}
+    fileFormat = {"WAV": 1, "FLAC": 2, "MP3": 3}.get(fmt)
+    filename = os.path.basename(urlparse(url).path) or os.path.basename(url)
+    result_stub = {"audioId": None, "audioFilename": filename, "fileFormat": fileFormat, "sourceUrl": url}
+    if not live:
+        return result_stub
+    # Use pull-external to let the API fetch from the URL
+    audio_id, rec = upload_audio_by_url(session, base_url, token, headers or {}, url)
+    if upload_log is not None and isinstance(rec, dict):
+        # annotate with isrc for traceability
+        rec = {**rec, "isrc": isrc}
+        upload_log.append(rec)
+    if audio_id:
+        return {"audioId": audio_id, "audioFilename": filename, "fileFormat": fileFormat}
+    return result_stub
 
 def extract_spotify_artist_id(val: Optional[str]) -> Optional[str]:
     """Return the canonical Spotify artist ID from a URI or URL.
@@ -421,7 +500,7 @@ def normalize_audio_url(url: Optional[str]) -> Optional[str]:
         return None
     try:
         low = s.lower()
-        # Dropbox: ensure dl=1 for direct download
+        # Dropbox: ensure dl=1 for direct download, but don't alter host or other params
         if "dropbox.com/" in low:
             if "?" in s:
                 base, qs = s.split("?", 1)
@@ -442,34 +521,211 @@ def normalize_audio_url(url: Optional[str]) -> Optional[str]:
     except Exception:
         return url
 
-def map_track_properties(row: Dict[str,Any]) -> Optional[List[int]]:
-    # Normalize incoming row keys: collapse whitespace/newlines, uppercase
-    def norm_key(k: str) -> str:
-        return COLSPACE_RE.sub(" ", str(k or "").strip()).upper()
+def _filename_from_url(url: str) -> str:
+    try:
+        p = urlparse(url)
+        name = os.path.basename(p.path)
+        return name or "file"
+    except Exception:
+        return os.path.basename(url) or "file"
 
-    row_norm = {norm_key(k): v for k, v in row.items()}
+def _audio_ext_from_url(url: str) -> str:
+    name = _filename_from_url(url).lower()
+    for ext in ("flac","wav","mp3","m4a","aac","aiff","aif"):
+        if name.endswith("."+ext):
+            return ext
+    return "wav"
+
+def upload_audio_by_url(session: requests.Session, base_url: str, token: str, headers_common: Dict[str, str], source_url: str) -> Tuple[Optional[str], Dict[str, Any]]:
+    """
+    Upload audio by instructing the API to pull from an external URL.
+
+    IMPORTANT API QUIRK (temporary, expected to be refactored):
+    - Even when the source file is FLAC, the API expects the endpoint path
+      'media/audio/pullexternal/wav'. In other words, both FLAC and WAV must
+      be sent to the 'wav' variant of the endpoint. We still pass a correct
+      fileName (with .flac or .wav) in the body so the server can record it.
+
+    Returns (audioId, log_record). The log_record captures endpoint, request
+    body (externalUrl + fileName), status, and truncated response text.
+    """
+    s_url = normalize_audio_url(source_url)
+    ext = _audio_ext_from_url(s_url or source_url)
+    # Force FLAC to use the 'wav' endpoint as per current API behavior.
+    endpoint_ext = "wav" if ext in ("flac", "wav") else ext
+    endpoint = f"{base_url}/media/audio/pullexternal/{endpoint_ext}"
+    # Derive filename from URL; if no extension, synthesize one using ext
+    raw_name = _filename_from_url(s_url or source_url)
+    if not raw_name or "." not in raw_name:
+        raw_name = f"audio.{ext}"
+    # Ensure extension consistency: if raw_name has mismatched extension, align with ext
+    base, dot, suffix = raw_name.rpartition(".")
+    if base and dot and suffix.lower() != ext.lower():
+        file_name = f"{base}.{ext}"
+    else:
+        file_name = raw_name
+    # Build body with externalUrl + fileName as requested
+    body = {"externalUrl": s_url, "fileName": file_name}
+    try:
+        resp = http(session, "POST", endpoint, token, json_body=body, headers=headers_common)
+        rec = {
+            "endpoint": endpoint,
+            "request": body,
+            "status": resp.status_code,
+            "responseText": (resp.text or "")[:2000]
+        }
+        if resp.ok:
+            # Accept both JSON object and JSON scalar responses
+            if resp.headers.get("content-type", "").startswith("application/json"):
+                try:
+                    data = resp.json()
+                except ValueError:
+                    data = None
+            else:
+                data = None
+            audio_id = None
+            if isinstance(data, dict):
+                audio_id = data.get("audioId") or data.get("fileId") or data.get("id")
+            elif isinstance(data, (str, int)):
+                audio_id = str(data).strip().strip('"')
+            if not audio_id:
+                m = re.search(r"[0-9a-fA-F\-]{8,}", resp.text or "") or re.search(r"\b\d{4,}\b", resp.text or "")
+                if m:
+                    audio_id = m.group(0)
+            if audio_id:
+                rec["audioId"] = audio_id
+                return str(audio_id), rec
+        return None, rec
+    except Exception as e:
+        return None, {"endpoint": endpoint, "request": body, "error": str(e)}
+
+def download_file(session: requests.Session, url: str) -> Tuple[Optional[str], Optional[str], Optional[str]]:
+    """Download URL to a temp file. Returns (path, filename, error)."""
+    try:
+        s_url = normalize_audio_url(url) or url
+        fn = _filename_from_url(s_url)
+        with session.get(s_url, stream=True, timeout=TIMEOUT) as r:
+            r.raise_for_status()
+            fd, tmp_path = tempfile.mkstemp(prefix="ingest_", suffix="_"+fn)
+            with os.fdopen(fd, "wb") as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    if chunk:
+                        f.write(chunk)
+        return tmp_path, fn, None
+    except Exception as e:
+        return None, None, str(e)
+
+def upload_image_file(session: requests.Session, base_url: str, token: str, headers_common: Dict[str,str], file_path: str, filename: str) -> Tuple[Optional[str], Dict[str,Any]]:
+    """POST multipart/form-data to /media/image/upload?cover=true. Returns (fileId, log_record)."""
+    endpoint = f"{base_url}/media/image/upload"
+    params = {"cover": "true"}
+    headers = {"Authorization": f"Bearer {token}", **headers_common}
+    try:
+        with open(file_path, "rb") as f:
+            files = {"file": (filename, f)}
+            resp = session.post(endpoint, params=params, headers=headers, files=files, timeout=TIMEOUT)
+        rec = {
+            "endpoint": endpoint,
+            "params": params,
+            "filename": filename,
+            "status": resp.status_code,
+            "contentType": resp.headers.get("content-type", ""),
+            "responseText": (resp.text or "")[:2000]
+        }
+        if resp.ok:
+            # Handle both JSON object and JSON string bodies
+            if resp.headers.get("content-type","" ).startswith("application/json"):
+                try:
+                    data = resp.json()
+                except ValueError:
+                    data = None
+            else:
+                data = None
+            file_id = None
+            if isinstance(data, dict):
+                file_id = data.get("fileId") or data.get("id")
+            elif isinstance(data, (str, int)):
+                # Some APIs return a bare JSON string with the id
+                file_id = str(data).strip().strip('"')
+            if not file_id:
+                # Fallback: try to extract a GUID or numeric id from the text
+                m = re.search(r"[0-9a-fA-F\-]{8,}", resp.text or "") or re.search(r"\b\d{4,}\b", resp.text or "")
+                if m:
+                    file_id = m.group(0)
+            if file_id:
+                rec["fileId"] = file_id
+                return str(file_id), rec
+        return None, rec
+    except Exception as e:
+        return None, {"endpoint": endpoint, "error": str(e), "filename": filename}
+
+def map_track_properties(row: Dict[str,Any]) -> Tuple[Optional[List[int]], Dict[str, Any]]:
+    """Map a Track Properties row to API IDs with diagnostics.
+    Returns (ids or [1] when defaulted, diag).
+    """
+    # Normalize incoming row keys: collapse non-alphanumerics to spaces for resilient matching
+    def norm_key(k: str) -> str:
+        try:
+            return re.sub(r"[^a-z0-9]+", " ", str(k or "").strip().lower()).strip()
+        except Exception:
+            return str(k or "").strip().lower()
+
+    # Build a reverse map of normalized key -> (original key, value, tokens)
+    def tokens(s: str) -> List[str]:
+        return [t for t in norm_key(s).split() if t]
+
+    row_norm_map: Dict[str, Tuple[str, Any, List[str]]] = {}
+    for k, v in row.items():
+        nk = norm_key(k)
+        row_norm_map[nk] = (k, v, tokens(k))
 
     labels = [
         "REMIX OR DERIVATIVE","SAMPLES OR STOCK","MIX OR COMPILATION","ALTERNATE VERSION",
         "SPECIAL GENRE","NON MUSICAL CONTENT","INCLUDES AI","NONE APPLY","NONE"
     ]
+
     set_ids: List[int] = []
     any_true = False
+    diag_values: Dict[str, Dict[str, Any]] = {}
+
+    STOPWORDS = {"or","and","of","the"}
+    def label_tokens(label: str) -> List[str]:
+        return [t for t in tokens(label) if t not in STOPWORDS]
+
     for lab in labels:
-        v = row_norm.get(norm_key(lab))
-        v = norm_bool(v)
-        if v:
+        tgt_tokens = set(label_tokens(lab))
+        matched_col = None; raw_val = None; parsed = None
+        # Try exact normalized key first
+        nk = norm_key(lab)
+        if nk in row_norm_map:
+            matched_col, raw_val, col_tokens = row_norm_map[nk]
+        else:
+            # Token-subset match: find a column whose tokens superset target tokens
+            for _, (orig_key, val, col_tokens) in row_norm_map.items():
+                col_set = set([t for t in col_tokens if t not in STOPWORDS])
+                if tgt_tokens and tgt_tokens.issubset(col_set):
+                    matched_col, raw_val = orig_key, val
+                    break
+        parsed = norm_bool(raw_val)
+        diag_values[lab] = {"matched_column": matched_col, "raw": raw_val, "bool": parsed}
+        if parsed:
             any_true = True
             key = lab.upper()
             if key in ("NONE APPLY", "NONE"):
-                set_ids = [1]  # exclusive
+                set_ids = [1]
                 break
-            # add mapped (TRACK_PROP_MAP keys are already normalized)
             set_ids.append(TRACK_PROP_MAP[key if key != "NONE APPLY" else "NONE"])
+
+    defaulted = False
     if not any_true:
-        return None
+        # Default to NONE per API requirement: track must have properties
+        set_ids = [1]
+        defaulted = True
+
     # dedupe & sort
-    return sorted(set(set_ids))
+    set_ids = sorted(set(set_ids))
+    diag = {"values": diag_values, "defaulted_to_none": defaulted, "result_ids": set_ids}
+    return set_ids, diag
 
 # Column name normalization (case + whitespace resilient)
 COLSPACE_RE = re.compile(r"[\s_]+")
@@ -899,6 +1155,8 @@ def main():
                 # Only attach image if we have a valid fileId; otherwise, skip to avoid 400s on null GUID
                 if img and img.get("fileId"):
                     rel["image"] = {"fileId": img["fileId"], "filename": img["filename"]}
+                if img_url:
+                    rel["imageSourceUrl"] = img_url
                 releases_payload.append(rel)
             sample_releases = []
             for i in range(min(3, len(releases_payload))):
@@ -941,21 +1199,23 @@ def main():
 
         # Tracks (by Release_Track)
         audio_url_map: Dict[str, Optional[str]] = {}
+        audio_upload_logs: List[Dict[str, Any]] = []
         with progress.step("Build tracks from Release_Track") as s:
             cm_reltrk = make_colmap(df_reltrk)
             audio_url_col = resolve_colkey(df_reltrk, "AUDIO FILE URL", "AUDIO URL", "AUDIO DOWNLOAD URL", "AUDIO FILE", "FILE URL", "AUDIO")
             audio_type_col = resolve_colkey(df_reltrk, "AUDIO TYPE", "FILE TYPE", "AUDIO FORMAT", "FORMAT")
             track_rows = []
             first_audio_url_seen = None
-            isrc_to_track: Dict[str, Dict[str,Any]] = {}
-            for _,rw in df_reltrk.iterrows():
+            isrc_to_track: Dict[str, Dict[str, Any]] = {}
+            for _, rw in df_reltrk.iterrows():
                 upc = norm_str(get_val(rw, cm_reltrk, UPC_COL)); isrc = norm_str(get_val(rw, cm_reltrk, ISRC_COL))
-                if not upc or not isrc: continue
+                if not upc or not isrc:
+                    continue
                 t_title = norm_str(get_val(rw, cm_reltrk, "TRACK TITLE")); t_version = norm_str(get_val(rw, cm_reltrk, "TRACK VERSION"))
                 lang = norm_str(get_val(rw, cm_reltrk, "LANGUAGE OF LYRICS", "LANGUAGE"))
                 explicit = norm_bool(get_val(rw, cm_reltrk, "EXPLICIT"))
                 ttype = norm_str(get_val(rw, cm_reltrk, "TYPE"))
-                ttype_id = {"original":1,"cover":2,"public domain":3}.get((ttype or "").strip().lower())
+                ttype_id = {"original": 1, "cover": 2, "public domain": 3}.get((ttype or "").strip().lower())
                 audio_url_raw = norm_str(rw.get(audio_url_col)) if audio_url_col else norm_str(get_val(rw, cm_reltrk, "AUDIO FILE URL"))
                 audio_url = normalize_audio_url(audio_url_raw)
                 audio_type = norm_str(rw.get(audio_type_col)) if audio_type_col else norm_str(get_val(rw, cm_reltrk, "AUDIO TYPE"))
@@ -963,7 +1223,7 @@ def main():
                 trknum = norm_int(get_val(rw, cm_reltrk, "TRACK", "TRACK #", "TRACK NUMBER"))  # track number
                 lang_id = resolve_language_id(lang, session, base_url, token)
 
-                audio = ingest_audio_by_url(audio_url, audio_type, session, base_url, token, args.live) if audio_url else None
+                audio = ingest_audio_by_url(audio_url, audio_type, session, base_url, token, args.live, headers={"X-EnterpriseId": str(enterpriseId), "X-TenantId": str(tenantId)}, isrc=isrc, upload_log=audio_upload_logs) if audio_url else None
                 if first_audio_url_seen is None and audio_url:
                     first_audio_url_seen = audio_url
                 if isrc:
@@ -978,16 +1238,21 @@ def main():
                     "previewStartSeconds": preview,
                     "trackRecordingVersions": [{
                         "isrc": isrc,
+                        "recordingVersionType": ttype_id,
                         # Only attach audioFiles objects when we have an uploaded audioId.
-                        # Sending null GUIDs causes 400; external URLs are not accepted directly here.
-                        "audioFiles": ([{"audioId": audio["audioId"], "audioFilename": audio["audioFilename"], "fileFormat": audio["fileFormat"]}] if (audio and audio.get("audioId")) else [])
+                        # External URLs are not accepted directly here.
+                        "audioFiles": ([{
+                            "audioId": audio["audioId"],
+                            "audioFilename": audio.get("audioFilename"),
+                            "fileFormat": audio.get("fileFormat")
+                        }] if (audio and audio.get("audioId")) else [])
                     }]
                 }
                 track_rows.append((upc, isrc, track))
                 isrc_to_track[isrc] = track
             sample_tracks = []
             for i in range(min(3, len(track_rows))):
-                upc,isrc,track = track_rows[i]
+                upc, isrc, track = track_rows[i]
                 sample_tracks.append({"upc": upc, "isrc": isrc, "name": track.get("name"), "trackNumber": track.get("trackNumber")})
             s.info(tracks=len(track_rows), sample_tracks=sample_tracks, first_audio_url=first_audio_url_seen, audio_url_col=audio_url_col, audio_type_col=audio_type_col)
 
@@ -1033,13 +1298,18 @@ def main():
                 rights = norm_str(get_val(rw, cm_trkcomp, "PUBLISHING")); publisher = norm_str(get_val(rw, cm_trkcomp, "PUBLISHER"))
                 if not isrc or not comp or not role or not share_s: continue
                 # share remains string for API, but we validated numerically earlier
+                share_num = None
+                try:
+                    share_num = float(share_s)
+                except Exception:
+                    share_num = None
                 rightsId = None
                 if rights:
                     rs = rights.strip().lower()
                     if rs in ("copyright control","self-published","self published","1","yes (self)"): rightsId = 1
                     elif rs in ("published","2","yes (publisher)"): rightsId = 2
                     elif rs in ("public domain","3","no publisher"): rightsId = 3
-                entry = {"composerName": comp, "roleName": role, "share": share_s}
+                entry = {"composerName": comp, "roleName": role, "share": share_s, "share_num": share_num}
                 if rightsId: entry["rightsId"] = rightsId
                 if rightsId == 2 and publisher:
                     entry["publisherName"] = publisher
@@ -1053,21 +1323,70 @@ def main():
         # Track properties
         with progress.step("Parse track properties") as s:
             cm_props = make_colmap(df_props)
+            # Build effective headers for df_props columns using sheet row 3 or row 4 when missing
+            effective_headers: Dict[Any, str] = {}
+            try:
+                wb_props = load_workbook(xlsx_path, data_only=True)
+                ws_props = wb_props[s9]
+            except Exception:
+                wb_props = None; ws_props = None
+            for c in df_props.columns:
+                if isinstance(c, str) and norm_str(c):
+                    effective_headers[c] = c
+                else:
+                    # Try to resolve from Excel rows 3/4 using column index (0-based -> 1-based)
+                    if ws_props is not None and isinstance(c, (int, float)):
+                        try:
+                            colnum = int(c) + 1
+                            h3 = ws_props.cell(row=3, column=colnum).value
+                            h4 = ws_props.cell(row=4, column=colnum).value
+                            h3s = norm_str(h3)
+                            h4s = norm_str(h4)
+                            # If the row-3 header is the generic bucket 'SPECIAL AUDIO PROPERTIES',
+                            # prefer the row-4 subheader as the effective column label (e.g., 'NONE APPLY').
+                            if h3s and h3s.strip().lower() == "special audio properties" and h4s:
+                                eff = h4s
+                            else:
+                                eff = h3s or h4s
+                            if eff:
+                                effective_headers[c] = eff
+                        except Exception:
+                            pass
             props_by_isrc: Dict[str,List[int]] = {}
+            props_diag: Dict[str, Any] = {}
+            mapped_cols = {str(k): v for k, v in effective_headers.items()}
             for _, rw in df_props.iterrows():
                 isrc = norm_str(get_val(rw, cm_props, ISRC_COL))
-                if not isrc: 
+                if not isrc:
                     continue
-                arr = map_track_properties(rw.to_dict())
-                if arr:
-                    props_by_isrc[isrc] = arr
+                # Build a row dict keyed by effective headers
+                row_dict: Dict[str, Any] = {}
+                for c in df_props.columns:
+                    eh = effective_headers.get(c)
+                    if not eh:
+                        continue
+                    try:
+                        row_dict[eh] = rw.get(c)
+                    except Exception:
+                        try:
+                            row_dict[eh] = rw[c]
+                        except Exception:
+                            row_dict[eh] = None
+                ids, diag = map_track_properties(row_dict)
+                if ids:
+                    props_by_isrc[isrc] = ids
+                if diag:
+                    # include which headers were mapped for extra visibility
+                    diag["_effective_headers"] = mapped_cols
+                    props_diag[isrc] = diag
             sample_props = []
             for isrc, arr in list(props_by_isrc.items())[:2]:
                 sample_props.append({"isrc": isrc, "props": arr})
-            s.info(with_properties=len(props_by_isrc), sample=sample_props)
+            s.info(with_properties=len(props_by_isrc), defaulted=sum(1 for d in props_diag.values() if d.get("defaulted_to_none")), sample=sample_props)
 
         # Attach contributors/compositions/properties
         with progress.step("Attach track contributors/compositions/properties") as s:
+            comp_share_diag: Dict[str, Any] = {}
             for idx,(upc,isrc,track) in enumerate(track_rows):
                 # Contributors
                 if isrc in track_contribs_by_isrc:
@@ -1081,16 +1400,52 @@ def main():
                     track['artistName'] = track_primary_artist_by_isrc[isrc]
                 # Compositions
                 if isrc in trk_comp_by_isrc:
+                    # Determine scale and convert to 0-100 percentages for API
+                    entries = trk_comp_by_isrc[isrc]
+                    nums = [cc.get("share_num") for cc in entries if cc.get("share_num") is not None]
+                    total = sum(nums) if nums else None
+                    tol = 1e-3
+                    scale = "unknown"
+                    if total is not None:
+                        if abs(total - 1.0) <= tol:
+                            scale = "unit"
+                        elif abs(total - 100.0) <= tol:
+                            scale = "percent"
+                        else:
+                            scale = "mixed"
+                    def fmt_pct(x: float) -> str:
+                        # Format as int if near-integer, else keep up to 4 decimals
+                        rx = round(x)
+                        if abs(x - rx) <= 1e-6:
+                            return str(int(rx))
+                        return ("%0.4f" % x).rstrip("0").rstrip(".")
                     comp_out = []
-                    for cc in trk_comp_by_isrc[isrc]:
+                    out_vals = []
+                    for cc in entries:
+                        s_num = cc.get("share_num")
+                        if s_num is None:
+                            # fallback: attempt parse again
+                            try:
+                                s_num = float(cc.get("share") or 0)
+                            except Exception:
+                                s_num = 0.0
+                        pct_val = s_num*100.0 if scale == "unit" else s_num
+                        out_vals.append(pct_val)
                         item = {
-                            "share": str(cc["share"]),
+                            "share": fmt_pct(pct_val),
                             "roleName": cc["roleName"],
                             "composer": {"name": cc["composerName"]}
                         }
                         if "rightsId" in cc: item["rightsId"] = cc["rightsId"]
                         if "publisherName" in cc: item["publisher"] = {"name": cc["publisherName"]}
                         comp_out.append(item)
+                    comp_share_diag[isrc] = {
+                        "in_values": nums,
+                        "in_total": total,
+                        "scale_detected": scale,
+                        "out_values": out_vals,
+                        "out_total": sum(out_vals) if out_vals else None
+                    }
                     if comp_out:
                         track["composerContentsDTO"] = comp_out
                 # Properties
@@ -1117,8 +1472,47 @@ def main():
 
         # ===== Emit dry-run artifacts
         with progress.step("Write dry-run artifacts") as s:
+            # Enrich labels with existing labelId for transparency
+            try:
+                headers_tmp = {"X-EnterpriseId": str(enterpriseId), "X-TenantId": str(tenantId)}
+                existing_labels = fetch_all_labels(session, base_url, token, headers_tmp)
+                # Persist a compact view of existing label lookup for transparency
+                try:
+                    (ARTIFACTS/"labels_lookup.json").write_text(json.dumps({k: v.get("labelId") for k,v in existing_labels.items()}, indent=2, ensure_ascii=False))
+                except Exception:
+                    pass
+                if not existing_labels:
+                    try:
+                        (ARTIFACTS/"labels_lookup.debug.json").write_text(json.dumps({
+                            "enterpriseId": enterpriseId,
+                            "tenantId": tenantId,
+                            "endpoints_tried": [
+                                f"{base_url}/content/label/all?pageNumber=1&pageSize=100",
+                                f"{base_url}/content/label/all",
+                                f"{base_url}/content/labels/all"
+                            ]
+                        }, indent=2))
+                    except Exception:
+                        pass
+                labels_artifact = []
+                for it in labels_payload:
+                    nm = (it.get("name") or "").strip()
+                    lid = None
+                    if nm:
+                        ex = existing_labels.get(nm.lower())
+                        if ex:
+                            try:
+                                lid = int(ex.get("labelId"))
+                            except Exception:
+                                lid = ex.get("labelId")
+                    rec = {"name": nm}
+                    if lid:
+                        rec["labelId"] = lid
+                    labels_artifact.append(rec)
+            except Exception:
+                labels_artifact = labels_payload
             (ARTIFACTS/"artists.json").write_text(json.dumps(artists_payload, indent=2, ensure_ascii=False))
-            (ARTIFACTS/"labels.json").write_text(json.dumps(labels_payload, indent=2, ensure_ascii=False))
+            (ARTIFACTS/"labels.json").write_text(json.dumps(labels_artifact, indent=2, ensure_ascii=False))
             (ARTIFACTS/"publishers.json").write_text(json.dumps(publishers_payload, indent=2, ensure_ascii=False))
             (ARTIFACTS/"composers.json").write_text(json.dumps(composers_payload, indent=2, ensure_ascii=False))
             (ARTIFACTS/"releases.json").write_text(json.dumps(releases_payload, indent=2, ensure_ascii=False))
@@ -1129,7 +1523,23 @@ def main():
                     (ARTIFACTS/"audio_urls.json").write_text(json.dumps(audio_url_map, indent=2, ensure_ascii=False))
             except Exception:
                 pass
-            s.info(artists=len(artists_payload), labels=len(labels_payload), publishers=len(publishers_payload), composers=len(composers_payload), releases=len(releases_payload), tracks=len(tracks_payload))
+            # Composition share diagnostics
+            try:
+                if 'comp_share_diag' in locals():
+                    (ARTIFACTS/"composition_share_analysis.json").write_text(json.dumps(comp_share_diag, indent=2, ensure_ascii=False))
+            except Exception:
+                pass
+            # Track properties diagnostics
+            try:
+                if 'props_diag' in locals():
+                    (ARTIFACTS/"track_properties_analysis.json").write_text(json.dumps(props_diag, indent=2, ensure_ascii=False))
+            except Exception:
+                pass
+            try:
+                lookup_count = len(existing_labels) if 'existing_labels' in locals() else None
+            except Exception:
+                lookup_count = None
+            s.info(artists=len(artists_payload), labels=len(labels_artifact) if 'labels_artifact' in locals() else len(labels_payload), labels_lookup=lookup_count, publishers=len(publishers_payload), composers=len(composers_payload), releases=len(releases_payload), tracks=len(tracks_payload))
             print(f"[OK] Dry-run artifacts written under {ARTIFACTS.resolve()}")
 
         if not args.live:
@@ -1144,6 +1554,7 @@ def main():
         }
 
         http_errors: List[Dict[str, Any]] = []
+        image_upload_logs: List[Dict[str, Any]] = []
         def create_simple_list(items, url_path):
             created = 0; failed = 0
             for it in items:
@@ -1174,6 +1585,46 @@ def main():
             s.info(labels_created=l_created, labels_reused=l_reused, labels_failed=l_failed,
                    artists_created=a_created, artists_reused=a_reused, artists_failed=a_failed,
                    publishers_ok=p_ok, publishers_fail=p_fail, composers_ok=c_ok, composers_fail=c_fail)
+
+        # Prepare source_artworks: download images locally, build mapping, then upload to get fileIds
+        with progress.step("Prepare and upload cover images") as s:
+            image_file_map: Dict[str, Dict[str, str]] = {}
+            downloaded = 0; uploaded = 0; skipped = 0
+            for idx, rel in enumerate(releases_payload):
+                src = rel.get("imageSourceUrl")
+                if not src:
+                    skipped += 1
+                    continue
+                try:
+                    # Download to source_artworks with deterministic filename
+                    _, name = os.path.split(_filename_from_url(src))
+                    safe_name = name or f"image_{idx}.jpg"
+                    tmp_path, fn, err = download_file(session, src)
+                    if err or not tmp_path:
+                        image_upload_logs.append({"when": "download_image", "sourceUrl": src, "error": err or "unknown"})
+                        continue
+                    local_path = SOURCE_ARTWORKS / safe_name
+                    shutil.move(tmp_path, local_path)
+                    downloaded += 1
+                    # Upload
+                    fid, up_log = upload_image_file(session, base_url, token, headers_common, str(local_path), safe_name)
+                    if up_log:
+                        image_upload_logs.append(up_log)
+                    if fid:
+                        uploaded += 1
+                        image_file_map[str(local_path)] = {"fileId": str(fid), "fileName": safe_name}
+                        rel["image"] = {"fileId": fid, "filename": safe_name}
+                        # Once we have a fileId, drop the source URL to avoid ambiguous payloads
+                        if "imageSourceUrl" in rel:
+                            rel.pop("imageSourceUrl", None)
+                except Exception as e:
+                    image_upload_logs.append({"when": "image_pipeline_exception", "sourceUrl": src, "error": str(e)})
+            # Persist mapping
+            try:
+                (ARTIFACTS/"image_file_map.json").write_text(json.dumps(image_file_map, indent=2, ensure_ascii=False))
+            except Exception:
+                pass
+            s.info(downloaded=downloaded, uploaded=uploaded, skipped=skipped, mapped=len(image_file_map))
 
         # Inject known IDs into release/track payloads before creation
         with progress.step("Wire labelId/artistId into payloads") as s:
@@ -1248,7 +1699,7 @@ def main():
                 progress.write_log()
                 sys.exit(1)
 
-        # Releases (with UPC duplicate handling)
+    # Releases (with UPC duplicate handling)
         with progress.step("Create releases") as s:
             upc_to_release_id: Dict[str,str] = {}
             rel_created = 0; rel_failed = 0
@@ -1280,15 +1731,15 @@ def main():
                     if rel.get("upc"): upc_to_release_id[rel["upc"]] = rid
             s.info(created=rel_created, failed=rel_failed)
 
-    # Tracks per release
-    with progress.step("Create tracks") as s:
-            t_created = 0; t_failed = 0
+        # Tracks per release
+        with progress.step("Create tracks") as s:
+            created = 0; failed = 0
             for upc, track in tracks_payload:
                 # If we know releaseId, include association if API needs it; otherwise the endpoint may infer.
                 t_url = f"{base_url}/content/track/save"
                 t_resp = http(session, "POST", t_url, token, json_body=track, headers=headers_common)
                 if not t_resp.ok:
-                    t_failed += 1
+                    failed += 1
                     http_errors.append({
                         "when": "create_track",
                         "status": t_resp.status_code,
@@ -1298,8 +1749,8 @@ def main():
                     })
                     print(f"[ERROR] Track create failed {t_resp.status_code}: {t_resp.text[:300]}")
                 else:
-                    t_created += 1
-            s.info(created=t_created, failed=t_failed)
+                    created += 1
+            s.info(created=created, failed=failed)
 
         if upc_dupes_logged:
             (ARTIFACTS/"upc_skipped_for_duplicates.json").write_text(json.dumps(upc_dupes_logged, indent=2))
@@ -1308,6 +1759,22 @@ def main():
         if http_errors:
             (ARTIFACTS/"http_errors.json").write_text(json.dumps(http_errors, indent=2, ensure_ascii=False))
             print(f"[LOG] Wrote HTTP error details to {(ARTIFACTS/ 'http_errors.json').resolve()}")
+
+        # Upload logs for audio
+        try:
+            if audio_upload_logs:
+                (ARTIFACTS/"audio_uploads.json").write_text(json.dumps(audio_upload_logs, indent=2, ensure_ascii=False))
+                print(f"[LOG] Wrote audio upload logs to {(ARTIFACTS/ 'audio_uploads.json').resolve()}")
+        except Exception:
+            pass
+
+        # Upload logs for images
+        try:
+            if image_upload_logs:
+                (ARTIFACTS/"image_uploads.json").write_text(json.dumps(image_upload_logs, indent=2, ensure_ascii=False))
+                print(f"[LOG] Wrote image upload logs to {(ARTIFACTS/ 'image_uploads.json').resolve()}")
+        except Exception:
+            pass
 
         progress.write_log()
         print("[DONE] Live execution finished.")

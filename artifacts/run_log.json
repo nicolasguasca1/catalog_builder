@@ -2,27 +2,27 @@
   {
     "name": "Validate enterprise",
     "status": "ok",
-    "start_ts": 1757681963.366988,
+    "start_ts": 1758558702.4817312,
     "meta": {
       "enterpriseId": 414849,
       "tenantId": 332920,
       "enterpriseName": "Nico test label"
     },
-    "duration_sec": 2.154
+    "duration_sec": 1.364
   },
   {
     "name": "Load role map",
     "status": "ok",
-    "start_ts": 1757681965.521665,
+    "start_ts": 1758558703.8464499,
     "meta": {
       "roles": 399
     },
-    "duration_sec": 0.0
+    "duration_sec": 0.001
   },
   {
     "name": "Read sheets",
     "status": "ok",
-    "start_ts": 1757681965.522176,
+    "start_ts": 1758558703.8478668,
     "meta": {
       "artists": 3,
       "labels": 2,
@@ -88,12 +88,12 @@
         }
       }
     },
-    "duration_sec": 3.25
+    "duration_sec": 3.588
   },
   {
     "name": "Preflight validations",
     "status": "ok",
-    "start_ts": 1757681968.773738,
+    "start_ts": 1758558707.437597,
     "meta": {
       "issues": 0
     },
@@ -102,7 +102,7 @@
   {
     "name": "Build artists & labels & master entities",
     "status": "ok",
-    "start_ts": 1757681968.7737842,
+    "start_ts": 1758558707.437641,
     "meta": {
       "artists": 3,
       "labels": 2,
@@ -139,7 +139,7 @@
   {
     "name": "Build releases",
     "status": "ok",
-    "start_ts": 1757681968.774379,
+    "start_ts": 1758558707.438272,
     "meta": {
       "releases": 2,
       "sample_releases": [
@@ -157,12 +157,12 @@
         }
       ]
     },
-    "duration_sec": 0.245
+    "duration_sec": 0.208
   },
   {
     "name": "Parse release contributors",
     "status": "ok",
-    "start_ts": 1757681969.0191722,
+    "start_ts": 1758558707.645951,
     "meta": {
       "contributors": 4,
       "primaries": 2,
@@ -193,12 +193,12 @@
         }
       ]
     },
-    "duration_sec": 0.002
+    "duration_sec": 0.001
   },
   {
     "name": "Build tracks from Release_Track",
     "status": "ok",
-    "start_ts": 1757681969.020824,
+    "start_ts": 1758558707.647258,
     "meta": {
       "tracks": 2,
       "sample_tracks": [
@@ -214,14 +214,17 @@
           "name": "A Cl\u00e1usula do Contrato",
           "trackNumber": 1
         }
-      ]
+      ],
+      "first_audio_url": "https://www.dropbox.com/scl/fi/g6ch1pcun31eep1am9mkv/Receba-789294845633-UPC.flac?rlkey=mxh9w3x6d82jmu7mmv2a9trio&st=i02exo9k&dl=1",
+      "audio_url_col": "AUDIO FILE URL",
+      "audio_type_col": "AUDIO TYPE"
     },
-    "duration_sec": 0.117
+    "duration_sec": 9.525
   },
   {
     "name": "Parse track contributors",
     "status": "ok",
-    "start_ts": 1757681969.138129,
+    "start_ts": 1758558717.1720881,
     "meta": {
       "contributors": 4,
       "primaries": 2,
@@ -252,12 +255,12 @@
         }
       ]
     },
-    "duration_sec": 0.002
+    "duration_sec": 0.001
   },
   {
     "name": "Parse track compositions",
     "status": "ok",
-    "start_ts": 1757681969.1401138,
+    "start_ts": 1758558717.1729631,
     "meta": {
       "compositions": 4,
       "sample": [
@@ -266,7 +269,8 @@
           "first": {
             "composerName": "Agnaldo Paulino de Jesus J\u00fanior",
             "roleName": "Composer & Lyricist",
-            "share": "0.6"
+            "share": "0.6",
+            "share_num": 0.6
           }
         },
         {
@@ -274,27 +278,42 @@
           "first": {
             "composerName": "Jackson Bertholdo Dos Santos",
             "roleName": "Composer & Lyricist",
-            "share": "0.5"
+            "share": "0.5",
+            "share_num": 0.5
           }
         }
       ]
     },
-    "duration_sec": 0.001
+    "duration_sec": 0.0
   },
   {
     "name": "Parse track properties",
     "status": "ok",
-    "start_ts": 1757681969.14121,
+    "start_ts": 1758558717.173367,
     "meta": {
-      "with_properties": 0,
-      "sample": []
+      "with_properties": 2,
+      "defaulted": 2,
+      "sample": [
+        {
+          "isrc": "QZW9M2221000",
+          "props": [
+            1
+          ]
+        },
+        {
+          "isrc": "QZW9M2236571",
+          "props": [
+            1
+          ]
+        }
+      ]
     },
-    "duration_sec": 0.001
+    "duration_sec": 1.232
   },
   {
     "name": "Attach track contributors/compositions/properties",
     "status": "ok",
-    "start_ts": 1757681969.1418722,
+    "start_ts": 1758558718.405272,
     "meta": {
       "tracks": 2
     },
@@ -303,7 +322,7 @@
   {
     "name": "Attach release contributors",
     "status": "ok",
-    "start_ts": 1757681969.141998,
+    "start_ts": 1758558718.4055948,
     "meta": {
       "releases": 2
     },
@@ -312,24 +331,25 @@
   {
     "name": "Write dry-run artifacts",
     "status": "ok",
-    "start_ts": 1757681969.142117,
+    "start_ts": 1758558718.405983,
     "meta": {
       "artists": 3,
       "labels": 2,
+      "labels_lookup": 13,
       "publishers": 0,
       "composers": 2,
       "releases": 2,
       "tracks": 2
     },
-    "duration_sec": 0.005
+    "duration_sec": 2.048
   },
   {
     "name": "Upsert masters (artists/labels) and create publishers/composers",
     "status": "ok",
-    "start_ts": 1757681969.147451,
+    "start_ts": 1758558720.454644,
     "meta": {
-      "labels_created": 2,
-      "labels_reused": 0,
+      "labels_created": 0,
+      "labels_reused": 2,
       "labels_failed": 0,
       "artists_created": 0,
       "artists_reused": 3,
@@ -339,12 +359,24 @@
       "composers_ok": 2,
       "composers_fail": 0
     },
-    "duration_sec": 1.469
+    "duration_sec": 2.473
+  },
+  {
+    "name": "Prepare and upload cover images",
+    "status": "ok",
+    "start_ts": 1758558722.927295,
+    "meta": {
+      "downloaded": 2,
+      "uploaded": 2,
+      "skipped": 0,
+      "mapped": 2
+    },
+    "duration_sec": 4.015
   },
   {
     "name": "Wire labelId/artistId into payloads",
     "status": "ok",
-    "start_ts": 1757681970.616593,
+    "start_ts": 1758558726.9425569,
     "meta": {
       "release_label_ids": 2,
       "release_contrib_ids": 4,
@@ -353,23 +385,32 @@
     "duration_sec": 0.0
   },
   {
+    "name": "Validate required media (audio)",
+    "status": "ok",
+    "start_ts": 1758558726.943049,
+    "meta": {
+      "missing": 0
+    },
+    "duration_sec": 0.0
+  },
+  {
     "name": "Create releases",
     "status": "ok",
-    "start_ts": 1757681970.6166668,
+    "start_ts": 1758558726.943299,
     "meta": {
       "created": 0,
       "failed": 2
     },
-    "duration_sec": 0.15
+    "duration_sec": 0.161
   },
   {
     "name": "Create tracks",
     "status": "ok",
-    "start_ts": 1757681970.7664099,
+    "start_ts": 1758558727.103928,
     "meta": {
-      "created": 0,
-      "failed": 2
+      "created": 2,
+      "failed": 0
     },
-    "duration_sec": 0.341
+    "duration_sec": 5.335
   }
 ]

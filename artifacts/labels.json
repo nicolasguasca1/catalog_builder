@@ -1,8 +1,10 @@
 [
   {
-    "name": "TokyoRecords"
+    "name": "TokyoRecords",
+    "labelId": 1034385
   },
   {
-    "name": "PEJOTA10*"
+    "name": "PEJOTA10*",
+    "labelId": 1034386
   }
 ]

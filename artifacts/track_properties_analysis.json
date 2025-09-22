@@ -1,0 +1,122 @@
+{
+  "QZW9M2221000": {
+    "values": {
+      "REMIX OR DERIVATIVE": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      },
+      "SAMPLES OR STOCK": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      },
+      "MIX OR COMPILATION": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      },
+      "ALTERNATE VERSION": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      },
+      "SPECIAL GENRE": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      },
+      "NON MUSICAL CONTENT": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      },
+      "INCLUDES AI": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      },
+      "NONE APPLY": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      },
+      "NONE": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      }
+    },
+    "defaulted_to_none": true,
+    "result_ids": [
+      1
+    ],
+    "_effective_headers": {
+      "ISRC/vISRC": "ISRC/vISRC",
+      "CATALOG TRACK ID": "CATALOG TRACK ID",
+      "TRACK TITLE": "TRACK TITLE",
+      "TRACK VERSION": "TRACK VERSION",
+      "SPECIAL AUDIO PROPERTIES": "SPECIAL AUDIO PROPERTIES"
+    }
+  },
+  "QZW9M2236571": {
+    "values": {
+      "REMIX OR DERIVATIVE": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      },
+      "SAMPLES OR STOCK": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      },
+      "MIX OR COMPILATION": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      },
+      "ALTERNATE VERSION": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      },
+      "SPECIAL GENRE": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      },
+      "NON MUSICAL CONTENT": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      },
+      "INCLUDES AI": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      },
+      "NONE APPLY": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      },
+      "NONE": {
+        "matched_column": null,
+        "raw": null,
+        "bool": null
+      }
+    },
+    "defaulted_to_none": true,
+    "result_ids": [
+      1
+    ],
+    "_effective_headers": {
+      "ISRC/vISRC": "ISRC/vISRC",
+      "CATALOG TRACK ID": "CATALOG TRACK ID",
+      "TRACK TITLE": "TRACK TITLE",
+      "TRACK VERSION": "TRACK VERSION",
+      "SPECIAL AUDIO PROPERTIES": "SPECIAL AUDIO PROPERTIES"
+    }
+  }
+}
