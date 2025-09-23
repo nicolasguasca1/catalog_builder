@@ -6,8 +6,8 @@
       "fileName": "Receba-789294845633-UPC.flac"
     },
     "status": 200,
-    "responseText": "{\"fileId\":\"0ca52a91-e73c-43d1-8530-c27513ea54e1\",\"isTemp\":true,\"filename\":\"Receba-789294845633-UPC.flac\",\"externalUrl\":null,\"lastUpdateDate\":\"0001-01-01T00:00:00\"}",
-    "audioId": "0ca52a91-e73c-43d1-8530-c27513ea54e1",
+    "responseText": "{\"fileId\":\"a7298528-218b-4e42-9bc0-732712d5f6fa\",\"isTemp\":true,\"filename\":\"Receba-789294845633-UPC.flac\",\"externalUrl\":null,\"lastUpdateDate\":\"0001-01-01T00:00:00\"}",
+    "audioId": "a7298528-218b-4e42-9bc0-732712d5f6fa",
     "isrc": "QZW9M2221000"
   },
   {
@@ -17,8 +17,8 @@
       "fileName": "A-Cl-usula-do-Contrato-789294962088-UPC.flac"
     },
     "status": 200,
-    "responseText": "{\"fileId\":\"a92aeeb6-c6c8-42dc-8f2a-376bbcd5a976\",\"isTemp\":true,\"filename\":\"A-Cl-usula-do-Contrato-789294962088-UPC.flac\",\"externalUrl\":null,\"lastUpdateDate\":\"0001-01-01T00:00:00\"}",
-    "audioId": "a92aeeb6-c6c8-42dc-8f2a-376bbcd5a976",
+    "responseText": "{\"fileId\":\"4978ca9b-2ef9-48dc-a931-618401c1fff0\",\"isTemp\":true,\"filename\":\"A-Cl-usula-do-Contrato-789294962088-UPC.flac\",\"externalUrl\":null,\"lastUpdateDate\":\"0001-01-01T00:00:00\"}",
+    "audioId": "4978ca9b-2ef9-48dc-a931-618401c1fff0",
     "isrc": "QZW9M2236571"
   }
 ]

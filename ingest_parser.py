@@ -391,8 +391,12 @@ def df_from_sheet(xlsx_path: str, sheet_name: str) -> Tuple[pd.DataFrame, Dict[s
     effective_start = 5
     df = df.iloc[effective_start-1:, :]  # pandas 1-index vs 0-index care
     df = df.rename(columns=rename)
-    # keep only known headers
-    keep_cols = [c for c in df.columns if isinstance(c, str) and c in req_map]
+    # keep only known headers, except for Audio_Properties where subheaders live in row 4 and many columns have empty row-3 headers
+    if ("audio" in sheet_name.lower()) and ("propert" in sheet_name.lower()):
+        # Keep all columns; downstream logic maps by Excel row 4 subheaders
+        keep_cols = list(df.columns)
+    else:
+        keep_cols = [c for c in df.columns if isinstance(c, str) and c in req_map]
     df = df[keep_cols]
     # drop fully empty rows
     df = df.dropna(how="all")
@@ -706,6 +710,17 @@ def map_track_properties(row: Dict[str,Any]) -> Tuple[Optional[List[int]], Dict[
                 if tgt_tokens and tgt_tokens.issubset(col_set):
                     matched_col, raw_val = orig_key, val
                     break
+            # Fuzzy fallback: choose the column with max token overlap if we didn't find a perfect superset
+            if matched_col is None and tgt_tokens:
+                best = (0, None, None)  # (overlap_count, orig_key, val)
+                for _, (orig_key, val, col_tokens) in row_norm_map.items():
+                    col_set = set([t for t in col_tokens if t not in STOPWORDS])
+                    overlap = len(tgt_tokens & col_set)
+                    if overlap > best[0]:
+                        best = (overlap, orig_key, val)
+                # Require at least 1 common token to consider it a match
+                if best[0] >= 1:
+                    matched_col, raw_val = best[1], best[2]
         parsed = norm_bool(raw_val)
         diag_values[lab] = {"matched_column": matched_col, "raw": raw_val, "bool": parsed}
         if parsed:
@@ -729,8 +744,18 @@ def map_track_properties(row: Dict[str,Any]) -> Tuple[Optional[List[int]], Dict[
 
 # Column name normalization (case + whitespace resilient)
 COLSPACE_RE = re.compile(r"[\s_]+")
-def norm_colkey(s: str) -> str:
-    return COLSPACE_RE.sub(" ", (s or "").strip()).lower()
+def norm_colkey(s) -> str:
+    """Normalize a column key to a lowercase, space-collapsed string.
+    Accepts non-strings (e.g., numeric column indices) by stringifying first.
+    """
+    if s is None:
+        return ""
+    try:
+        s = str(s)
+    except Exception:
+        # Fallback best-effort
+        s = ""
+    return COLSPACE_RE.sub(" ", s.strip()).lower()
 
 # Build a map of normalized column names to real names
 def make_colmap(df: pd.DataFrame) -> Dict[str,str]:
@@ -998,8 +1023,8 @@ def main():
         if expect_col(df_props, ISRC_COL):
             cm_props = make_colmap(df_props)
             for i, rw in df_props.iterrows():
-                arr = map_track_properties(rw.to_dict())
-                if arr and 1 in arr and len(arr) > 1:
+                ids, _ = map_track_properties(rw.to_dict())
+                if ids and 1 in ids and len(ids) > 1:
                     report.append({"sheet": s9, "row": i+2, "error": "Track properties: 'None' cannot be combined with other flags"})
 
         # Stop if any blocking issues
@@ -1120,14 +1145,59 @@ def main():
             tracks_payload = []  # list of (release_key, payload)
             upc_dupes_logged = []
 
+            # Build effective headers for Release_Label sheet to resolve subheaders (e.g., (P)/(C) Year/Holder)
+            rel_effective_by_index: Dict[int, str] = {}
+            try:
+                wb_rel = load_workbook(xlsx_path, data_only=True)
+                ws_rel = wb_rel[s3]
+            except Exception:
+                ws_rel = None
+            if ws_rel is not None:
+                for j, c in enumerate(list(df_rel.columns)):
+                    eff: Optional[str] = None
+                    try:
+                        colnum = j + 1
+                        h3 = ws_rel.cell(row=3, column=colnum).value
+                        h4 = ws_rel.cell(row=4, column=colnum).value
+                        h3s = norm_str(h3)
+                        h4s = norm_str(h4)
+                        # If row-3 is a grouped header and row-4 is a subheader, combine
+                        if h3s and h4s and any(k in h3s.lower() for k in ["copyright", "release title", "cover image", "upc", "label", "genre", "original release date", "title language"]):
+                            # Special-case (P)/(C) Copyright groups: build "(P) Copyright Year" style labels
+                            if "copyright" in h3s.lower():
+                                eff = f"{h3s} {h4s}".strip()
+                            else:
+                                eff = h3s  # for non-copyright, row3 is specific enough
+                        else:
+                            eff = h3s or h4s or norm_str(c) or f"col_{j}"
+                    except Exception:
+                        eff = norm_str(c) or f"col_{j}"
+                    rel_effective_by_index[j] = eff
+            # Build reverse map eff -> indices
+            rel_eff_to_idx: Dict[str, List[int]] = {}
+            for j, name in rel_effective_by_index.items():
+                rel_eff_to_idx.setdefault(name, []).append(j)
+
+            def rel_val(row: pd.Series, eff_name: str) -> Optional[Any]:
+                idxs = rel_eff_to_idx.get(eff_name) or []
+                if not idxs:
+                    return None
+                try:
+                    return row.iloc[idxs[0]]
+                except Exception:
+                    return None
+
             for i,rw in df_rel.iterrows():
                 upc = norm_str(get_val(rw, cm_rel, UPC_COL))
                 title = norm_str(get_val(rw, cm_rel, "RELEASE TITLE"))
                 version = norm_str(get_val(rw, cm_rel, "RELEASE VERSION"))
                 title_lang = norm_str(get_val(rw, cm_rel, "TITLE LANGUAGE"))
                 img_url = norm_str(get_val(rw, cm_rel, "COVER IMAGE URL", "COVER IMAGE url"))
-                p_year = rw.get("(P) Copyright Year"); p_holder = rw.get("(P) Copyright Holder")
-                c_year = rw.get("(C) Copyright Year"); c_holder = rw.get("(C) Copyright Holder")
+                # Pull (P)/(C) from subheaders when present
+                p_year = rel_val(rw, "(P) Copyright Year") or rw.get("(P) Copyright Year")
+                p_holder = rel_val(rw, "(P) Copyright Holder") or rw.get("(P) Copyright Holder")
+                c_year = rel_val(rw, "(C) Copyright Year") or rw.get("(C) Copyright Year")
+                c_holder = rel_val(rw, "(C) Copyright Holder") or rw.get("(C) Copyright Holder")
                 p_line = parse_year_holder(p_year, p_holder)
                 c_line = parse_year_holder(c_year, c_holder)
                 g1 = norm_str(get_val(rw, cm_rel, "GENRE 1")); g2 = norm_str(get_val(rw, cm_rel, "GENRE 2"))
@@ -1146,7 +1216,10 @@ def main():
                 if upc: rel["upc"] = upc
                 if p_line: rel["copyrightP"] = p_line
                 if c_line: rel["copyrightC"] = c_line
-                if lang_id: rel.setdefault("releaseLocals", []).append({"languageId": lang_id, "name": title})
+                if lang_id:
+                    # language of the release title also dictates the release-level languageId
+                    rel.setdefault("releaseLocals", []).append({"languageId": lang_id, "name": title})
+                    rel["languageId"] = lang_id
                 if g1_id: rel["primaryMusicStyleId"] = g1_id
                 if g2_id: rel["secondaryMusicStyleId"] = g2_id
                 if label_name:
@@ -1323,55 +1396,79 @@ def main():
         # Track properties
         with progress.step("Parse track properties") as s:
             cm_props = make_colmap(df_props)
-            # Build effective headers for df_props columns using sheet row 3 or row 4 when missing
-            effective_headers: Dict[Any, str] = {}
+            # Build effective headers PER COLUMN POSITION using sheet row 3/4 so we disambiguate duplicate
+            # 'SPECIAL AUDIO PROPERTIES' columns into unique subheaders (row 4 values).
             try:
                 wb_props = load_workbook(xlsx_path, data_only=True)
                 ws_props = wb_props[s9]
             except Exception:
                 wb_props = None; ws_props = None
-            for c in df_props.columns:
-                if isinstance(c, str) and norm_str(c):
-                    effective_headers[c] = c
-                else:
-                    # Try to resolve from Excel rows 3/4 using column index (0-based -> 1-based)
-                    if ws_props is not None and isinstance(c, (int, float)):
-                        try:
-                            colnum = int(c) + 1
-                            h3 = ws_props.cell(row=3, column=colnum).value
-                            h4 = ws_props.cell(row=4, column=colnum).value
-                            h3s = norm_str(h3)
-                            h4s = norm_str(h4)
-                            # If the row-3 header is the generic bucket 'SPECIAL AUDIO PROPERTIES',
-                            # prefer the row-4 subheader as the effective column label (e.g., 'NONE APPLY').
-                            if h3s and h3s.strip().lower() == "special audio properties" and h4s:
-                                eff = h4s
-                            else:
-                                eff = h3s or h4s
-                            if eff:
-                                effective_headers[c] = eff
-                        except Exception:
-                            pass
+            effective_headers_by_index: Dict[int, str] = {}
+            mapped_cols: Dict[str, str] = {}
+            # Map DF columns to Excel column indices by matching header names by occurrence order
+            excel_pos_by_name: Dict[str, List[int]] = {}
+            if ws_props is not None:
+                try:
+                    max_col = ws_props.max_column
+                    for colnum in range(1, max_col + 1):
+                        h3 = ws_props.cell(row=3, column=colnum).value
+                        name = norm_str(h3) or ""
+                        key = (name or "").strip().lower()
+                        excel_pos_by_name.setdefault(key, []).append(colnum)
+                except Exception:
+                    excel_pos_by_name = {}
+            used_count: Dict[str, int] = {}
+            for j, c in enumerate(list(df_props.columns)):
+                eff: Optional[str] = None
+                excel_colnum: Optional[int] = None
+                if ws_props is not None:
+                    # try match by header name occurrence
+                    cname = norm_str(c) or ""
+                    ckey = cname.strip().lower()
+                    pos_list = excel_pos_by_name.get(ckey) or []
+                    idx = used_count.get(ckey, 0)
+                    if idx < len(pos_list):
+                        excel_colnum = pos_list[idx]
+                        used_count[ckey] = idx + 1
+                # Fallback: approximate by DF index position
+                if ws_props is not None and excel_colnum is None:
+                    excel_colnum = j + 1
+                if ws_props is not None and excel_colnum is not None:
+                    try:
+                        h3 = ws_props.cell(row=3, column=excel_colnum).value
+                        h4 = ws_props.cell(row=4, column=excel_colnum).value
+                        h3s = norm_str(h3)
+                        h4s = norm_str(h4)
+                        if h3s and h3s.strip().lower() == "special audio properties" and h4s:
+                            eff = h4s
+                        else:
+                            eff = h3s or h4s
+                    except Exception:
+                        eff = None
+                if not eff:
+                    eff = norm_str(c) or f"col_{j}"
+                effective_headers_by_index[j] = eff
+                mapped_cols[f"{j}:{c}"] = eff
+
             props_by_isrc: Dict[str,List[int]] = {}
             props_diag: Dict[str, Any] = {}
-            mapped_cols = {str(k): v for k, v in effective_headers.items()}
             for _, rw in df_props.iterrows():
                 isrc = norm_str(get_val(rw, cm_props, ISRC_COL))
                 if not isrc:
                     continue
-                # Build a row dict keyed by effective headers
+                # Build a row dict keyed by effective headers using positional indexing to handle duplicates
                 row_dict: Dict[str, Any] = {}
-                for c in df_props.columns:
-                    eh = effective_headers.get(c)
+                for j in range(len(df_props.columns)):
+                    eh = effective_headers_by_index.get(j)
                     if not eh:
                         continue
                     try:
-                        row_dict[eh] = rw.get(c)
+                        val = rw.iloc[j]
                     except Exception:
-                        try:
-                            row_dict[eh] = rw[c]
-                        except Exception:
-                            row_dict[eh] = None
+                        val = None
+                    # Don't overwrite an already set key (keep first occurrence)
+                    if eh not in row_dict:
+                        row_dict[eh] = val
                 ids, diag = map_track_properties(row_dict)
                 if ids:
                     props_by_isrc[isrc] = ids
@@ -1398,6 +1495,17 @@ def main():
                 # Primary artistName from Track_Artist(s)
                 if 'artistName' not in track and isrc in track_primary_artist_by_isrc:
                     track['artistName'] = track_primary_artist_by_isrc[isrc]
+                # If we have a primary artistName and that artist has known external IDs, attach them (optional field)
+                try:
+                    if 'artistExternalIds' not in track:
+                        nm = (track.get('artistName') or '').strip()
+                        if nm:
+                            art_obj = artist_name_to_obj.get(nm.lower())
+                            ext = (art_obj or {}).get('artistExternalIds')
+                            if ext:
+                                track['artistExternalIds'] = ext
+                except Exception:
+                    pass
                 # Compositions
                 if isrc in trk_comp_by_isrc:
                     # Determine scale and convert to 0-100 percentages for API
@@ -1451,6 +1559,21 @@ def main():
                 # Properties
                 if isrc in props_by_isrc:
                     track["trackProperties"] = props_by_isrc[isrc]
+                else:
+                    # Default to NONE APPLY when properties row is missing
+                    track["trackProperties"] = [1]
+                # Ensure required keys exist even if empty
+                track.setdefault("contributors", [])
+                track.setdefault("composerContentsDTO", [])
+                # Optional trackLocals: include when we have at least name and languageId; version is optional
+                if "trackLocals" not in track:
+                    tl_name = track.get("name")
+                    tl_lang = track.get("languageId")
+                    if tl_name and tl_lang:
+                        loc = {"name": tl_name, "languageId": tl_lang}
+                        if track.get("version"):
+                            loc["version"] = track.get("version")
+                        track["trackLocals"] = [loc]
                 tracks_payload.append((upc, track))
             s.info(tracks=len(tracks_payload))
 
@@ -1462,6 +1585,16 @@ def main():
                 # Apply primary artistName from Release_Artist(s)
                 if 'artistName' not in rel and upc in release_primary_artist_by_upc:
                     rel['artistName'] = release_primary_artist_by_upc[upc]
+                # If we now have an artistName, include their external IDs if available
+                try:
+                    nm = (rel.get('artistName') or '').strip()
+                    if nm:
+                        art_obj = artist_name_to_obj.get(nm.lower())
+                        ext = (art_obj or {}).get('artistExternalIds')
+                        if ext:
+                            rel['artistExternalIds'] = ext
+                except Exception:
+                    pass
                 if upc in release_contribs_by_upc:
                     applied = []
                     for c in release_contribs_by_upc[upc]:
@@ -1701,18 +1834,30 @@ def main():
 
     # Releases (with UPC duplicate handling)
         with progress.step("Create releases") as s:
+            # Build tracks grouped by release UPC
+            tracks_by_upc: Dict[str, List[Dict[str, Any]]] = {}
+            try:
+                for upc_key, trk in tracks_payload:
+                    if upc_key:
+                        tracks_by_upc.setdefault(upc_key, []).append(trk)
+            except Exception:
+                tracks_by_upc = {}
             upc_to_release_id: Dict[str,str] = {}
             rel_created = 0; rel_failed = 0
             for rel in releases_payload:
                 body = dict(rel)  # copy
+                # Attach tracks for this release if available
+                upc_val = body.get("upc")
+                if upc_val and upc_val in tracks_by_upc:
+                    body["tracks"] = tracks_by_upc[upc_val]
                 url = f"{base_url}/content/release/save"
                 resp = http(session, "POST", url, token, json_body=body, headers=headers_common)
                 if not resp.ok:
                     txt = (resp.text or "").lower()
                     # If duplicate UPC error → retry without upc and log
                     if "upc" in txt and ("exist" in txt or "duplicate" in txt or resp.status_code in (400,409)):
-                        upc_val = body.pop("upc", None)
-                        upc_dupes_logged.append(upc_val)
+                        upc_removed = body.pop("upc", None)
+                        upc_dupes_logged.append(upc_removed)
                         print(f"[INFO] UPC '{upc_val}' appears to exist; retrying without UPC as requested.")
                         resp = http(session, "POST", url, token, json_body=body, headers=headers_common)
                 if not resp.ok:

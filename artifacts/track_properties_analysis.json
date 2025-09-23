@@ -2,121 +2,125 @@
   "QZW9M2221000": {
     "values": {
       "REMIX OR DERIVATIVE": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
+        "matched_column": "REMIX or DERIVATIVE",
+        "raw": false,
+        "bool": false
       },
       "SAMPLES OR STOCK": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
+        "matched_column": "SAMPLES or STOCK",
+        "raw": false,
+        "bool": false
       },
       "MIX OR COMPILATION": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
+        "matched_column": "MIx or COMPILATION",
+        "raw": false,
+        "bool": false
       },
       "ALTERNATE VERSION": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
+        "matched_column": "ALTERNATE VERSION",
+        "raw": false,
+        "bool": false
       },
       "SPECIAL GENRE": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
+        "matched_column": "SPECIAL GENRE",
+        "raw": false,
+        "bool": false
       },
       "NON MUSICAL CONTENT": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
+        "matched_column": "NON MUSICAL CONTENT",
+        "raw": false,
+        "bool": false
       },
       "INCLUDES AI": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
+        "matched_column": "INCLUDES AI",
+        "raw": false,
+        "bool": false
       },
       "NONE APPLY": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
-      },
-      "NONE": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
+        "matched_column": "NONE APPLY",
+        "raw": true,
+        "bool": true
       }
     },
-    "defaulted_to_none": true,
+    "defaulted_to_none": false,
     "result_ids": [
       1
     ],
     "_effective_headers": {
-      "ISRC/vISRC": "ISRC/vISRC",
-      "CATALOG TRACK ID": "CATALOG TRACK ID",
-      "TRACK TITLE": "TRACK TITLE",
-      "TRACK VERSION": "TRACK VERSION",
-      "SPECIAL AUDIO PROPERTIES": "SPECIAL AUDIO PROPERTIES"
+      "0:ISRC/vISRC": "ISRC/vISRC",
+      "1:CATALOG TRACK ID": "CATALOG TRACK ID",
+      "2:TRACK TITLE": "TRACK TITLE",
+      "3:TRACK VERSION": "TRACK VERSION",
+      "4:4": "REMIX or DERIVATIVE",
+      "5:5": "SAMPLES or STOCK",
+      "6:SPECIAL AUDIO PROPERTIES": "MIx or COMPILATION",
+      "7:7": "ALTERNATE VERSION",
+      "8:8": "SPECIAL GENRE",
+      "9:9": "NON MUSICAL CONTENT",
+      "10:10": "INCLUDES AI",
+      "11:11": "NONE APPLY"
     }
   },
   "QZW9M2236571": {
     "values": {
       "REMIX OR DERIVATIVE": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
+        "matched_column": "REMIX or DERIVATIVE",
+        "raw": false,
+        "bool": false
       },
       "SAMPLES OR STOCK": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
+        "matched_column": "SAMPLES or STOCK",
+        "raw": false,
+        "bool": false
       },
       "MIX OR COMPILATION": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
+        "matched_column": "MIx or COMPILATION",
+        "raw": false,
+        "bool": false
       },
       "ALTERNATE VERSION": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
+        "matched_column": "ALTERNATE VERSION",
+        "raw": false,
+        "bool": false
       },
       "SPECIAL GENRE": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
+        "matched_column": "SPECIAL GENRE",
+        "raw": false,
+        "bool": false
       },
       "NON MUSICAL CONTENT": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
+        "matched_column": "NON MUSICAL CONTENT",
+        "raw": false,
+        "bool": false
       },
       "INCLUDES AI": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
+        "matched_column": "INCLUDES AI",
+        "raw": false,
+        "bool": false
       },
       "NONE APPLY": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
-      },
-      "NONE": {
-        "matched_column": null,
-        "raw": null,
-        "bool": null
+        "matched_column": "NONE APPLY",
+        "raw": true,
+        "bool": true
       }
     },
-    "defaulted_to_none": true,
+    "defaulted_to_none": false,
     "result_ids": [
       1
     ],
     "_effective_headers": {
-      "ISRC/vISRC": "ISRC/vISRC",
-      "CATALOG TRACK ID": "CATALOG TRACK ID",
-      "TRACK TITLE": "TRACK TITLE",
-      "TRACK VERSION": "TRACK VERSION",
-      "SPECIAL AUDIO PROPERTIES": "SPECIAL AUDIO PROPERTIES"
+      "0:ISRC/vISRC": "ISRC/vISRC",
+      "1:CATALOG TRACK ID": "CATALOG TRACK ID",
+      "2:TRACK TITLE": "TRACK TITLE",
+      "3:TRACK VERSION": "TRACK VERSION",
+      "4:4": "REMIX or DERIVATIVE",
+      "5:5": "SAMPLES or STOCK",
+      "6:SPECIAL AUDIO PROPERTIES": "MIx or COMPILATION",
+      "7:7": "ALTERNATE VERSION",
+      "8:8": "SPECIAL GENRE",
+      "9:9": "NON MUSICAL CONTENT",
+      "10:10": "INCLUDES AI",
+      "11:11": "NONE APPLY"
     }
   }
 }

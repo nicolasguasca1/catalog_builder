@@ -197,14 +197,28 @@
       "CATALOG TRACK ID",
       "TRACK TITLE",
       "TRACK VERSION",
-      "SPECIAL AUDIO PROPERTIES"
+      4,
+      5,
+      "SPECIAL AUDIO PROPERTIES",
+      7,
+      8,
+      9,
+      10,
+      11
     ],
     "norm": [
       "isrc/visrc",
       "catalog track id",
       "track title",
       "track version",
-      "special audio properties"
+      "4",
+      "5",
+      "special audio properties",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
     ]
   }
 }

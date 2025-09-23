@@ -14,7 +14,7 @@
         "recordingVersionType": 1,
         "audioFiles": [
           {
-            "audioId": "0ca52a91-e73c-43d1-8530-c27513ea54e1",
+            "audioId": "a7298528-218b-4e42-9bc0-732712d5f6fa",
             "audioFilename": "Receba-789294845633-UPC.flac",
             "fileFormat": 2
           }
@@ -36,6 +36,16 @@
       }
     ],
     "artistName": "JKZ",
+    "artistExternalIds": [
+      {
+        "distributorStoreId": 1,
+        "profileId": "1532352644"
+      },
+      {
+        "distributorStoreId": 9,
+        "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+      }
+    ],
     "composerContentsDTO": [
       {
         "share": "60",
@@ -54,6 +64,12 @@
     ],
     "trackProperties": [
       1
+    ],
+    "trackLocals": [
+      {
+        "name": "Receba",
+        "languageId": 31
+      }
     ]
   },
   {
@@ -71,7 +87,7 @@
         "recordingVersionType": 1,
         "audioFiles": [
           {
-            "audioId": "a92aeeb6-c6c8-42dc-8f2a-376bbcd5a976",
+            "audioId": "4978ca9b-2ef9-48dc-a931-618401c1fff0",
             "audioFilename": "A-Cl-usula-do-Contrato-789294962088-UPC.flac",
             "fileFormat": 2
           }
@@ -93,6 +109,16 @@
       }
     ],
     "artistName": "Flash Beats Manow",
+    "artistExternalIds": [
+      {
+        "distributorStoreId": 1,
+        "profileId": "1601139620"
+      },
+      {
+        "distributorStoreId": 9,
+        "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+      }
+    ],
     "composerContentsDTO": [
       {
         "share": "50",
@@ -111,6 +137,12 @@
     ],
     "trackProperties": [
       1
+    ],
+    "trackLocals": [
+      {
+        "name": "A Cláusula do Contrato",
+        "languageId": 31
+      }
     ]
   }
 ]
