@@ -2,27 +2,27 @@
   {
     "name": "Validate enterprise",
     "status": "ok",
-    "start_ts": 1758652231.31383,
+    "start_ts": 1760640439.967068,
     "meta": {
       "enterpriseId": 414849,
       "tenantId": 332920,
       "enterpriseName": "Nico test label"
     },
-    "duration_sec": 1.41
+    "duration_sec": 1.737
   },
   {
     "name": "Load role map",
     "status": "ok",
-    "start_ts": 1758652232.723548,
+    "start_ts": 1760640441.704585,
     "meta": {
       "roles": 399
     },
-    "duration_sec": 0.0
+    "duration_sec": 0.001
   },
   {
     "name": "Read sheets",
     "status": "ok",
-    "start_ts": 1758652232.723836,
+    "start_ts": 1760640441.705215,
     "meta": {
       "artists": 3,
       "labels": 2,
@@ -88,12 +88,110 @@
         }
       }
     },
-    "duration_sec": 3.441
+    "duration_sec": 3.154
+  },
+  {
+    "name": "Audit optional fields usage",
+    "status": "ok",
+    "start_ts": 1760640444.859139,
+    "meta": {
+      "summary": {
+        "1) Artists list": {
+          "optional_cols": 2,
+          "used": 1,
+          "unused": 1
+        },
+        "2) Labels list": {
+          "optional_cols": 0,
+          "used": 0,
+          "unused": 0
+        },
+        "3) Release_Label": {
+          "optional_cols": 0,
+          "used": 0,
+          "unused": 0
+        },
+        "4) Release_Artist(s)": {
+          "optional_cols": 0,
+          "used": 0,
+          "unused": 0
+        },
+        "5) Release_Track": {
+          "optional_cols": 0,
+          "used": 0,
+          "unused": 0
+        },
+        "6) Track_Artist(s)": {
+          "optional_cols": 0,
+          "used": 0,
+          "unused": 0
+        },
+        "7) Comp ContributorPublisher li": {
+          "optional_cols": 0,
+          "used": 0,
+          "unused": 0
+        },
+        "8) Track_Composition(s)": {
+          "optional_cols": 0,
+          "used": 0,
+          "unused": 0
+        },
+        "9) Audio_Properties": {
+          "optional_cols": 0,
+          "used": 0,
+          "unused": 0
+        }
+      },
+      "sample_unused": [
+        {
+          "sheet": "1) Artists list",
+          "column": "SoundCloud ProfileId"
+        }
+      ],
+      "values_artifact": "optional_fields_values.json"
+    },
+    "duration_sec": 0.002
+  },
+  {
+    "name": "Audit all columns values",
+    "status": "ok",
+    "start_ts": 1760640444.860907,
+    "meta": {
+      "values_artifact": "all_fields_values.json",
+      "sample_top": [
+        {
+          "sheet": "1) Artists list",
+          "column": "Artist Name",
+          "fill_rate": 1.0
+        },
+        {
+          "sheet": "2) Labels list",
+          "column": "Label Name",
+          "fill_rate": 1.0
+        },
+        {
+          "sheet": "3) Release_Label",
+          "column": "(C) Copyright",
+          "fill_rate": 1.0
+        },
+        {
+          "sheet": "4) Release_Artist(s)",
+          "column": "ARTIST",
+          "fill_rate": 1.0
+        },
+        {
+          "sheet": "5) Release_Track",
+          "column": "AUDIO FILE URL",
+          "fill_rate": 1.0
+        }
+      ]
+    },
+    "duration_sec": 0.01
   },
   {
     "name": "Preflight validations",
     "status": "ok",
-    "start_ts": 1758652236.1667771,
+    "start_ts": 1760640444.873098,
     "meta": {
       "issues": 0
     },
@@ -102,7 +200,7 @@
   {
     "name": "Build artists & labels & master entities",
     "status": "ok",
-    "start_ts": 1758652236.166822,
+    "start_ts": 1760640444.873166,
     "meta": {
       "artists": 3,
       "labels": 2,
@@ -139,7 +237,7 @@
   {
     "name": "Build releases",
     "status": "ok",
-    "start_ts": 1758652236.1674602,
+    "start_ts": 1760640444.874099,
     "meta": {
       "releases": 2,
       "sample_releases": [
@@ -157,12 +255,12 @@
         }
       ]
     },
-    "duration_sec": 0.575
+    "duration_sec": 0.561
   },
   {
     "name": "Parse release contributors",
     "status": "ok",
-    "start_ts": 1758652236.742481,
+    "start_ts": 1760640445.435036,
     "meta": {
       "contributors": 4,
       "primaries": 2,
@@ -198,7 +296,7 @@
   {
     "name": "Build tracks from Release_Track",
     "status": "ok",
-    "start_ts": 1758652236.743139,
+    "start_ts": 1760640445.436001,
     "meta": {
       "tracks": 2,
       "sample_tracks": [
@@ -215,16 +313,16 @@
           "trackNumber": 1
         }
       ],
-      "first_audio_url": "https://www.dropbox.com/scl/fi/g6ch1pcun31eep1am9mkv/Receba-789294845633-UPC.flac?rlkey=mxh9w3x6d82jmu7mmv2a9trio&st=i02exo9k&dl=1",
+      "first_audio_url": "https://www.dropbox.com/scl/fi/sjv55c5eqq0utzgy15ojq/Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav?rlkey=6j5ruxil4gc3vxonuf8ownxvi&st=8kysye3f&dl=1",
       "audio_url_col": "AUDIO FILE URL",
       "audio_type_col": "AUDIO TYPE"
     },
-    "duration_sec": 9.454
+    "duration_sec": 0.203
   },
   {
     "name": "Parse track contributors",
     "status": "ok",
-    "start_ts": 1758652246.196885,
+    "start_ts": 1760640445.639483,
     "meta": {
       "contributors": 4,
       "primaries": 2,
@@ -255,12 +353,12 @@
         }
       ]
     },
-    "duration_sec": 0.004
+    "duration_sec": 0.002
   },
   {
     "name": "Parse track compositions",
     "status": "ok",
-    "start_ts": 1758652246.2006102,
+    "start_ts": 1760640445.641495,
     "meta": {
       "compositions": 4,
       "sample": [
@@ -284,12 +382,12 @@
         }
       ]
     },
-    "duration_sec": 0.0
+    "duration_sec": 0.001
   },
   {
     "name": "Parse track properties",
     "status": "ok",
-    "start_ts": 1758652246.2009869,
+    "start_ts": 1760640445.642427,
     "meta": {
       "with_properties": 2,
       "defaulted": 0,
@@ -308,12 +406,12 @@
         }
       ]
     },
-    "duration_sec": 0.274
+    "duration_sec": 0.252
   },
   {
     "name": "Attach track contributors/compositions/properties",
     "status": "ok",
-    "start_ts": 1758652246.4753652,
+    "start_ts": 1760640445.894784,
     "meta": {
       "tracks": 2
     },
@@ -322,7 +420,7 @@
   {
     "name": "Attach release contributors",
     "status": "ok",
-    "start_ts": 1758652246.475486,
+    "start_ts": 1760640445.894845,
     "meta": {
       "releases": 2
     },
@@ -331,7 +429,7 @@
   {
     "name": "Write dry-run artifacts",
     "status": "ok",
-    "start_ts": 1758652246.4755268,
+    "start_ts": 1760640445.894877,
     "meta": {
       "artists": 3,
       "labels": 2,
@@ -341,76 +439,6 @@
       "releases": 2,
       "tracks": 2
     },
-    "duration_sec": 1.72
-  },
-  {
-    "name": "Upsert masters (artists/labels) and create publishers/composers",
-    "status": "ok",
-    "start_ts": 1758652248.1957371,
-    "meta": {
-      "labels_created": 0,
-      "labels_reused": 2,
-      "labels_failed": 0,
-      "artists_created": 0,
-      "artists_reused": 3,
-      "artists_failed": 0,
-      "publishers_ok": 0,
-      "publishers_fail": 0,
-      "composers_ok": 2,
-      "composers_fail": 0
-    },
-    "duration_sec": 2.346
-  },
-  {
-    "name": "Prepare and upload cover images",
-    "status": "ok",
-    "start_ts": 1758652250.542188,
-    "meta": {
-      "downloaded": 2,
-      "uploaded": 2,
-      "skipped": 0,
-      "mapped": 2
-    },
-    "duration_sec": 11.913
-  },
-  {
-    "name": "Wire labelId/artistId into payloads",
-    "status": "ok",
-    "start_ts": 1758652262.455006,
-    "meta": {
-      "release_label_ids": 2,
-      "release_contrib_ids": 4,
-      "track_contrib_ids": 4
-    },
-    "duration_sec": 0.0
-  },
-  {
-    "name": "Validate required media (audio)",
-    "status": "ok",
-    "start_ts": 1758652262.455542,
-    "meta": {
-      "missing": 0
-    },
-    "duration_sec": 0.0
-  },
-  {
-    "name": "Create releases",
-    "status": "ok",
-    "start_ts": 1758652262.455738,
-    "meta": {
-      "created": 2,
-      "failed": 0
-    },
-    "duration_sec": 31.647
-  },
-  {
-    "name": "Create tracks",
-    "status": "ok",
-    "start_ts": 1758652294.10305,
-    "meta": {
-      "created": 2,
-      "failed": 0
-    },
-    "duration_sec": 13.814
+    "duration_sec": 1.229
   }
 ]

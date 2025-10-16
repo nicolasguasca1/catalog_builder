@@ -7,7 +7,9 @@
       "Spotify Artist URI",
       "Meta ArtistId",
       "SoundCloud ProfileId",
-      "Duplicate Names"
+      "2",
+      "Duplicate Names",
+      "332920.0"
     ],
     "norm": [
       "artist name",
@@ -16,7 +18,9 @@
       "spotify artist uri",
       "meta artistid",
       "soundcloud profileid",
-      "duplicate names"
+      "2",
+      "duplicate names",
+      "332920.0"
     ]
   },
   "2) Labels list": {
@@ -41,7 +45,11 @@
       "RELEASE VERSION",
       "RELEASE TYPE",
       "(P) Copyright",
+      "Holder",
+      "Holder",
       "(C) Copyright",
+      "Holder",
+      "Holder",
       "ORIGINAL\nRELEASE DATE",
       "GENRE 1",
       "GENRE 2"
@@ -57,7 +65,11 @@
       "release version",
       "release type",
       "(p) copyright",
+      "holder",
+      "holder",
       "(c) copyright",
+      "holder",
+      "holder",
       "original release date",
       "genre 1",
       "genre 2"
@@ -130,10 +142,7 @@
       "TRACK TITLE",
       "TRACK VERSION",
       "ARTIST",
-      "ARTIST ROLE",
-      "ARTIST ROLE\nCATEGORY",
-      "0",
-      "set TracksCount=(select count (distinct TrackId) from Tracks where ArtistId=(select max(ArtistId) from Artists where Name=N'' and EnterpriseId=\"&EntId&\")))"
+      "ARTIST ROLE"
     ],
     "norm": [
       "isrc/visrc",
@@ -141,28 +150,21 @@
       "track title",
       "track version",
       "artist",
-      "artist role",
-      "artist role category",
-      "0",
-      "set trackscount=(select count (distinct trackid) from tracks where artistid=(select max(artistid) from artists where name=n'' and enterpriseid=\"&entid&\")))"
+      "artist role"
     ]
   },
   "7) Comp ContributorPublisher li": {
     "raw": [
       "Composition Contributor",
       "0",
-      "0",
-      "Publisher Name",
-      "0",
-      "0"
+      "Column_3",
+      "Publisher Name"
     ],
     "norm": [
       "composition contributor",
       "0",
-      "0",
-      "publisher name",
-      "0",
-      "0"
+      "column 3",
+      "publisher name"
     ]
   },
   "8) Track_Composition(s)": {
@@ -197,28 +199,28 @@
       "CATALOG TRACK ID",
       "TRACK TITLE",
       "TRACK VERSION",
-      4,
-      5,
+      "REMIX or \nDERIVATIVE",
+      "SAMPLES\nor STOCK",
       "SPECIAL AUDIO PROPERTIES",
-      7,
-      8,
-      9,
-      10,
-      11
+      "ALTERNATE \nVERSION",
+      "SPECIAL\nGENRE",
+      "NON MUSICAL\nCONTENT",
+      "INCLUDES\n AI",
+      "NONE APPLY"
     ],
     "norm": [
       "isrc/visrc",
       "catalog track id",
       "track title",
       "track version",
-      "4",
-      "5",
+      "remix or derivative",
+      "samples or stock",
       "special audio properties",
-      "7",
-      "8",
-      "9",
-      "10",
-      "11"
+      "alternate version",
+      "special genre",
+      "non musical content",
+      "includes ai",
+      "none apply"
     ]
   }
 }

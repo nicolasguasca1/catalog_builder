@@ -1,0 +1,75 @@
+{
+  "1) Artists list": {
+    "covered": [
+      {
+        "column": "Artist Image url",
+        "column_key": "Artist Image url__col2",
+        "notes": {
+          "row1": "List all Artists to Import",
+          "row2": "= OPTIONAL FIELD",
+          "row3": "Artist Image url",
+          "row4": "public URL triggering DIRECT DOWNLOAD of file"
+        },
+        "rows_with_values": 2,
+        "rows_total": 3,
+        "fill_rate": 0.6667
+      }
+    ],
+    "unused": [
+      {
+        "column": "SoundCloud ProfileId",
+        "column_key": "SoundCloud ProfileId__col6",
+        "notes": {
+          "row1": "0",
+          "row2": "= OPTIONAL FIELD",
+          "row3": "SoundCloud ProfileId",
+          "row4": "SoundCloud Artist Username"
+        },
+        "rows_with_values": 0,
+        "rows_total": 3,
+        "fill_rate": 0.0
+      }
+    ],
+    "missing": []
+  },
+  "2) Labels list": {
+    "covered": [],
+    "unused": [],
+    "missing": []
+  },
+  "3) Release_Label": {
+    "covered": [],
+    "unused": [],
+    "missing": []
+  },
+  "4) Release_Artist(s)": {
+    "covered": [],
+    "unused": [],
+    "missing": []
+  },
+  "5) Release_Track": {
+    "covered": [],
+    "unused": [],
+    "missing": []
+  },
+  "6) Track_Artist(s)": {
+    "covered": [],
+    "unused": [],
+    "missing": []
+  },
+  "7) Comp ContributorPublisher li": {
+    "covered": [],
+    "unused": [],
+    "missing": []
+  },
+  "8) Track_Composition(s)": {
+    "covered": [],
+    "unused": [],
+    "missing": []
+  },
+  "9) Audio_Properties": {
+    "covered": [],
+    "unused": [],
+    "missing": []
+  }
+}

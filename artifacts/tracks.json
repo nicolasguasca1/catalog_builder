@@ -12,13 +12,7 @@
       {
         "isrc": "QZW9M2221000",
         "recordingVersionType": 1,
-        "audioFiles": [
-          {
-            "audioId": "a7298528-218b-4e42-9bc0-732712d5f6fa",
-            "audioFilename": "Receba-789294845633-UPC.flac",
-            "fileFormat": 2
-          }
-        ]
+        "audioFiles": []
       }
     ],
     "contributors": [
@@ -85,13 +79,7 @@
       {
         "isrc": "QZW9M2236571",
         "recordingVersionType": 1,
-        "audioFiles": [
-          {
-            "audioId": "4978ca9b-2ef9-48dc-a931-618401c1fff0",
-            "audioFilename": "A-Cl-usula-do-Contrato-789294962088-UPC.flac",
-            "fileFormat": 2
-          }
-        ]
+        "audioFiles": []
       }
     ],
     "contributors": [

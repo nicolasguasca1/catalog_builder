@@ -31,6 +31,19 @@ TRACK_PROP_MAP = {
     "INCLUDES AI": 8,
 }
 
+# Hard column limits (1-based inclusive) to skip spreadsheet noise past the template definitions.
+SHEET_COLUMN_LIMITS: Dict[str, int] = {
+    "1) Artists list": 9,
+    "2) Labels list": 2,
+    "3) Release_Label": 16,
+    "4) Release_Artist(s)": 8,
+    "5) Release_Track": 16,
+    "6) Track_Artist(s)": 6,
+    "7) Comp ContributorPublisher li": 4,
+    "8) Track_Composition(s)": 10,
+    "9) Audio_Properties": 12,
+}
+
 # Build a name->id role map from roles.py (case-insensitive)
 ROLE_FALLBACK = { (str(v).strip().lower()): k for k, v in roles_dict.items() }
 
@@ -339,49 +352,105 @@ def norm_str(x) -> Optional[str]:
     return s if s != "" else None
 
 def parse_header_and_requirements(xlsx_path: str, sheet_name: str) -> Tuple[List[str], Dict[str,bool], int]:
-    """Return (headers, required_map, data_start_row_index) using row 3 as headers and row 4 for notes.
-       required_map[col] = True if REQUIRED FIELD (based on text or fill heuristics)."""
+    """Return (headers, required_map, data_start_row_index) using row 3 as headers and scanning rows 1-4 for notes.
+       required_map[col] = True if REQUIRED FIELD (based on text or fill heuristics). Also include:
+       - required_map["_optional_flags"]: {unique_column_key -> True if explicitly marked OPTIONAL}
+       - required_map["_optional_columns"]: List of column metadata dicts with display name, position, and notes
+       - required_map["_notes_row_text"]: {unique_column_key -> {rowN: raw_text}}
+    """
     wb = load_workbook(xlsx_path, data_only=True)
     ws = wb[sheet_name]
     header_row = 3
+    # Template has information across rows 1-4; row 3 is the visible header, row 2/4 often include notes
     req_row = 4
     data_start = 5
     headers: List[str] = []
     col_index_map: Dict[int, str] = {}
-    for c in range(1, ws.max_column+1):
-        val = ws.cell(row=header_row, column=c).value
-        head = "" if val is None else str(val).strip()
+    required: Dict[str, bool] = {}
+    optional_flags: Dict[str, bool] = {}
+    optional_columns: Dict[str, Dict[str, Any]] = {}
+    notes_text: Dict[str, Dict[str, Optional[str]]] = {}
+    name_occurrence: Dict[str, int] = {}
+
+    def _row_text(cell_value) -> Optional[str]:
+        if cell_value is None:
+            return None
+        try:
+            s = str(cell_value).strip()
+        except Exception:
+            s = str(cell_value)
+        return s or None
+
+    requested_limit = SHEET_COLUMN_LIMITS.get(sheet_name)
+    max_column = ws.max_column if requested_limit is None else min(ws.max_column, max(0, requested_limit))
+
+    for c in range(1, max_column+1):
+        row_vals: Dict[int, Optional[str]] = {}
+        for rr in (1,2,3,4):
+            try:
+                row_vals[rr] = _row_text(ws.cell(row=rr, column=c).value)
+            except Exception:
+                row_vals[rr] = None
+        head = row_vals.get(3) or row_vals.get(4) or row_vals.get(2) or row_vals.get(1) or f"Column_{c}"
         headers.append(head)
         col_index_map[c] = head
+        occ = name_occurrence.get(head.lower(), 0)
+        name_occurrence[head.lower()] = occ + 1
+        col_key = f"{head}__col{c}"
 
-    required: Dict[str, bool] = {}
-    for c in range(1, ws.max_column+1):
-        head = col_index_map[c]
-        if not head:
-            continue
-        cell = ws.cell(row=req_row, column=c)
-        txt = str(cell.value).strip().upper() if cell.value else ""
-        fill: PatternFill = cell.fill
+        # Marker detection across rows
         is_required = False
-        if "= REQUIRED FIELD" in txt:
-            is_required = True
-        elif "= OPTIONAL FIELD" in txt:
-            is_required = False
-        else:
-            fg = getattr(fill, "fgColor", None)
-            rgb = getattr(fg, "rgb", None) if fg else None
-            if rgb and (rgb.startswith("FFFF00") or rgb.endswith("FF00")):
+        status_opt = False
+        for rr in (1,2,3,4):
+            tx = (row_vals.get(rr) or "").upper()
+            if "= REQUIRED FIELD" in tx:
                 is_required = True
-        required[head] = is_required
+            if "= OPTIONAL FIELD" in tx:
+                status_opt = True
+        if not is_required:
+            try:
+                for rr in (1,2,3,4):
+                    cell_rr = ws.cell(row=rr, column=c)
+                    fill_rr: PatternFill = cell_rr.fill
+                    fg = getattr(fill_rr, "fgColor", None)
+                    rgb = getattr(fg, "rgb", None) if fg else None
+                    if rgb and (rgb.startswith("FFFF00") or rgb.endswith("FF00")):
+                        is_required = True
+                        break
+            except Exception:
+                pass
+
+        prev_required = required.get(head, False)
+        required[head] = bool(prev_required or is_required)
+        optional_flags[col_key] = bool(status_opt)
+        row_notes = {f"row{rr}": row_vals.get(rr) for rr in (1,2,3,4) if row_vals.get(rr)}
+        notes_text[col_key] = row_notes
+        notes_text.setdefault(head, row_notes)
+        optional_columns[col_key] = {
+            "key": col_key,
+            "name": head,
+            "column_index": c-1,
+            "occurrence_index": occ,
+            "optional": bool(status_opt),
+            "row_texts": row_notes,
+        }
 
     # stash meta inside req map for logging later
     required["_header_row_value"] = header_row
     required["_data_start_value"] = data_start
+    required["_optional_flags"] = optional_flags
+    required["_optional_columns"] = list(optional_columns.values())
+    required["_notes_row_text"] = notes_text
+    required["_column_limit_requested"] = requested_limit
+    required["_column_limit_applied"] = max_column
     return headers, required, data_start
 
 def df_from_sheet(xlsx_path: str, sheet_name: str) -> Tuple[pd.DataFrame, Dict[str,bool]]:
     headers, req_map, data_start = parse_header_and_requirements(xlsx_path, sheet_name)
     df = pd.read_excel(xlsx_path, sheet_name=sheet_name, header=None)
+    max_cols = len(headers)
+    if max_cols:
+        df = df.iloc[:, :max_cols]
     # build rename map
     rename = {}
     for idx, h in enumerate(headers):
@@ -391,17 +460,13 @@ def df_from_sheet(xlsx_path: str, sheet_name: str) -> Tuple[pd.DataFrame, Dict[s
     effective_start = 5
     df = df.iloc[effective_start-1:, :]  # pandas 1-index vs 0-index care
     df = df.rename(columns=rename)
-    # keep only known headers, except for Audio_Properties where subheaders live in row 4 and many columns have empty row-3 headers
-    if ("audio" in sheet_name.lower()) and ("propert" in sheet_name.lower()):
-        # Keep all columns; downstream logic maps by Excel row 4 subheaders
-        keep_cols = list(df.columns)
-    else:
-        keep_cols = [c for c in df.columns if isinstance(c, str) and c in req_map]
-    df = df[keep_cols]
+    # Keep all columns after renaming so optional subheaders and duplicates remain available
+    df = df.loc[:, [c for c in df.columns if isinstance(c, str)]]
     # drop fully empty rows
     df = df.dropna(how="all")
     # stash effective start for logging
     req_map["_effective_data_start"] = effective_start
+    req_map["_column_limit_effective"] = max_cols
     return df.reset_index(drop=True), req_map
 
 def require_columns(df: pd.DataFrame, req_map: Dict[str,bool]) -> List[Tuple[int,str]]:
@@ -954,6 +1019,255 @@ def main():
                 s9: {"raw": list(df_props.columns), "norm": [norm_colkey(c) for c in df_props.columns]},
             }
             (ARTIFACTS/"headers.json").write_text(json.dumps(headers_snapshot, indent=2, ensure_ascii=False))
+
+        # ===== Optional fields audit (visibility in dry-run and live)
+        with progress.step("Audit optional fields usage") as s:
+            def extract_optional_series(df: pd.DataFrame, entry: Dict[str, Any]) -> Optional[pd.Series]:
+                pos = entry.get("column_index")
+                ser: Optional[pd.Series] = None
+                if isinstance(pos, int) and 0 <= pos < df.shape[1]:
+                    candidate = df.iloc[:, pos]
+                    if isinstance(candidate, pd.Series):
+                        ser = candidate
+                    elif isinstance(candidate, pd.DataFrame) and not candidate.empty:
+                        occ = entry.get("occurrence_index", 0)
+                        ser = candidate.iloc[:, occ] if occ < candidate.shape[1] else candidate.iloc[:, 0]
+                if ser is None:
+                    label = entry.get("name")
+                    if label in df.columns:
+                        obj = df[label]
+                        if isinstance(obj, pd.DataFrame):
+                            occ = entry.get("occurrence_index", 0)
+                            ser = obj.iloc[:, occ] if occ < obj.shape[1] else obj.iloc[:, 0]
+                        else:
+                            ser = obj
+                return ser
+
+            def optional_audit(df: pd.DataFrame, req_map: Dict[str, bool]) -> Dict[str, Any]:
+                entries = (req_map or {}).get("_optional_columns") or []
+                covered = []
+                unused = []
+                missing_cols = []
+                for entry in entries:
+                    if not entry.get("optional"):
+                        continue
+                    series = extract_optional_series(df, entry)
+                    if series is None:
+                        missing_cols.append(entry.get("name"))
+                        continue
+                    series = series.astype(object)
+                    count_nonempty = int(series.map(lambda v: 0 if is_nan(v) else 1).sum()) if len(series) else 0
+                    total = int(len(series))
+                    pct = (count_nonempty / total) if total else 0.0
+                    report_entry = {
+                        "column": entry.get("name"),
+                        "column_key": entry.get("key"),
+                        "notes": entry.get("row_texts"),
+                        "rows_with_values": count_nonempty,
+                        "rows_total": total,
+                        "fill_rate": round(pct, 4)
+                    }
+                    if count_nonempty > 0:
+                        covered.append(report_entry)
+                    else:
+                        unused.append(report_entry)
+                covered = sorted(covered, key=lambda e: (-e["rows_with_values"], e["column"]))
+                unused = sorted(unused, key=lambda e: e["column"])
+                return {"covered": covered, "unused": unused, "missing": missing_cols}
+
+            def optional_values_extract(df: pd.DataFrame, req_map: Dict[str, bool], cap_per_column: int = 50) -> Dict[str, Any]:
+                entries = (req_map or {}).get("_optional_columns") or []
+                start_row = int((req_map or {}).get("_effective_data_start") or 5)
+                out: Dict[str, Any] = {}
+                for entry in entries:
+                    if not entry.get("optional"):
+                        continue
+                    series = extract_optional_series(df, entry)
+                    if series is None:
+                        continue
+                    series = series.astype(object)
+                    vals = []
+                    uniques = []
+                    seen = set()
+                    taken = 0
+                    for idx, v in series.items():
+                        if is_nan(v):
+                            continue
+                        excel_row = start_row + int(idx)
+                        sval = str(v)
+                        if taken < cap_per_column:
+                            vals.append({"row": excel_row, "value": sval})
+                            taken += 1
+                        if sval not in seen:
+                            seen.add(sval)
+                            if len(uniques) < 10:
+                                uniques.append(sval)
+                    out[entry.get("key") or entry.get("name")] = {
+                        "column": entry.get("name"),
+                        "values_sample": vals,
+                        "values_sample_capped": len(vals) >= cap_per_column,
+                        "unique_values_sample": uniques
+                    }
+                return out
+
+            optional_report = {
+                s1: optional_audit(df_art, req_art),
+                s2: optional_audit(df_lab, req_lab),
+                s3: optional_audit(df_rel, req_rel),
+                s4: optional_audit(df_relart, req_relart),
+                s5: optional_audit(df_reltrk, req_reltrk),
+                s6: optional_audit(df_trkart, req_trkart),
+                s7: optional_audit(df_comp_masters, req_comp_masters),
+                s8: optional_audit(df_trkcomp, req_trkcomp),
+                s9: optional_audit(df_props, req_props),
+            }
+            # Write full JSON artifact
+            (ARTIFACTS/"optional_fields_report.json").write_text(json.dumps(optional_report, indent=2, ensure_ascii=False))
+            # Also write actual non-empty values samples per optional column
+            optional_values = {
+                s1: optional_values_extract(df_art, req_art),
+                s2: optional_values_extract(df_lab, req_lab),
+                s3: optional_values_extract(df_rel, req_rel),
+                s4: optional_values_extract(df_relart, req_relart),
+                s5: optional_values_extract(df_reltrk, req_reltrk),
+                s6: optional_values_extract(df_trkart, req_trkart),
+                s7: optional_values_extract(df_comp_masters, req_comp_masters),
+                s8: optional_values_extract(df_trkcomp, req_trkcomp),
+                s9: optional_values_extract(df_props, req_props),
+            }
+            (ARTIFACTS/"optional_fields_values.json").write_text(json.dumps(optional_values, indent=2, ensure_ascii=False))
+            # Small console summary to keep it skimmable
+            summary = {name: {
+                "optional_cols": len(rep.get("covered", [])) + len(rep.get("unused", [])),
+                "used": len(rep.get("covered", [])),
+                "unused": len(rep.get("unused", []))
+            } for name, rep in optional_report.items()}
+            # Also compute top 5 unused optional columns across all sheets
+            unused_flat = []
+            for sh, rep in optional_report.items():
+                for e in rep.get("unused", [])[:]:
+                    unused_flat.append({"sheet": sh, **e})
+            # Only show a small sample in s.info
+            sample_unused = [{"sheet": u.get("sheet"), "column": u.get("column")} for u in unused_flat[:5]]
+            s.info(summary=summary, sample_unused=sample_unused, values_artifact="optional_fields_values.json")
+
+        # ===== All fields audit (every header, not just optional)
+        with progress.step("Audit all columns values") as s:
+            def all_fields_report(df: pd.DataFrame, req_map: Dict[str, bool]) -> Dict[str, Any]:
+                notes = (req_map or {}).get("_notes_row_text") or {}
+                cols_sum = []
+                for col in [c for c in df.columns if isinstance(c, str)]:
+                    obj = df[col]
+                    if isinstance(obj, pd.DataFrame):
+                        # Duplicate column name: count row as non-empty if any of the dups has a value
+                        if len(obj) == 0:
+                            count_nonempty = 0; total = 0
+                        else:
+                            mask = obj.apply(lambda row: any(not is_nan(v) for v in row), axis=1)
+                            count_nonempty = int(mask.sum()); total = int(len(obj))
+                    else:
+                        series = obj
+                        count_nonempty = int(series.map(lambda v: 0 if is_nan(v) else 1).sum()) if len(series) else 0
+                        total = int(len(series))
+                    pct = (count_nonempty / total) if total else 0.0
+                    cols_sum.append({
+                        "column": col,
+                        "notes": notes.get(col),
+                        "rows_with_values": count_nonempty,
+                        "rows_total": total,
+                        "fill_rate": round(pct, 4)
+                    })
+                # sort descending by rows_with_values then by name
+                cols_sum = sorted(cols_sum, key=lambda e: (-e["rows_with_values"], e["column"]))
+                return {"columns": cols_sum}
+
+            def all_fields_values(df: pd.DataFrame, req_map: Dict[str, bool], cap_per_column: int = 50) -> Dict[str, Any]:
+                start_row = int((req_map or {}).get("_effective_data_start") or 5)
+                out: Dict[str, Any] = {}
+                for col in [c for c in df.columns if isinstance(c, str)]:
+                    vals = []
+                    uniques = []
+                    seen = set()
+                    taken = 0
+                    obj = df[col]
+                    if hasattr(obj, "items") and not isinstance(obj, pd.DataFrame):
+                        iterator = obj.items()
+                        for idx, v in iterator:
+                            if is_nan(v):
+                                continue
+                            excel_row = start_row + int(idx)
+                            sval = str(v)
+                            if taken < cap_per_column:
+                                vals.append({"row": excel_row, "value": sval})
+                                taken += 1
+                            if sval not in seen:
+                                seen.add(sval)
+                                if len(uniques) < 10:
+                                    uniques.append(sval)
+                    else:
+                        # Duplicate header case
+                        sub = obj if isinstance(obj, pd.DataFrame) else df[[col]]
+                        subcols = list(sub.columns)
+                        for idx, row in sub.iterrows():
+                            picked = None; src_dup_idx = None
+                            for j in range(len(subcols)):
+                                try:
+                                    v = row.iloc[j]
+                                except Exception:
+                                    v = None
+                                if not is_nan(v):
+                                    picked = v; src_dup_idx = j; break
+                            if picked is None:
+                                continue
+                            excel_row = start_row + int(idx)
+                            sval = str(picked)
+                            if taken < cap_per_column:
+                                vals.append({"row": excel_row, "value": sval, "source_duplicate_index": src_dup_idx})
+                                taken += 1
+                            if sval not in seen:
+                                seen.add(sval)
+                                if len(uniques) < 10:
+                                    uniques.append(sval)
+                    out[col] = {
+                        "values_sample": vals,
+                        "values_sample_capped": len(vals) >= cap_per_column,
+                        "unique_values_sample": uniques
+                    }
+                return out
+
+            all_report = {
+                s1: all_fields_report(df_art, req_art),
+                s2: all_fields_report(df_lab, req_lab),
+                s3: all_fields_report(df_rel, req_rel),
+                s4: all_fields_report(df_relart, req_relart),
+                s5: all_fields_report(df_reltrk, req_reltrk),
+                s6: all_fields_report(df_trkart, req_trkart),
+                s7: all_fields_report(df_comp_masters, req_comp_masters),
+                s8: all_fields_report(df_trkcomp, req_trkcomp),
+                s9: all_fields_report(df_props, req_props),
+            }
+            (ARTIFACTS/"all_fields_report.json").write_text(json.dumps(all_report, indent=2, ensure_ascii=False))
+
+            all_values = {
+                s1: all_fields_values(df_art, req_art),
+                s2: all_fields_values(df_lab, req_lab),
+                s3: all_fields_values(df_rel, req_rel),
+                s4: all_fields_values(df_relart, req_relart),
+                s5: all_fields_values(df_reltrk, req_reltrk),
+                s6: all_fields_values(df_trkart, req_trkart),
+                s7: all_fields_values(df_comp_masters, req_comp_masters),
+                s8: all_fields_values(df_trkcomp, req_trkcomp),
+                s9: all_fields_values(df_props, req_props),
+            }
+            (ARTIFACTS/"all_fields_values.json").write_text(json.dumps(all_values, indent=2, ensure_ascii=False))
+            # Log a tiny sample pointing to columns likely to be present (top by fill-rate)
+            sample_cols = []
+            for sh, rep in all_report.items():
+                arr = rep.get("columns", [])
+                if arr:
+                    top = arr[0]
+                    sample_cols.append({"sheet": sh, "column": top.get("column"), "fill_rate": top.get("fill_rate")})
+            s.info(values_artifact="all_fields_values.json", sample_top=sample_cols[:5])
 
         # ===== Preflight validations
         report: List[Dict[str,Any]] = []

@@ -1,0 +1,1308 @@
+{
+  "1) Artists list": {
+    "Artist Name": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "JKZ"
+        },
+        {
+          "row": 6,
+          "value": "Flash Beats Manow"
+        },
+        {
+          "row": 7,
+          "value": "Various Artists"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "JKZ",
+        "Flash Beats Manow",
+        "Various Artists"
+      ]
+    },
+    "Artist Image url": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1"
+        },
+        {
+          "row": 6,
+          "value": "https://www.dropbox.com/scl/fi/wky0ryb739s0xs3wo5qop/A-Cl-usula-do-Contrato-789294962088-UPC.jpg?rlkey=91bp85llgb8ho5lnfcs56105s&st=dn12pxrd&dl=1"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1",
+        "https://www.dropbox.com/scl/fi/wky0ryb739s0xs3wo5qop/A-Cl-usula-do-Contrato-789294962088-UPC.jpg?rlkey=91bp85llgb8ho5lnfcs56105s&st=dn12pxrd&dl=1"
+      ]
+    },
+    "Apple ArtistId": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "1532352644"
+        },
+        {
+          "row": 6,
+          "value": "1601139620"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "1532352644",
+        "1601139620"
+      ]
+    },
+    "Spotify Artist URI": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "spotify:artist:1Gn8eEXtOWHA7XU8wEWXOb"
+        },
+        {
+          "row": 6,
+          "value": "spotify:artist:0ZIlwtVZkqtMZUpbHrz8TL"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "spotify:artist:1Gn8eEXtOWHA7XU8wEWXOb",
+        "spotify:artist:0ZIlwtVZkqtMZUpbHrz8TL"
+      ]
+    },
+    "Meta ArtistId": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "SoundCloud ProfileId": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "2": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "Duplicate Names": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "332920.0": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Insert into Artists VALUES(N'JKZ', (select CreatedBy from Enterprises where EnterpriseId=414849), (select ImageId from Images where Filename='JKZ414849'), null, null, getdate(), null, null, null, null, 414849, null, null, null, null, 0, null, null, 332920, null, null, null, null, null, null, 0, 0)"
+        },
+        {
+          "row": 6,
+          "value": "Insert into Artists VALUES(N'Flash Beats Manow', (select CreatedBy from Enterprises where EnterpriseId=414849), (select ImageId from Images where Filename='FlashBeatsManow414849'), null, null, getdate(), null, null, null, null, 414849, null, null, null, null, 0, null, null, 332920, null, null, null, null, null, null, 0, 0)"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Insert into Artists VALUES(N'JKZ', (select CreatedBy from Enterprises where EnterpriseId=414849), (select ImageId from Images where Filename='JKZ414849'), null, null, getdate(), null, null, null, null, 414849, null, null, null, null, 0, null, null, 332920, null, null, null, null, null, null, 0, 0)",
+        "Insert into Artists VALUES(N'Flash Beats Manow', (select CreatedBy from Enterprises where EnterpriseId=414849), (select ImageId from Images where Filename='FlashBeatsManow414849'), null, null, getdate(), null, null, null, null, 414849, null, null, null, null, 0, null, null, 332920, null, null, null, null, null, null, 0, 0)"
+      ]
+    }
+  },
+  "2) Labels list": {
+    "Label Name": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "TokyoRecords"
+        },
+        {
+          "row": 6,
+          "value": "PEJOTA10*"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "TokyoRecords",
+        "PEJOTA10*"
+      ]
+    },
+    "0": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    }
+  },
+  "3) Release_Label": {
+    "LABEL": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "TokyoRecords"
+        },
+        {
+          "row": 6,
+          "value": "PEJOTA10*"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "TokyoRecords",
+        "PEJOTA10*"
+      ]
+    },
+    "COVER IMAGE URL": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1"
+        },
+        {
+          "row": 6,
+          "value": "https://www.dropbox.com/scl/fi/wky0ryb739s0xs3wo5qop/A-Cl-usula-do-Contrato-789294962088-UPC.jpg?rlkey=91bp85llgb8ho5lnfcs56105s&st=dn12pxrd&dl=1"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1",
+        "https://www.dropbox.com/scl/fi/wky0ryb739s0xs3wo5qop/A-Cl-usula-do-Contrato-789294962088-UPC.jpg?rlkey=91bp85llgb8ho5lnfcs56105s&st=dn12pxrd&dl=1"
+      ]
+    },
+    "IMAGE TYPE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "jpg"
+        },
+        {
+          "row": 6,
+          "value": "jpg"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "jpg"
+      ]
+    },
+    "UPC / EAN / JAN": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "789294845633"
+        },
+        {
+          "row": 6,
+          "value": "789294962088"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "789294845633",
+        "789294962088"
+      ]
+    },
+    "CATALOG RELEASE ID": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "RELEASE TITLE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Receba"
+        },
+        {
+          "row": 6,
+          "value": "A Cláusula do Contrato"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Receba",
+        "A Cláusula do Contrato"
+      ]
+    },
+    "TITLE LANGUAGE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Portuguese"
+        },
+        {
+          "row": 6,
+          "value": "Portuguese"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Portuguese"
+      ]
+    },
+    "RELEASE VERSION": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "RELEASE TYPE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Single"
+        },
+        {
+          "row": 6,
+          "value": "Single"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Single"
+      ]
+    },
+    "(P) Copyright": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "2022"
+        },
+        {
+          "row": 6,
+          "value": "2022"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "2022"
+      ]
+    },
+    "Holder": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "TokyoRecords",
+          "source_duplicate_index": 0
+        },
+        {
+          "row": 6,
+          "value": "TokyoRecords",
+          "source_duplicate_index": 0
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "TokyoRecords"
+      ]
+    },
+    "(C) Copyright": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "2022"
+        },
+        {
+          "row": 6,
+          "value": "2022"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "2022"
+      ]
+    },
+    "ORIGINAL\nRELEASE DATE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "2022-11-21 00:00:00"
+        },
+        {
+          "row": 6,
+          "value": "2022-11-24 00:00:00"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "2022-11-21 00:00:00",
+        "2022-11-24 00:00:00"
+      ]
+    },
+    "GENRE 1": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Hip Hop/Rap"
+        },
+        {
+          "row": 6,
+          "value": "Hip Hop/Rap"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Hip Hop/Rap"
+      ]
+    },
+    "GENRE 2": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    }
+  },
+  "4) Release_Artist(s)": {
+    "UPC / EAN / JAN": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "789294845633"
+        },
+        {
+          "row": 6,
+          "value": "789294845633"
+        },
+        {
+          "row": 7,
+          "value": "789294845633"
+        },
+        {
+          "row": 8,
+          "value": "789294962088"
+        },
+        {
+          "row": 9,
+          "value": "789294962088"
+        },
+        {
+          "row": 10,
+          "value": "789294962088"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "789294845633",
+        "789294962088"
+      ]
+    },
+    "CATALOG RELEASE ID": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "RELEASE TITLE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Receba"
+        },
+        {
+          "row": 6,
+          "value": "Receba"
+        },
+        {
+          "row": 7,
+          "value": "Receba"
+        },
+        {
+          "row": 8,
+          "value": "A Cláusula do Contrato"
+        },
+        {
+          "row": 9,
+          "value": "A Cláusula do Contrato"
+        },
+        {
+          "row": 10,
+          "value": "A Cláusula do Contrato"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Receba",
+        "A Cláusula do Contrato"
+      ]
+    },
+    "RELEASE VERSION": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "ARTIST": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "JKZ"
+        },
+        {
+          "row": 6,
+          "value": "JKZ"
+        },
+        {
+          "row": 7,
+          "value": "JKZ"
+        },
+        {
+          "row": 8,
+          "value": "Flash Beats Manow"
+        },
+        {
+          "row": 9,
+          "value": "Flash Beats Manow"
+        },
+        {
+          "row": 10,
+          "value": "Flash Beats Manow"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "JKZ",
+        "Flash Beats Manow"
+      ]
+    },
+    "ARTIST ROLE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Main Primary Artist"
+        },
+        {
+          "row": 6,
+          "value": "Producer"
+        },
+        {
+          "row": 7,
+          "value": "Engineer"
+        },
+        {
+          "row": 8,
+          "value": "Main Primary Artist"
+        },
+        {
+          "row": 9,
+          "value": "Producer"
+        },
+        {
+          "row": 10,
+          "value": "Engineer"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Main Primary Artist",
+        "Producer",
+        "Engineer"
+      ]
+    },
+    "ARTIST ROLE\nCATEGORY": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Main Primary Artist"
+        },
+        {
+          "row": 6,
+          "value": "Producer & Engineer"
+        },
+        {
+          "row": 7,
+          "value": "Producer & Engineer"
+        },
+        {
+          "row": 8,
+          "value": "Main Primary Artist"
+        },
+        {
+          "row": 9,
+          "value": "Producer & Engineer"
+        },
+        {
+          "row": 10,
+          "value": "Producer & Engineer"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Main Primary Artist",
+        "Producer & Engineer"
+      ]
+    },
+    "0": {
+      "values_sample": [
+        {
+          "row": 6,
+          "value": "sort(if(countif($A$5:$A&$B$5:$B,'3) Release_Label'!$D$5:$D&'3) Release_Label'!$E$5:$E)=0,'3) Release_Label'!$D$5:$D&\" \"&'3) Release_Label'!$E$5:$E,))"
+        },
+        {
+          "row": 7,
+          "value": "sort(if(countif({A5:A,B5:B},{'3) Release_Label'!D5:D,'3) Release_Label'!E5:E})=0,{'3) Release_Label'!D5:D,'3) Release_Label'!E5:E},))"
+        },
+        {
+          "row": 8,
+          "value": "#REF!"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "sort(if(countif($A$5:$A&$B$5:$B,'3) Release_Label'!$D$5:$D&'3) Release_Label'!$E$5:$E)=0,'3) Release_Label'!$D$5:$D&\" \"&'3) Release_Label'!$E$5:$E,))",
+        "sort(if(countif({A5:A,B5:B},{'3) Release_Label'!D5:D,'3) Release_Label'!E5:E})=0,{'3) Release_Label'!D5:D,'3) Release_Label'!E5:E},))",
+        "#REF!"
+      ]
+    }
+  },
+  "5) Release_Track": {
+    "UPC / EAN / JAN": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "789294845633"
+        },
+        {
+          "row": 6,
+          "value": "789294962088"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "789294845633",
+        "789294962088"
+      ]
+    },
+    "CATALOG RELEASE ID": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "RELEASE TITLE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Receba"
+        },
+        {
+          "row": 6,
+          "value": "A Cláusula do Contrato"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Receba",
+        "A Cláusula do Contrato"
+      ]
+    },
+    "RELEASE VERSION": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "TRACK": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "1"
+        },
+        {
+          "row": 6,
+          "value": "1"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "1"
+      ]
+    },
+    "ISRC/vISRC": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "QZW9M2221000"
+        },
+        {
+          "row": 6,
+          "value": "QZW9M2236571"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "QZW9M2221000",
+        "QZW9M2236571"
+      ]
+    },
+    "CATALOG TRACK ID": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "TRACK TITLE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Receba"
+        },
+        {
+          "row": 6,
+          "value": "A Cláusula do Contrato"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Receba",
+        "A Cláusula do Contrato"
+      ]
+    },
+    "TRACK VERSION": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "LANGUAGE OF LYRICS": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Portuguese"
+        },
+        {
+          "row": 6,
+          "value": "Portuguese"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Portuguese"
+      ]
+    },
+    "EXPLICIT": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "NO"
+        },
+        {
+          "row": 6,
+          "value": "NO"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "NO"
+      ]
+    },
+    "TYPE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Original"
+        },
+        {
+          "row": 6,
+          "value": "Original"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Original"
+      ]
+    },
+    "AUDIO FILE URL": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "https://www.dropbox.com/scl/fi/sjv55c5eqq0utzgy15ojq/Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav?rlkey=6j5ruxil4gc3vxonuf8ownxvi&st=8kysye3f&dl=1"
+        },
+        {
+          "row": 6,
+          "value": "https://www.dropbox.com/scl/fi/ncgo2nf5srfafm0odhequ/Joy-Mejia-Te-Fall.wav?rlkey=6jl64vr3v0w4tn6km1sbhlxux&st=um08pokf&dl=1"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "https://www.dropbox.com/scl/fi/sjv55c5eqq0utzgy15ojq/Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav?rlkey=6j5ruxil4gc3vxonuf8ownxvi&st=8kysye3f&dl=1",
+        "https://www.dropbox.com/scl/fi/ncgo2nf5srfafm0odhequ/Joy-Mejia-Te-Fall.wav?rlkey=6jl64vr3v0w4tn6km1sbhlxux&st=um08pokf&dl=1"
+      ]
+    },
+    "AUDIO TYPE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "flac"
+        },
+        {
+          "row": 6,
+          "value": "flac"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "flac"
+      ]
+    },
+    "TRACK PREVIEW": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "COMPOSITION\n ISWC": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    }
+  },
+  "6) Track_Artist(s)": {
+    "ISRC/vISRC": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "QZW9M2221000"
+        },
+        {
+          "row": 6,
+          "value": "QZW9M2221000"
+        },
+        {
+          "row": 7,
+          "value": "QZW9M2221000"
+        },
+        {
+          "row": 8,
+          "value": "QZW9M2236571"
+        },
+        {
+          "row": 9,
+          "value": "QZW9M2236571"
+        },
+        {
+          "row": 10,
+          "value": "QZW9M2236571"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "QZW9M2221000",
+        "QZW9M2236571"
+      ]
+    },
+    "CATALOG TRACK ID": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "TRACK TITLE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Receba"
+        },
+        {
+          "row": 6,
+          "value": "Receba"
+        },
+        {
+          "row": 7,
+          "value": "Receba"
+        },
+        {
+          "row": 8,
+          "value": "A Cláusula do Contrato"
+        },
+        {
+          "row": 9,
+          "value": "A Cláusula do Contrato"
+        },
+        {
+          "row": 10,
+          "value": "A Cláusula do Contrato"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Receba",
+        "A Cláusula do Contrato"
+      ]
+    },
+    "TRACK VERSION": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "ARTIST": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "JKZ"
+        },
+        {
+          "row": 6,
+          "value": "JKZ"
+        },
+        {
+          "row": 7,
+          "value": "JKZ"
+        },
+        {
+          "row": 8,
+          "value": "Flash Beats Manow"
+        },
+        {
+          "row": 9,
+          "value": "Flash Beats Manow"
+        },
+        {
+          "row": 10,
+          "value": "Flash Beats Manow"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "JKZ",
+        "Flash Beats Manow"
+      ]
+    },
+    "ARTIST ROLE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Main Primary Artist"
+        },
+        {
+          "row": 6,
+          "value": "Producer"
+        },
+        {
+          "row": 7,
+          "value": "Engineer"
+        },
+        {
+          "row": 8,
+          "value": "Producer"
+        },
+        {
+          "row": 9,
+          "value": "Main Primary Artist"
+        },
+        {
+          "row": 10,
+          "value": "Engineer"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Main Primary Artist",
+        "Producer",
+        "Engineer"
+      ]
+    }
+  },
+  "7) Comp ContributorPublisher li": {
+    "Composition Contributor": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Agnaldo Paulino de Jesus Júnior"
+        },
+        {
+          "row": 6,
+          "value": "Jackson Bertholdo Dos Santos"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Agnaldo Paulino de Jesus Júnior",
+        "Jackson Bertholdo Dos Santos"
+      ]
+    },
+    "0": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "Column_3": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "insert into Composers VALUES(N'Agnaldo Paulino de Jesus Júnior', null, null, (select CreatedBy from Enterprises where EnterpriseId=414849), getdate(), null, null, null,332920, 414849, null, null, null, null)"
+        },
+        {
+          "row": 6,
+          "value": "insert into Composers VALUES(N'Jackson Bertholdo Dos Santos', null, null, (select CreatedBy from Enterprises where EnterpriseId=414849), getdate(), null, null, null,332920, 414849, null, null, null, null)"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "insert into Composers VALUES(N'Agnaldo Paulino de Jesus Júnior', null, null, (select CreatedBy from Enterprises where EnterpriseId=414849), getdate(), null, null, null,332920, 414849, null, null, null, null)",
+        "insert into Composers VALUES(N'Jackson Bertholdo Dos Santos', null, null, (select CreatedBy from Enterprises where EnterpriseId=414849), getdate(), null, null, null,332920, 414849, null, null, null, null)"
+      ]
+    },
+    "Publisher Name": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    }
+  },
+  "8) Track_Composition(s)": {
+    "ISRC/vISRC": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "QZW9M2221000"
+        },
+        {
+          "row": 6,
+          "value": "QZW9M2221000"
+        },
+        {
+          "row": 7,
+          "value": "QZW9M2236571"
+        },
+        {
+          "row": 8,
+          "value": "QZW9M2236571"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "QZW9M2221000",
+        "QZW9M2236571"
+      ]
+    },
+    "CATALOG TRACK ID": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "TRACK TITLE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Receba"
+        },
+        {
+          "row": 6,
+          "value": "Receba"
+        },
+        {
+          "row": 7,
+          "value": "A Cláusula do Contrato"
+        },
+        {
+          "row": 8,
+          "value": "A Cláusula do Contrato"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Receba",
+        "A Cláusula do Contrato"
+      ]
+    },
+    "TRACK VERSION": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "COMPOSITION CONTRIBUTOR": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Agnaldo Paulino de Jesus Júnior"
+        },
+        {
+          "row": 6,
+          "value": "Jackson Bertholdo Dos Santos"
+        },
+        {
+          "row": 7,
+          "value": "Jackson Bertholdo Dos Santos"
+        },
+        {
+          "row": 8,
+          "value": "Agnaldo Paulino de Jesus Júnior"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Agnaldo Paulino de Jesus Júnior",
+        "Jackson Bertholdo Dos Santos"
+      ]
+    },
+    "ROLE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Composer & Lyricist"
+        },
+        {
+          "row": 6,
+          "value": "Composer & Lyricist"
+        },
+        {
+          "row": 7,
+          "value": "Composer & Lyricist"
+        },
+        {
+          "row": 8,
+          "value": "Composer & Lyricist"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Composer & Lyricist"
+      ]
+    },
+    "SHARE%": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "0.6"
+        },
+        {
+          "row": 6,
+          "value": "0.4"
+        },
+        {
+          "row": 7,
+          "value": "0.5"
+        },
+        {
+          "row": 8,
+          "value": "0.5"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "0.6",
+        "0.4",
+        "0.5"
+      ]
+    },
+    "TOTAL%": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "0.6"
+        },
+        {
+          "row": 6,
+          "value": "1"
+        },
+        {
+          "row": 7,
+          "value": "0.5"
+        },
+        {
+          "row": 8,
+          "value": "1"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "0.6",
+        "1",
+        "0.5"
+      ]
+    },
+    "PUBLISHING": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Copyright control (self-published)"
+        },
+        {
+          "row": 6,
+          "value": "Copyright control (self-published)"
+        },
+        {
+          "row": 7,
+          "value": "Copyright control (self-published)"
+        },
+        {
+          "row": 8,
+          "value": "Copyright control (self-published)"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Copyright control (self-published)"
+      ]
+    },
+    "PUBLISHER": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    }
+  },
+  "9) Audio_Properties": {
+    "ISRC/vISRC": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "QZW9M2221000"
+        },
+        {
+          "row": 6,
+          "value": "QZW9M2236571"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "QZW9M2221000",
+        "QZW9M2236571"
+      ]
+    },
+    "CATALOG TRACK ID": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "TRACK TITLE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Receba"
+        },
+        {
+          "row": 6,
+          "value": "A Cláusula do Contrato"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Receba",
+        "A Cláusula do Contrato"
+      ]
+    },
+    "TRACK VERSION": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "REMIX or \nDERIVATIVE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "False"
+        },
+        {
+          "row": 6,
+          "value": "False"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "False"
+      ]
+    },
+    "SAMPLES\nor STOCK": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "False"
+        },
+        {
+          "row": 6,
+          "value": "False"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "False"
+      ]
+    },
+    "SPECIAL AUDIO PROPERTIES": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "False"
+        },
+        {
+          "row": 6,
+          "value": "False"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "False"
+      ]
+    },
+    "ALTERNATE \nVERSION": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "False"
+        },
+        {
+          "row": 6,
+          "value": "False"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "False"
+      ]
+    },
+    "SPECIAL\nGENRE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "False"
+        },
+        {
+          "row": 6,
+          "value": "False"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "False"
+      ]
+    },
+    "NON MUSICAL\nCONTENT": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "False"
+        },
+        {
+          "row": 6,
+          "value": "False"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "False"
+      ]
+    },
+    "INCLUDES\n AI": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "False"
+        },
+        {
+          "row": 6,
+          "value": "False"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "False"
+      ]
+    },
+    "NONE APPLY": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "True"
+        },
+        {
+          "row": 6,
+          "value": "True"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "True"
+      ]
+    }
+  }
+}
