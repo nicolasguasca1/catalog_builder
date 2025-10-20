@@ -7,8 +7,8 @@
     "filename": "Receba-789294845633-UPC.jpg",
     "status": 200,
     "contentType": "application/json; charset=utf-8",
-    "responseText": "\"160e674f-4e4c-4a9c-99f2-8e2fee2cdfbc\"",
-    "fileId": "160e674f-4e4c-4a9c-99f2-8e2fee2cdfbc"
+    "responseText": "\"8532f400-b2b4-473f-888a-f357e786ab2f\"",
+    "fileId": "8532f400-b2b4-473f-888a-f357e786ab2f"
   },
   {
     "endpoint": "https://api.revelator.com/media/image/upload",
@@ -18,7 +18,7 @@
     "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
     "status": 200,
     "contentType": "application/json; charset=utf-8",
-    "responseText": "\"434b62cb-69f1-4e88-ba67-8babe4fef6ae\"",
-    "fileId": "434b62cb-69f1-4e88-ba67-8babe4fef6ae"
+    "responseText": "\"a12465ea-4eb9-40f5-bf06-276c2d011d36\"",
+    "fileId": "a12465ea-4eb9-40f5-bf06-276c2d011d36"
   }
 ]

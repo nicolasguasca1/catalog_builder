@@ -74,9 +74,21 @@
       ]
     },
     "Meta ArtistId": {
-      "values_sample": [],
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "697315585919469"
+        },
+        {
+          "row": 6,
+          "value": "697315585919468"
+        }
+      ],
       "values_sample_capped": false,
-      "unique_values_sample": []
+      "unique_values_sample": [
+        "697315585919469",
+        "697315585919468"
+      ]
     },
     "SoundCloud ProfileId": {
       "values_sample": [],
@@ -242,9 +254,16 @@
       ]
     },
     "RELEASE VERSION": {
-      "values_sample": [],
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Extended"
+        }
+      ],
       "values_sample_capped": false,
-      "unique_values_sample": []
+      "unique_values_sample": [
+        "Extended"
+      ]
     },
     "RELEASE TYPE": {
       "values_sample": [
@@ -346,9 +365,20 @@
       ]
     },
     "GENRE 2": {
-      "values_sample": [],
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "African Reggae"
+        },
+        {
+          "row": 6,
+          "value": "African Reggae"
+        }
+      ],
       "values_sample_capped": false,
-      "unique_values_sample": []
+      "unique_values_sample": [
+        "African Reggae"
+      ]
     }
   },
   "4) Release_Artist(s)": {
@@ -424,9 +454,24 @@
       ]
     },
     "RELEASE VERSION": {
-      "values_sample": [],
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Extended"
+        },
+        {
+          "row": 6,
+          "value": "Extended"
+        },
+        {
+          "row": 7,
+          "value": "Extended"
+        }
+      ],
       "values_sample_capped": false,
-      "unique_values_sample": []
+      "unique_values_sample": [
+        "Extended"
+      ]
     },
     "ARTIST": {
       "values_sample": [
@@ -592,9 +637,16 @@
       ]
     },
     "RELEASE VERSION": {
-      "values_sample": [],
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Extended"
+        }
+      ],
       "values_sample_capped": false,
-      "unique_values_sample": []
+      "unique_values_sample": [
+        "Extended"
+      ]
     },
     "TRACK": {
       "values_sample": [
@@ -652,9 +704,16 @@
       ]
     },
     "TRACK VERSION": {
-      "values_sample": [],
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Extended"
+        }
+      ],
       "values_sample_capped": false,
-      "unique_values_sample": []
+      "unique_values_sample": [
+        "Extended"
+      ]
     },
     "LANGUAGE OF LYRICS": {
       "values_sample": [
@@ -738,14 +797,38 @@
       ]
     },
     "TRACK PREVIEW": {
-      "values_sample": [],
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "140"
+        },
+        {
+          "row": 6,
+          "value": "200"
+        }
+      ],
       "values_sample_capped": false,
-      "unique_values_sample": []
+      "unique_values_sample": [
+        "140",
+        "200"
+      ]
     },
     "COMPOSITION\n ISWC": {
-      "values_sample": [],
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "12345"
+        },
+        {
+          "row": 6,
+          "value": "67890"
+        }
+      ],
       "values_sample_capped": false,
-      "unique_values_sample": []
+      "unique_values_sample": [
+        "12345",
+        "67890"
+      ]
     }
   },
   "6) Track_Artist(s)": {
@@ -821,9 +904,24 @@
       ]
     },
     "TRACK VERSION": {
-      "values_sample": [],
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Extended"
+        },
+        {
+          "row": 6,
+          "value": "Extended"
+        },
+        {
+          "row": 7,
+          "value": "Extended"
+        }
+      ],
       "values_sample_capped": false,
-      "unique_values_sample": []
+      "unique_values_sample": [
+        "Extended"
+      ]
     },
     "ARTIST": {
       "values_sample": [
@@ -934,9 +1032,21 @@
       ]
     },
     "Publisher Name": {
-      "values_sample": [],
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "SONY ATV"
+        },
+        {
+          "row": 6,
+          "value": "WARNER CHAPPEL"
+        }
+      ],
       "values_sample_capped": false,
-      "unique_values_sample": []
+      "unique_values_sample": [
+        "SONY ATV",
+        "WARNER CHAPPEL"
+      ]
     }
   },
   "8) Track_Composition(s)": {
@@ -996,9 +1106,20 @@
       ]
     },
     "TRACK VERSION": {
-      "values_sample": [],
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Extended"
+        },
+        {
+          "row": 6,
+          "value": "Extended"
+        }
+      ],
       "values_sample_capped": false,
-      "unique_values_sample": []
+      "unique_values_sample": [
+        "Extended"
+      ]
     },
     "COMPOSITION CONTRIBUTOR": {
       "values_sample": [
@@ -1113,22 +1234,35 @@
         },
         {
           "row": 7,
-          "value": "Copyright control (self-published)"
+          "value": "Published (managed by a publisher)"
         },
         {
           "row": 8,
-          "value": "Copyright control (self-published)"
+          "value": "Published (managed by a publisher)"
         }
       ],
       "values_sample_capped": false,
       "unique_values_sample": [
-        "Copyright control (self-published)"
+        "Copyright control (self-published)",
+        "Published (managed by a publisher)"
       ]
     },
     "PUBLISHER": {
-      "values_sample": [],
+      "values_sample": [
+        {
+          "row": 7,
+          "value": "SONY ATV"
+        },
+        {
+          "row": 8,
+          "value": "WARNER CHAPPEL"
+        }
+      ],
       "values_sample_capped": false,
-      "unique_values_sample": []
+      "unique_values_sample": [
+        "SONY ATV",
+        "WARNER CHAPPEL"
+      ]
     }
   },
   "9) Audio_Properties": {
@@ -1172,9 +1306,16 @@
       ]
     },
     "TRACK VERSION": {
-      "values_sample": [],
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Extended"
+        }
+      ],
       "values_sample_capped": false,
-      "unique_values_sample": []
+      "unique_values_sample": [
+        "Extended"
+      ]
     },
     "REMIX or \nDERIVATIVE": {
       "values_sample": [

@@ -2,23 +2,23 @@
   {
     "endpoint": "https://api.revelator.com/media/audio/pullexternal/wav",
     "request": {
-      "externalUrl": "https://www.dropbox.com/scl/fi/g6ch1pcun31eep1am9mkv/Receba-789294845633-UPC.flac?rlkey=mxh9w3x6d82jmu7mmv2a9trio&st=i02exo9k&dl=1",
-      "fileName": "Receba-789294845633-UPC.flac"
+      "externalUrl": "https://www.dropbox.com/scl/fi/sjv55c5eqq0utzgy15ojq/Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav?rlkey=6j5ruxil4gc3vxonuf8ownxvi&st=8kysye3f&dl=1",
+      "fileName": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav"
     },
     "status": 200,
-    "responseText": "{\"fileId\":\"a7298528-218b-4e42-9bc0-732712d5f6fa\",\"isTemp\":true,\"filename\":\"Receba-789294845633-UPC.flac\",\"externalUrl\":null,\"lastUpdateDate\":\"0001-01-01T00:00:00\"}",
-    "audioId": "a7298528-218b-4e42-9bc0-732712d5f6fa",
+    "responseText": "{\"fileId\":\"b675b0e9-02b1-4c97-885b-5b2b7d799f3d\",\"isTemp\":true,\"filename\":\"Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav\",\"externalUrl\":null,\"lastUpdateDate\":\"0001-01-01T00:00:00\"}",
+    "audioId": "b675b0e9-02b1-4c97-885b-5b2b7d799f3d",
     "isrc": "QZW9M2221000"
   },
   {
     "endpoint": "https://api.revelator.com/media/audio/pullexternal/wav",
     "request": {
-      "externalUrl": "https://www.dropbox.com/scl/fi/i5lnp58jvdvz99rmvukp3/A-Cl-usula-do-Contrato-789294962088-UPC.flac?rlkey=hr2u9fvf5lq6u33enhqm3ui3f&st=m6hlmmgt&dl=1",
-      "fileName": "A-Cl-usula-do-Contrato-789294962088-UPC.flac"
+      "externalUrl": "https://www.dropbox.com/scl/fi/ncgo2nf5srfafm0odhequ/Joy-Mejia-Te-Fall.wav?rlkey=6jl64vr3v0w4tn6km1sbhlxux&st=um08pokf&dl=1",
+      "fileName": "Joy-Mejia-Te-Fall.wav"
     },
     "status": 200,
-    "responseText": "{\"fileId\":\"4978ca9b-2ef9-48dc-a931-618401c1fff0\",\"isTemp\":true,\"filename\":\"A-Cl-usula-do-Contrato-789294962088-UPC.flac\",\"externalUrl\":null,\"lastUpdateDate\":\"0001-01-01T00:00:00\"}",
-    "audioId": "4978ca9b-2ef9-48dc-a931-618401c1fff0",
+    "responseText": "{\"fileId\":\"5afe9276-f35b-4ffc-9304-b4cff5ce0235\",\"isTemp\":true,\"filename\":\"Joy-Mejia-Te-Fall.wav\",\"externalUrl\":null,\"lastUpdateDate\":\"0001-01-01T00:00:00\"}",
+    "audioId": "5afe9276-f35b-4ffc-9304-b4cff5ce0235",
     "isrc": "QZW9M2236571"
   }
 ]

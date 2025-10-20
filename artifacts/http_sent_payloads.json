@@ -1,0 +1,881 @@
+[
+  {
+    "timestamp": 1760957028.117,
+    "method": "POST",
+    "url": "https://api.revelator.com/media/audio/pullexternal/wav",
+    "json": {
+      "externalUrl": "https://www.dropbox.com/scl/fi/sjv55c5eqq0utzgy15ojq/Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav?rlkey=6j5ruxil4gc3vxonuf8ownxvi&st=8kysye3f&dl=1",
+      "fileName": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav"
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "414849",
+      "X-TenantId": "332920"
+    }
+  },
+  {
+    "timestamp": 1760957032.727,
+    "method": "POST",
+    "url": "https://api.revelator.com/media/audio/pullexternal/wav",
+    "json": {
+      "externalUrl": "https://www.dropbox.com/scl/fi/ncgo2nf5srfafm0odhequ/Joy-Mejia-Te-Fall.wav?rlkey=6jl64vr3v0w4tn6km1sbhlxux&st=um08pokf&dl=1",
+      "fileName": "Joy-Mejia-Te-Fall.wav"
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "414849",
+      "X-TenantId": "332920"
+    }
+  },
+  {
+    "timestamp": 1760957040.19,
+    "method": "POST",
+    "url": "https://api.revelator.com/content/publisher/save",
+    "json": {
+      "name": "SONY ATV"
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "414849",
+      "X-TenantId": "332920"
+    }
+  },
+  {
+    "timestamp": 1760957040.377,
+    "method": "POST",
+    "url": "https://api.revelator.com/content/publisher/save",
+    "json": {
+      "name": "WARNER CHAPPEL"
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "414849",
+      "X-TenantId": "332920"
+    }
+  },
+  {
+    "timestamp": 1760957040.554,
+    "method": "POST",
+    "url": "https://api.revelator.com/content/composer/save",
+    "json": {
+      "name": "Agnaldo Paulino de Jesus Júnior"
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "414849",
+      "X-TenantId": "332920"
+    }
+  },
+  {
+    "timestamp": 1760957040.846,
+    "method": "POST",
+    "url": "https://api.revelator.com/content/composer/save",
+    "json": {
+      "name": "Jackson Bertholdo Dos Santos"
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "414849",
+      "X-TenantId": "332920"
+    }
+  },
+  {
+    "timestamp": 1760957052.123,
+    "method": "POST",
+    "url": "https://api.revelator.com/content/release/save",
+    "json": {
+      "name": "Receba",
+      "version": "Extended",
+      "previouslyReleased": true,
+      "releaseDate": "2022-11-21 00:00:00",
+      "upc": "789294845633",
+      "releaseLocals": [
+        {
+          "languageId": 31,
+          "name": "Receba"
+        }
+      ],
+      "languageId": 31,
+      "primaryMusicStyleId": 41,
+      "secondaryMusicStyleId": 555,
+      "hasRecordLabel": true,
+      "labelName": "TokyoRecords",
+      "artistName": "JKZ",
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1532352644"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919469"
+        }
+      ],
+      "contributors": [
+        {
+          "roleId": 34,
+          "artist": {
+            "artistId": 1669978
+          }
+        },
+        {
+          "roleId": 19,
+          "artist": {
+            "artistId": 1669978
+          }
+        }
+      ],
+      "image": {
+        "fileId": "8532f400-b2b4-473f-888a-f357e786ab2f",
+        "filename": "Receba-789294845633-UPC.jpg"
+      },
+      "labelId": 1034385,
+      "tracks": [
+        {
+          "name": "Receba",
+          "version": "Extended",
+          "languageId": 31,
+          "explicit": false,
+          "trackType": 1,
+          "trackNumber": 1,
+          "previewStartSeconds": 140,
+          "trackRecordingVersions": [
+            {
+              "isrc": "QZW9M2221000",
+              "recordingVersionType": 1,
+              "audioFiles": [
+                {
+                  "audioId": "b675b0e9-02b1-4c97-885b-5b2b7d799f3d",
+                  "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
+                  "fileFormat": 2
+                }
+              ]
+            }
+          ],
+          "contributors": [
+            {
+              "roleId": 34,
+              "artist": {
+                "artistId": 1669978
+              }
+            },
+            {
+              "roleId": 19,
+              "artist": {
+                "artistId": 1669978
+              }
+            }
+          ],
+          "artistName": "JKZ",
+          "artistExternalIds": [
+            {
+              "distributorStoreId": 1,
+              "profileId": "1532352644"
+            },
+            {
+              "distributorStoreId": 9,
+              "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+            },
+            {
+              "distributorStoreId": 309,
+              "profileId": "697315585919469"
+            }
+          ],
+          "composerContentsDTO": [
+            {
+              "share": "60",
+              "composerName": "Agnaldo Paulino de Jesus Júnior",
+              "roleId": 39,
+              "rightsId": 1,
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Agnaldo Paulino de Jesus Júnior",
+                  "version": "Extended"
+                }
+              ]
+            },
+            {
+              "share": "40",
+              "composerName": "Jackson Bertholdo Dos Santos",
+              "roleId": 39,
+              "rightsId": 1,
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Jackson Bertholdo Dos Santos",
+                  "version": "Extended"
+                }
+              ]
+            }
+          ],
+          "trackProperties": [
+            1
+          ],
+          "trackLocals": [
+            {
+              "name": "Receba",
+              "languageId": 31,
+              "version": "Extended"
+            }
+          ]
+        }
+      ]
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "414849",
+      "X-TenantId": "332920"
+    }
+  },
+  {
+    "timestamp": 1760957055.082,
+    "method": "POST",
+    "url": "https://api.revelator.com/content/release/save",
+    "json": {
+      "name": "Receba",
+      "version": "Extended",
+      "previouslyReleased": true,
+      "releaseDate": "2022-11-21 00:00:00",
+      "releaseLocals": [
+        {
+          "languageId": 31,
+          "name": "Receba"
+        }
+      ],
+      "languageId": 31,
+      "primaryMusicStyleId": 41,
+      "secondaryMusicStyleId": 555,
+      "hasRecordLabel": true,
+      "labelName": "TokyoRecords",
+      "artistName": "JKZ",
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1532352644"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919469"
+        }
+      ],
+      "contributors": [
+        {
+          "roleId": 34,
+          "artist": {
+            "artistId": 1669978
+          }
+        },
+        {
+          "roleId": 19,
+          "artist": {
+            "artistId": 1669978
+          }
+        }
+      ],
+      "image": {
+        "fileId": "8532f400-b2b4-473f-888a-f357e786ab2f",
+        "filename": "Receba-789294845633-UPC.jpg"
+      },
+      "labelId": 1034385,
+      "tracks": [
+        {
+          "name": "Receba",
+          "version": "Extended",
+          "languageId": 31,
+          "explicit": false,
+          "trackType": 1,
+          "trackNumber": 1,
+          "previewStartSeconds": 140,
+          "trackRecordingVersions": [
+            {
+              "isrc": "QZW9M2221000",
+              "recordingVersionType": 1,
+              "audioFiles": [
+                {
+                  "audioId": "b675b0e9-02b1-4c97-885b-5b2b7d799f3d",
+                  "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
+                  "fileFormat": 2
+                }
+              ]
+            }
+          ],
+          "contributors": [
+            {
+              "roleId": 34,
+              "artist": {
+                "artistId": 1669978
+              }
+            },
+            {
+              "roleId": 19,
+              "artist": {
+                "artistId": 1669978
+              }
+            }
+          ],
+          "artistName": "JKZ",
+          "artistExternalIds": [
+            {
+              "distributorStoreId": 1,
+              "profileId": "1532352644"
+            },
+            {
+              "distributorStoreId": 9,
+              "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+            },
+            {
+              "distributorStoreId": 309,
+              "profileId": "697315585919469"
+            }
+          ],
+          "composerContentsDTO": [
+            {
+              "share": "60",
+              "composerName": "Agnaldo Paulino de Jesus Júnior",
+              "roleId": 39,
+              "rightsId": 1,
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Agnaldo Paulino de Jesus Júnior",
+                  "version": "Extended"
+                }
+              ]
+            },
+            {
+              "share": "40",
+              "composerName": "Jackson Bertholdo Dos Santos",
+              "roleId": 39,
+              "rightsId": 1,
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Jackson Bertholdo Dos Santos",
+                  "version": "Extended"
+                }
+              ]
+            }
+          ],
+          "trackProperties": [
+            1
+          ],
+          "trackLocals": [
+            {
+              "name": "Receba",
+              "languageId": 31,
+              "version": "Extended"
+            }
+          ]
+        }
+      ]
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "414849",
+      "X-TenantId": "332920"
+    }
+  },
+  {
+    "timestamp": 1760957063.458,
+    "method": "POST",
+    "url": "https://api.revelator.com/content/release/save",
+    "json": {
+      "name": "A Cláusula do Contrato",
+      "version": null,
+      "previouslyReleased": true,
+      "releaseDate": "2022-11-24 00:00:00",
+      "upc": "789294962088",
+      "releaseLocals": [
+        {
+          "languageId": 31,
+          "name": "A Cláusula do Contrato"
+        }
+      ],
+      "languageId": 31,
+      "primaryMusicStyleId": 41,
+      "secondaryMusicStyleId": 555,
+      "hasRecordLabel": true,
+      "labelName": "PEJOTA10*",
+      "artistName": "Flash Beats Manow",
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1601139620"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919468"
+        }
+      ],
+      "contributors": [
+        {
+          "roleId": 34,
+          "artist": {
+            "artistId": 1669979
+          }
+        },
+        {
+          "roleId": 19,
+          "artist": {
+            "artistId": 1669979
+          }
+        }
+      ],
+      "image": {
+        "fileId": "a12465ea-4eb9-40f5-bf06-276c2d011d36",
+        "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg"
+      },
+      "labelId": 1034386,
+      "tracks": [
+        {
+          "name": "A Cláusula do Contrato",
+          "version": null,
+          "languageId": 31,
+          "explicit": false,
+          "trackType": 1,
+          "trackNumber": 1,
+          "previewStartSeconds": 200,
+          "trackRecordingVersions": [
+            {
+              "isrc": "QZW9M2236571",
+              "recordingVersionType": 1,
+              "audioFiles": [
+                {
+                  "audioId": "5afe9276-f35b-4ffc-9304-b4cff5ce0235",
+                  "audioFilename": "Joy-Mejia-Te-Fall.wav",
+                  "fileFormat": 2
+                }
+              ]
+            }
+          ],
+          "contributors": [
+            {
+              "roleId": 34,
+              "artist": {
+                "artistId": 1669979
+              }
+            },
+            {
+              "roleId": 19,
+              "artist": {
+                "artistId": 1669979
+              }
+            }
+          ],
+          "artistName": "Flash Beats Manow",
+          "artistExternalIds": [
+            {
+              "distributorStoreId": 1,
+              "profileId": "1601139620"
+            },
+            {
+              "distributorStoreId": 9,
+              "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+            },
+            {
+              "distributorStoreId": 309,
+              "profileId": "697315585919468"
+            }
+          ],
+          "composerContentsDTO": [
+            {
+              "share": "50",
+              "composerName": "Jackson Bertholdo Dos Santos",
+              "roleId": 39,
+              "rightsId": 1,
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Jackson Bertholdo Dos Santos"
+                }
+              ]
+            },
+            {
+              "share": "50",
+              "composerName": "Agnaldo Paulino de Jesus Júnior",
+              "roleId": 39,
+              "rightsId": 1,
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Agnaldo Paulino de Jesus Júnior"
+                }
+              ]
+            }
+          ],
+          "trackProperties": [
+            1
+          ],
+          "trackLocals": [
+            {
+              "name": "A Cláusula do Contrato",
+              "languageId": 31
+            }
+          ]
+        }
+      ]
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "414849",
+      "X-TenantId": "332920"
+    }
+  },
+  {
+    "timestamp": 1760957066.199,
+    "method": "POST",
+    "url": "https://api.revelator.com/content/release/save",
+    "json": {
+      "name": "A Cláusula do Contrato",
+      "version": null,
+      "previouslyReleased": true,
+      "releaseDate": "2022-11-24 00:00:00",
+      "releaseLocals": [
+        {
+          "languageId": 31,
+          "name": "A Cláusula do Contrato"
+        }
+      ],
+      "languageId": 31,
+      "primaryMusicStyleId": 41,
+      "secondaryMusicStyleId": 555,
+      "hasRecordLabel": true,
+      "labelName": "PEJOTA10*",
+      "artistName": "Flash Beats Manow",
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1601139620"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919468"
+        }
+      ],
+      "contributors": [
+        {
+          "roleId": 34,
+          "artist": {
+            "artistId": 1669979
+          }
+        },
+        {
+          "roleId": 19,
+          "artist": {
+            "artistId": 1669979
+          }
+        }
+      ],
+      "image": {
+        "fileId": "a12465ea-4eb9-40f5-bf06-276c2d011d36",
+        "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg"
+      },
+      "labelId": 1034386,
+      "tracks": [
+        {
+          "name": "A Cláusula do Contrato",
+          "version": null,
+          "languageId": 31,
+          "explicit": false,
+          "trackType": 1,
+          "trackNumber": 1,
+          "previewStartSeconds": 200,
+          "trackRecordingVersions": [
+            {
+              "isrc": "QZW9M2236571",
+              "recordingVersionType": 1,
+              "audioFiles": [
+                {
+                  "audioId": "5afe9276-f35b-4ffc-9304-b4cff5ce0235",
+                  "audioFilename": "Joy-Mejia-Te-Fall.wav",
+                  "fileFormat": 2
+                }
+              ]
+            }
+          ],
+          "contributors": [
+            {
+              "roleId": 34,
+              "artist": {
+                "artistId": 1669979
+              }
+            },
+            {
+              "roleId": 19,
+              "artist": {
+                "artistId": 1669979
+              }
+            }
+          ],
+          "artistName": "Flash Beats Manow",
+          "artistExternalIds": [
+            {
+              "distributorStoreId": 1,
+              "profileId": "1601139620"
+            },
+            {
+              "distributorStoreId": 9,
+              "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+            },
+            {
+              "distributorStoreId": 309,
+              "profileId": "697315585919468"
+            }
+          ],
+          "composerContentsDTO": [
+            {
+              "share": "50",
+              "composerName": "Jackson Bertholdo Dos Santos",
+              "roleId": 39,
+              "rightsId": 1,
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Jackson Bertholdo Dos Santos"
+                }
+              ]
+            },
+            {
+              "share": "50",
+              "composerName": "Agnaldo Paulino de Jesus Júnior",
+              "roleId": 39,
+              "rightsId": 1,
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Agnaldo Paulino de Jesus Júnior"
+                }
+              ]
+            }
+          ],
+          "trackProperties": [
+            1
+          ],
+          "trackLocals": [
+            {
+              "name": "A Cláusula do Contrato",
+              "languageId": 31
+            }
+          ]
+        }
+      ]
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "414849",
+      "X-TenantId": "332920"
+    }
+  },
+  {
+    "timestamp": 1760957074.164,
+    "method": "POST",
+    "url": "https://api.revelator.com/content/track/save",
+    "json": {
+      "name": "Receba",
+      "version": "Extended",
+      "languageId": 31,
+      "explicit": false,
+      "trackType": 1,
+      "trackNumber": 1,
+      "previewStartSeconds": 140,
+      "trackRecordingVersions": [
+        {
+          "isrc": "QZW9M2221000",
+          "recordingVersionType": 1,
+          "audioFiles": [
+            {
+              "audioId": "b675b0e9-02b1-4c97-885b-5b2b7d799f3d",
+              "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
+              "fileFormat": 2
+            }
+          ]
+        }
+      ],
+      "contributors": [
+        {
+          "roleId": 34,
+          "artist": {
+            "artistId": 1669978
+          }
+        },
+        {
+          "roleId": 19,
+          "artist": {
+            "artistId": 1669978
+          }
+        }
+      ],
+      "artistName": "JKZ",
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1532352644"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919469"
+        }
+      ],
+      "composerContentsDTO": [
+        {
+          "share": "60",
+          "composerName": "Agnaldo Paulino de Jesus Júnior",
+          "roleId": 39,
+          "rightsId": 1,
+          "composersLocals": [
+            {
+              "languageId": 31,
+              "name": "Agnaldo Paulino de Jesus Júnior",
+              "version": "Extended"
+            }
+          ]
+        },
+        {
+          "share": "40",
+          "composerName": "Jackson Bertholdo Dos Santos",
+          "roleId": 39,
+          "rightsId": 1,
+          "composersLocals": [
+            {
+              "languageId": 31,
+              "name": "Jackson Bertholdo Dos Santos",
+              "version": "Extended"
+            }
+          ]
+        }
+      ],
+      "trackProperties": [
+        1
+      ],
+      "trackLocals": [
+        {
+          "name": "Receba",
+          "languageId": 31,
+          "version": "Extended"
+        }
+      ]
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "414849",
+      "X-TenantId": "332920"
+    }
+  },
+  {
+    "timestamp": 1760957079.043,
+    "method": "POST",
+    "url": "https://api.revelator.com/content/track/save",
+    "json": {
+      "name": "A Cláusula do Contrato",
+      "version": null,
+      "languageId": 31,
+      "explicit": false,
+      "trackType": 1,
+      "trackNumber": 1,
+      "previewStartSeconds": 200,
+      "trackRecordingVersions": [
+        {
+          "isrc": "QZW9M2236571",
+          "recordingVersionType": 1,
+          "audioFiles": [
+            {
+              "audioId": "5afe9276-f35b-4ffc-9304-b4cff5ce0235",
+              "audioFilename": "Joy-Mejia-Te-Fall.wav",
+              "fileFormat": 2
+            }
+          ]
+        }
+      ],
+      "contributors": [
+        {
+          "roleId": 34,
+          "artist": {
+            "artistId": 1669979
+          }
+        },
+        {
+          "roleId": 19,
+          "artist": {
+            "artistId": 1669979
+          }
+        }
+      ],
+      "artistName": "Flash Beats Manow",
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1601139620"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919468"
+        }
+      ],
+      "composerContentsDTO": [
+        {
+          "share": "50",
+          "composerName": "Jackson Bertholdo Dos Santos",
+          "roleId": 39,
+          "rightsId": 1,
+          "composersLocals": [
+            {
+              "languageId": 31,
+              "name": "Jackson Bertholdo Dos Santos"
+            }
+          ]
+        },
+        {
+          "share": "50",
+          "composerName": "Agnaldo Paulino de Jesus Júnior",
+          "roleId": 39,
+          "rightsId": 1,
+          "composersLocals": [
+            {
+              "languageId": 31,
+              "name": "Agnaldo Paulino de Jesus Júnior"
+            }
+          ]
+        }
+      ],
+      "trackProperties": [
+        1
+      ],
+      "trackLocals": [
+        {
+          "name": "A Cláusula do Contrato",
+          "languageId": 31
+        }
+      ]
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "414849",
+      "X-TenantId": "332920"
+    }
+  }
+]

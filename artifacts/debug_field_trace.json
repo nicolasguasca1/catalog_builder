@@ -1,0 +1,278 @@
+{
+  "artists_raw": [
+    {
+      "name": "JKZ",
+      "apple": "1532352644",
+      "spotify_raw": "spotify:artist:1Gn8eEXtOWHA7XU8wEWXOb",
+      "spotify_id": "1Gn8eEXtOWHA7XU8wEWXOb",
+      "meta": "697315585919469",
+      "soundcloud": null,
+      "externalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1532352644"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919469"
+        }
+      ]
+    },
+    {
+      "name": "Flash Beats Manow",
+      "apple": "1601139620",
+      "spotify_raw": "spotify:artist:0ZIlwtVZkqtMZUpbHrz8TL",
+      "spotify_id": "0ZIlwtVZkqtMZUpbHrz8TL",
+      "meta": "697315585919468",
+      "soundcloud": null,
+      "externalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1601139620"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919468"
+        }
+      ]
+    },
+    {
+      "name": "Various Artists",
+      "apple": null,
+      "spotify_raw": null,
+      "spotify_id": null,
+      "meta": null,
+      "soundcloud": null,
+      "externalIds": []
+    }
+  ],
+  "publishers_raw": [
+    {
+      "name": "SONY ATV"
+    },
+    {
+      "name": "WARNER CHAPPEL"
+    }
+  ],
+  "releases_raw": [
+    {
+      "upc": "789294845633",
+      "title": "Receba",
+      "version": "Extended",
+      "copyrightP": null,
+      "copyrightC": null,
+      "languageId": 31,
+      "labelName": "TokyoRecords"
+    },
+    {
+      "upc": "789294962088",
+      "title": "A Cláusula do Contrato",
+      "version": null,
+      "copyrightP": null,
+      "copyrightC": null,
+      "languageId": 31,
+      "labelName": "PEJOTA10*"
+    }
+  ],
+  "tracks_raw": [
+    {
+      "upc": "789294845633",
+      "isrc": "QZW9M2221000",
+      "title": "Receba",
+      "version": "Extended",
+      "previewStartSeconds": 140,
+      "trackNumber": 1,
+      "languageId": 31,
+      "trackType": 1,
+      "audioUrl": "https://www.dropbox.com/scl/fi/sjv55c5eqq0utzgy15ojq/Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav?rlkey=6j5ruxil4gc3vxonuf8ownxvi&st=8kysye3f&dl=1",
+      "audioType": "flac"
+    },
+    {
+      "upc": "789294962088",
+      "isrc": "QZW9M2236571",
+      "title": "A Cláusula do Contrato",
+      "version": null,
+      "previewStartSeconds": 200,
+      "trackNumber": 1,
+      "languageId": 31,
+      "trackType": 1,
+      "audioUrl": "https://www.dropbox.com/scl/fi/ncgo2nf5srfafm0odhequ/Joy-Mejia-Te-Fall.wav?rlkey=6jl64vr3v0w4tn6km1sbhlxux&st=um08pokf&dl=1",
+      "audioType": "flac"
+    }
+  ],
+  "track_compositions": [
+    {
+      "isrc": "QZW9M2221000",
+      "composerName": "Agnaldo Paulino de Jesus Júnior",
+      "roleName": "Composer & Lyricist",
+      "roleId": 39,
+      "share": "0.6",
+      "rightsId": 1,
+      "publisherName": null
+    },
+    {
+      "isrc": "QZW9M2221000",
+      "composerName": "Jackson Bertholdo Dos Santos",
+      "roleName": "Composer & Lyricist",
+      "roleId": 39,
+      "share": "0.4",
+      "rightsId": 1,
+      "publisherName": null
+    },
+    {
+      "isrc": "QZW9M2236571",
+      "composerName": "Jackson Bertholdo Dos Santos",
+      "roleName": "Composer & Lyricist",
+      "roleId": 39,
+      "share": "0.5",
+      "rightsId": 2,
+      "publisherName": "SONY ATV"
+    },
+    {
+      "isrc": "QZW9M2236571",
+      "composerName": "Agnaldo Paulino de Jesus Júnior",
+      "roleName": "Composer & Lyricist",
+      "roleId": 39,
+      "share": "0.5",
+      "rightsId": 2,
+      "publisherName": "WARNER CHAPPEL"
+    }
+  ],
+  "composer_entries": [
+    {
+      "composerName": "Agnaldo Paulino de Jesus Júnior",
+      "source": "masters"
+    },
+    {
+      "composerName": "Jackson Bertholdo Dos Santos",
+      "source": "masters"
+    },
+    {
+      "isrc": "QZW9M2221000",
+      "composerName": "Agnaldo Paulino de Jesus Júnior",
+      "roleId": 39,
+      "rightsId": 1,
+      "publisherName": null
+    },
+    {
+      "isrc": "QZW9M2221000",
+      "composerName": "Jackson Bertholdo Dos Santos",
+      "roleId": 39,
+      "rightsId": 1,
+      "publisherName": null
+    },
+    {
+      "isrc": "QZW9M2236571",
+      "composerName": "Jackson Bertholdo Dos Santos",
+      "roleId": 39,
+      "rightsId": 2,
+      "publisherName": "SONY ATV"
+    },
+    {
+      "isrc": "QZW9M2236571",
+      "composerName": "Agnaldo Paulino de Jesus Júnior",
+      "roleId": 39,
+      "rightsId": 2,
+      "publisherName": "WARNER CHAPPEL"
+    }
+  ],
+  "composer_warnings": [],
+  "final_tracks": [
+    {
+      "upc": "789294845633",
+      "isrc": "QZW9M2221000",
+      "previewStartSeconds": 140,
+      "version": "Extended",
+      "composerCount": 2,
+      "contributorsCount": 2,
+      "trackProperties": [
+        1
+      ],
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1532352644"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919469"
+        }
+      ],
+      "recordingVersions": [
+        {
+          "isrc": "QZW9M2221000",
+          "recordingVersionType": 1,
+          "audioFiles": []
+        }
+      ]
+    },
+    {
+      "upc": "789294962088",
+      "isrc": "QZW9M2236571",
+      "previewStartSeconds": 200,
+      "version": null,
+      "composerCount": 2,
+      "contributorsCount": 2,
+      "trackProperties": [
+        1
+      ],
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1601139620"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919468"
+        }
+      ],
+      "recordingVersions": [
+        {
+          "isrc": "QZW9M2236571",
+          "recordingVersionType": 1,
+          "audioFiles": []
+        }
+      ]
+    }
+  ],
+  "final_releases": [
+    {
+      "upc": "789294845633",
+      "name": "Receba",
+      "version": "Extended",
+      "copyrightP": null,
+      "copyrightC": null,
+      "artistName": "JKZ",
+      "labelName": "TokyoRecords",
+      "contributorsCount": 2,
+      "hasReleaseLocals": true
+    },
+    {
+      "upc": "789294962088",
+      "name": "A Cláusula do Contrato",
+      "version": null,
+      "copyrightP": null,
+      "copyrightC": null,
+      "artistName": "Flash Beats Manow",
+      "labelName": "PEJOTA10*",
+      "contributorsCount": 2,
+      "hasReleaseLocals": true
+    }
+  ]
+}

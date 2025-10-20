@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import argparse, os, sys, math, json, re, time, tempfile, shutil
+import argparse, os, sys, math, json, re, time, tempfile, shutil, copy
 from urllib.parse import urlparse, parse_qsl, urlunparse, urlencode
 from urllib.parse import urlparse
 from contextlib import contextmanager
@@ -12,6 +12,8 @@ import requests
 from openpyxl import load_workbook
 from openpyxl.styles.fills import PatternFill
 from roles import roles_dict
+
+SENT_HTTP_PAYLOADS: List[Dict[str, Any]] = []
 
 # ========= Config & constants =========
 
@@ -140,6 +142,16 @@ class Progress:
         except Exception as e:
             print(f"[WARN] Failed writing run log: {e}")
 
+def add_debug_sample(bucket: List[Any], record: Any, limit: int = 25) -> None:
+    """Store up to `limit` samples per bucket for debugging."""
+    if len(bucket) < limit:
+        bucket.append(record)
+
+def normalize_role_key(name: Optional[str]) -> str:
+    if not name:
+        return ""
+    return re.sub(r"[^a-z0-9]+", " ", str(name).lower()).strip()
+
 def getenv_required(name: str) -> str:
     v = os.getenv(name)
     if not v:
@@ -148,8 +160,22 @@ def getenv_required(name: str) -> str:
     return v
 
 def http(session: requests.Session, method: str, url: str, token: str, json_body=None, params=None, headers=None) -> requests.Response:
+    global SENT_HTTP_PAYLOADS
     h = {"Authorization": f"Bearer {token}"}
     if headers: h.update(headers)
+    if method.upper() == "POST":
+        try:
+            payload_snapshot = {
+                "timestamp": round(time.time(), 3),
+                "method": method.upper(),
+                "url": url,
+                "json": copy.deepcopy(json_body) if json_body is not None else None,
+                "params": copy.deepcopy(params) if params is not None else None,
+                "headers": {k: v for k, v in (headers or {}).items() if k.lower().startswith("x-")},
+            }
+            SENT_HTTP_PAYLOADS.append(payload_snapshot)
+        except Exception:
+            pass
     resp = session.request(method, url, json=json_body, params=params, headers=h, timeout=TIMEOUT)
     return resp
 
@@ -219,6 +245,84 @@ def fetch_all_labels(session: requests.Session, base_url: str, token: str, heade
                         out[name.lower()] = it
         except Exception:
             pass
+    return out
+
+def fetch_all_publishers(session: requests.Session, base_url: str, token: str, headers: Optional[Dict[str,str]]) -> Dict[str, Dict[str,Any]]:
+    out: Dict[str, Dict[str,Any]] = {}
+    page = 1; page_size = 100
+    while True:
+        url = f"{base_url}/content/publisher/all"
+        resp = http(session, "GET", url, token, params={"pageNumber": page, "pageSize": page_size}, headers=headers)
+        if not resp.ok:
+            break
+        try:
+            data = resp.json()
+        except Exception:
+            data = None
+        if isinstance(data, list):
+            items = data; total = len(items); paginated = False
+        else:
+            data = data or {}
+            items = (data.get("items") or data.get("data") or [])
+            total = data.get("totalItemsCount", len(items))
+            paginated = True if "items" in data or "totalItemsCount" in data else False
+        for it in items or []:
+            try:
+                name = (it.get("name") or "").strip()
+                if name:
+                    out[name.lower()] = it
+            except Exception:
+                continue
+        if not items:
+            break
+        if not paginated or (page * page_size) >= (total or 0):
+            break
+        page += 1
+    if not out:
+        try:
+            resp = http(session, "GET", f"{base_url}/content/publisher/all", token, headers=headers)
+            if resp.ok:
+                data = resp.json()
+                items = data if isinstance(data, list) else (data or {}).get("items") or (data or {}).get("data") or []
+                for it in items or []:
+                    name = (it.get("name") or "").strip()
+                    if name:
+                        out[name.lower()] = it
+        except Exception:
+            pass
+    if not out:
+        try:
+            resp = http(session, "GET", f"{base_url}/content/publishers/all", token, headers=headers)
+            if resp.ok:
+                data = resp.json()
+                items = data if isinstance(data, list) else (data or {}).get("items") or (data or {}).get("data") or []
+                for it in items or []:
+                    name = (it.get("name") or "").strip()
+                    if name:
+                        out[name.lower()] = it
+        except Exception:
+            pass
+    return out
+
+def fetch_contributor_roles(session: requests.Session, base_url: str, token: str, headers: Optional[Dict[str,str]]) -> Dict[str, Dict[str,Any]]:
+    out: Dict[str, Dict[str,Any]] = {}
+    try:
+        resp = http(session, "GET", f"{base_url}/common/lookup/contributorRoles", token, headers=headers)
+        if not resp.ok:
+            return out
+        data = resp.json() or []
+        for it in data:
+            try:
+                group_id = it.get("contributorRoleGroupId")
+                role_id = it.get("contributorRoleId") or it.get("roleId")
+                name = (it.get("name") or "").strip()
+                if group_id is not None and int(group_id) == 4 and role_id and name:
+                    key = normalize_role_key(name)
+                    out[key] = {"roleId": int(role_id), "name": name, "raw": it}
+            except Exception:
+                continue
+    except Exception:
+        pass
     return out
 
 def find_artist_id(session: requests.Session, base_url: str, token: str, enterpriseId: int, name: str, headers: Dict[str,str]) -> Optional[int]:
@@ -350,6 +454,53 @@ def norm_str(x) -> Optional[str]:
     s = re.sub(r"\s+", " ", s)
     s = s.strip()
     return s if s != "" else None
+
+def resolve_rights_id(raw: Optional[str]) -> Tuple[int, Optional[str]]:
+    """Return (rightsId, reason) where reason is None when mapping was confident.
+
+    Known mappings:
+      1 -> self-published / copyright control
+      2 -> published under a publisher / administered by publisher
+      3 -> public domain / no publisher
+
+    Any unrecognized or missing value defaults to 1 with a reason flag so we can log it."""
+    s = norm_str(raw)
+    if not s:
+        return 1, "missing"
+    lowered = s.lower()
+    digits = re.sub(r"[^0-9]", "", lowered)
+    if digits in {"1", "2", "3"}:
+        return int(digits), None
+
+    tokens = [tok for tok in re.split(r"[^a-z0-9]+", lowered) if tok]
+    normalized = " ".join(tokens)
+    token_set = set(tokens)
+
+    def has_tokens(*needed: str) -> bool:
+        return all(tok in token_set for tok in needed)
+
+    if "public domain" in normalized or has_tokens("public", "domain") or token_set.intersection({"pd"}):
+        return 3, None
+    if has_tokens("no", "publisher") or has_tokens("without", "publisher"):
+        return 3, None
+
+    if "copyright control" in normalized or has_tokens("copyright", "control"):
+        return 1, None
+    if has_tokens("self", "published") or has_tokens("self", "publish") or has_tokens("self", "publishing"):
+        return 1, None
+    if has_tokens("yes", "self"):
+        return 1, None
+
+    if "managed by a publisher" in normalized or has_tokens("publisher", "managed") or has_tokens("publisher", "administered"):
+        return 2, None
+    if has_tokens("yes", "publisher"):
+        return 2, None
+    if "publisher" in token_set and "no" not in token_set:
+        return 2, None
+    if "published" in token_set and "self" not in token_set:
+        return 2, None
+
+    return 1, "unrecognized"
 
 def parse_header_and_requirements(xlsx_path: str, sheet_name: str) -> Tuple[List[str], Dict[str,bool], int]:
     """Return (headers, required_map, data_start_row_index) using row 3 as headers and scanning rows 1-4 for notes.
@@ -908,6 +1059,22 @@ def main():
 
     with requests.Session() as session:
         progress = Progress()
+        global SENT_HTTP_PAYLOADS
+        SENT_HTTP_PAYLOADS = []
+        debug_trace: Dict[str, List[Dict[str, Any]]] = {
+            "artists_raw": [],
+            "publishers_raw": [],
+            "releases_raw": [],
+            "tracks_raw": [],
+            "track_compositions": [],
+            "composer_entries": [],
+            "composer_warnings": [],
+            "final_tracks": [],
+            "final_releases": []
+        }
+        lookup_headers = {"X-EnterpriseId": str(enterpriseId), "X-TenantId": str(tenantId)}
+        composer_role_map: Dict[str, Dict[str, Any]] = {}
+        publisher_lookup: Dict[str, Dict[str, Any]] = {}
 
         # Validate enterprise
         with progress.step("Validate enterprise") as s:
@@ -944,6 +1111,19 @@ def main():
                 except Exception:
                     print("[WARN] Could not parse roles.json, using fallback map only.")
             s.info(roles=len(role_map))
+
+        with progress.step("Fetch composer roles & publishers") as s:
+            try:
+                composer_role_map = fetch_contributor_roles(session, base_url, token, headers=lookup_headers)
+            except Exception as exc:
+                print(f"[WARN] Could not fetch contributor roles: {exc}")
+                composer_role_map = {}
+            try:
+                publisher_lookup = fetch_all_publishers(session, base_url, token, headers=lookup_headers)
+            except Exception as exc:
+                print(f"[WARN] Could not fetch publishers: {exc}")
+                publisher_lookup = {}
+            s.info(contributor_roles=len(composer_role_map), publishers=len(publisher_lookup))
 
         # ===== Read sheets
         xlsx_path = args.xlsx
@@ -1374,6 +1554,8 @@ def main():
             artists_payload = []
             artist_name_to_obj = {}
             dropped_art_missing_name = 0
+            artists_with_external_ids = 0
+            artist_external_source_counts = {"apple": 0, "spotify": 0, "meta": 0, "soundcloud": 0}
             for i,rw in df_art.iterrows():
                 # fallback: use resolved column if present
                 name = norm_str(rw.get(art_name_col)) if art_name_col else norm_str(get_val(rw, cm_art, "Artist Name", "ARTIST NAME", "Artist"))
@@ -1387,16 +1569,39 @@ def main():
                 meta = norm_str(get_val(rw, cm_art, "Meta ArtistId"))
                 sc = norm_str(get_val(rw, cm_art, "SoundCloud ProfileId", "SoundCloud Profile ID"))
                 ext = []
-                if apple: ext.append({"distributorStoreId":1, "profileId":apple})
-                if spotify_id: ext.append({"distributorStoreId":9, "profileId":spotify_id})
-                if sc: ext.append({"distributorStoreId":68, "profileId":sc})
-                if meta: ext.append({"distributorStoreId":309, "profileId":meta})
+                sources_used: List[str] = []
+                if apple:
+                    ext.append({"distributorStoreId":1, "profileId":apple})
+                    sources_used.append("apple")
+                if spotify_id:
+                    ext.append({"distributorStoreId":9, "profileId":spotify_id})
+                    sources_used.append("spotify")
+                if sc:
+                    ext.append({"distributorStoreId":68, "profileId":sc})
+                    sources_used.append("soundcloud")
+                if meta:
+                    ext.append({"distributorStoreId":309, "profileId":meta})
+                    sources_used.append("meta")
+                if ext:
+                    artists_with_external_ids += 1
+                    for src in sources_used:
+                        if src in artist_external_source_counts:
+                            artist_external_source_counts[src] += 1
                 img = ingest_image_by_url(img_url, session, base_url, token) if img_url else None
                 payload = {"name": name}
                 if ext: payload["artistExternalIds"] = ext
                 if img: payload["image"] = {"fileId": img["fileId"], "filename": img["filename"]}
                 artists_payload.append(payload)
                 artist_name_to_obj[name.lower()] = payload
+                add_debug_sample(debug_trace["artists_raw"], {
+                    "name": name,
+                    "apple": apple,
+                    "spotify_raw": spotify,
+                    "spotify_id": spotify_id,
+                    "meta": meta,
+                    "soundcloud": sc,
+                    "externalIds": ext
+                })
 
         # Labels
             cm_lab = make_colmap(df_lab)
@@ -1423,11 +1628,13 @@ def main():
                     pn = norm_str(rw.get(pub_col))
                     if pn and pn.lower() not in pub_names:
                         publishers_payload.append({"name": pn}); pub_names.add(pn.lower())
+                        add_debug_sample(debug_trace["publishers_raw"], {"name": pn})
             if comp_col:
                 for _, rw in df_comp_masters.iterrows():
                     cn = norm_str(rw.get(comp_col))
                     if cn and cn.lower() not in comp_names:
                         composers_payload.append({"name": cn}); comp_names.add(cn.lower())
+                        add_debug_sample(debug_trace["composer_entries"], {"composerName": cn, "source": "masters"})
             # Include small samples in the log for quick visibility
             art_samples = []
             if art_name_col:
@@ -1449,7 +1656,8 @@ def main():
                 artists=len(artists_payload), labels=len(labels_payload), publishers=len(publishers_payload), composers=len(composers_payload),
                 artists_seen=len(df_art), labels_seen=len(df_lab), dropped_art_missing_name=dropped_art_missing_name, dropped_lab_missing_name=dropped_lab_missing_name,
                 artist_name_col=art_name_col, label_name_col=lab_name_col, publisher_col=pub_col, composer_col=comp_col,
-                artist_samples=art_samples, label_samples=lab_samples, publisher_samples=pub_samples, composer_samples=comp_samples
+                artist_samples=art_samples, label_samples=lab_samples, publisher_samples=pub_samples, composer_samples=comp_samples,
+                artists_with_external_ids=artists_with_external_ids, external_id_sources=artist_external_source_counts
             )
 
         # ===== Releases & Tracks
@@ -1458,6 +1666,11 @@ def main():
             releases_payload = []
             tracks_payload = []  # list of (release_key, payload)
             upc_dupes_logged = []
+            releases_with_upc = 0
+            releases_missing_upc = 0
+            releases_with_p_line = 0
+            releases_with_c_line = 0
+            releases_with_version = 0
 
             # Build effective headers for Release_Label sheet to resolve subheaders (e.g., (P)/(C) Year/Holder)
             rel_effective_by_index: Dict[int, str] = {}
@@ -1527,9 +1740,19 @@ def main():
                     "previouslyReleased": bool(norm_str(get_val(rw, cm_rel, "ORIGINAL RELEASE DATE", "ORIGINAL\nRELEASE DATE"))),
                     "releaseDate": norm_str(get_val(rw, cm_rel, "ORIGINAL RELEASE DATE", "ORIGINAL\nRELEASE DATE")),
                 }
-                if upc: rel["upc"] = upc
-                if p_line: rel["copyrightP"] = p_line
-                if c_line: rel["copyrightC"] = c_line
+                if upc:
+                    rel["upc"] = upc
+                    releases_with_upc += 1
+                else:
+                    releases_missing_upc += 1
+                if p_line:
+                    rel["copyrightP"] = p_line
+                    releases_with_p_line += 1
+                if c_line:
+                    rel["copyrightC"] = c_line
+                    releases_with_c_line += 1
+                if version:
+                    releases_with_version += 1
                 if lang_id:
                     # language of the release title also dictates the release-level languageId
                     rel.setdefault("releaseLocals", []).append({"languageId": lang_id, "name": title})
@@ -1545,11 +1768,25 @@ def main():
                 if img_url:
                     rel["imageSourceUrl"] = img_url
                 releases_payload.append(rel)
+                add_debug_sample(debug_trace["releases_raw"], {
+                    "upc": upc,
+                    "title": title,
+                    "version": version,
+                    "copyrightP": p_line,
+                    "copyrightC": c_line,
+                    "languageId": lang_id,
+                    "labelName": label_name
+                })
             sample_releases = []
             for i in range(min(3, len(releases_payload))):
                 rr = releases_payload[i]
                 sample_releases.append({k: rr.get(k) for k in ("name","version","upc","labelName")})
-            s.info(releases=len(releases_payload), sample_releases=sample_releases)
+            s.info(
+                releases=len(releases_payload), sample_releases=sample_releases,
+                with_upc=releases_with_upc, missing_upc=releases_missing_upc,
+                with_p_line=releases_with_p_line, with_c_line=releases_with_c_line,
+                with_version=releases_with_version
+            )
 
         # Release contributors
         with progress.step("Parse release contributors") as s:
@@ -1594,6 +1831,9 @@ def main():
             track_rows = []
             first_audio_url_seen = None
             isrc_to_track: Dict[str, Dict[str, Any]] = {}
+            tracks_with_preview = 0
+            tracks_missing_preview = 0
+            tracks_with_version = 0
             for _, rw in df_reltrk.iterrows():
                 upc = norm_str(get_val(rw, cm_reltrk, UPC_COL)); isrc = norm_str(get_val(rw, cm_reltrk, ISRC_COL))
                 if not upc or not isrc:
@@ -1609,6 +1849,12 @@ def main():
                 preview = norm_int(get_val(rw, cm_reltrk, "TRACK PREVIEW", "PREVIEW START"))
                 trknum = norm_int(get_val(rw, cm_reltrk, "TRACK", "TRACK #", "TRACK NUMBER"))  # track number
                 lang_id = resolve_language_id(lang, session, base_url, token)
+                if preview is not None:
+                    tracks_with_preview += 1
+                else:
+                    tracks_missing_preview += 1
+                if t_version:
+                    tracks_with_version += 1
 
                 audio = ingest_audio_by_url(audio_url, audio_type, session, base_url, token, args.live, headers={"X-EnterpriseId": str(enterpriseId), "X-TenantId": str(tenantId)}, isrc=isrc, upload_log=audio_upload_logs) if audio_url else None
                 if first_audio_url_seen is None and audio_url:
@@ -1637,11 +1883,28 @@ def main():
                 }
                 track_rows.append((upc, isrc, track))
                 isrc_to_track[isrc] = track
+                add_debug_sample(debug_trace["tracks_raw"], {
+                    "upc": upc,
+                    "isrc": isrc,
+                    "title": t_title,
+                    "version": t_version,
+                    "previewStartSeconds": preview,
+                    "trackNumber": trknum,
+                    "languageId": lang_id,
+                    "trackType": ttype_id,
+                    "audioUrl": audio_url,
+                    "audioType": audio_type
+                })
             sample_tracks = []
             for i in range(min(3, len(track_rows))):
                 upc, isrc, track = track_rows[i]
                 sample_tracks.append({"upc": upc, "isrc": isrc, "name": track.get("name"), "trackNumber": track.get("trackNumber")})
-            s.info(tracks=len(track_rows), sample_tracks=sample_tracks, first_audio_url=first_audio_url_seen, audio_url_col=audio_url_col, audio_type_col=audio_type_col)
+            s.info(
+                tracks=len(track_rows), sample_tracks=sample_tracks,
+                first_audio_url=first_audio_url_seen, audio_url_col=audio_url_col, audio_type_col=audio_type_col,
+                preview_with=tracks_with_preview, preview_missing=tracks_missing_preview,
+                tracks_with_version=tracks_with_version
+            )
 
         # Track contributors
         with progress.step("Parse track contributors") as s:
@@ -1679,33 +1942,76 @@ def main():
         with progress.step("Parse track compositions") as s:
             cm_trkcomp = make_colmap(df_trkcomp)
             trk_comp_by_isrc: Dict[str,List[Dict[str,Any]]] = {}
+            comp_warnings: List[Dict[str, Any]] = []
             for _,rw in df_trkcomp.iterrows():
                 isrc = norm_str(get_val(rw, cm_trkcomp, ISRC_COL)); comp = norm_str(get_val(rw, cm_trkcomp, "COMPOSITION CONTRIBUTOR"))
                 role = norm_str(get_val(rw, cm_trkcomp, "ROLE")); share_s = norm_str(get_val(rw, cm_trkcomp, "SHARE%"))
                 rights = norm_str(get_val(rw, cm_trkcomp, "PUBLISHING")); publisher = norm_str(get_val(rw, cm_trkcomp, "PUBLISHER"))
-                if not isrc or not comp or not role or not share_s: continue
-                # share remains string for API, but we validated numerically earlier
+                if not isrc or not comp or not role or not share_s:
+                    continue
                 share_num = None
                 try:
                     share_num = float(share_s)
                 except Exception:
                     share_num = None
-                rightsId = None
-                if rights:
-                    rs = rights.strip().lower()
-                    if rs in ("copyright control","self-published","self published","1","yes (self)"): rightsId = 1
-                    elif rs in ("published","2","yes (publisher)"): rightsId = 2
-                    elif rs in ("public domain","3","no publisher"): rightsId = 3
-                entry = {"composerName": comp, "roleName": role, "share": share_s, "share_num": share_num}
-                if rightsId: entry["rightsId"] = rightsId
-                if rightsId == 2 and publisher:
-                    entry["publisherName"] = publisher
+                rightsId, rights_reason = resolve_rights_id(rights)
+                if rights_reason:
+                    issue = "missing_rights" if rights_reason == "missing" else "unrecognized_rights"
+                    comp_warnings.append({
+                        "isrc": isrc,
+                        "composer": comp,
+                        "issue": issue,
+                        "raw_rights": rights,
+                        "defaulted_to": rightsId
+                    })
+                role_key = normalize_role_key(role)
+                role_rec = composer_role_map.get(role_key)
+                role_id = int(role_rec["roleId"]) if role_rec else None
+                if role_id is None:
+                    comp_warnings.append({"isrc": isrc, "composer": comp, "role": role, "issue": "unknown_role"})
+                    continue
+                entry: Dict[str, Any] = {
+                    "composerName": comp,
+                    "roleName": role,
+                    "roleId": role_id,
+                    "share": share_s,
+                    "share_num": share_num,
+                    "rightsId": rightsId,
+                }
+                if rightsId == 2:
+                    if publisher:
+                        pub_key = publisher.lower()
+                        pub_obj = publisher_lookup.get(pub_key) if publisher_lookup else None
+                        publisher_id: Optional[int] = None
+                        if pub_obj:
+                            try:
+                                publisher_id = int(pub_obj.get("publisherId") or pub_obj.get("id"))
+                            except Exception:
+                                publisher_id = None
+                        if publisher_id is None:
+                            publisher_id = 0
+                        entry["publisherName"] = publisher
+                        entry["publisherId"] = publisher_id
+                    else:
+                        comp_warnings.append({"isrc": isrc, "composer": comp, "issue": "missing_publisher_for_published"})
+                        continue
                 trk_comp_by_isrc.setdefault(isrc, []).append(entry)
+                add_debug_sample(debug_trace["track_compositions"], {
+                    "isrc": isrc,
+                    "composerName": comp,
+                    "roleName": role,
+                    "roleId": role_id,
+                    "share": share_s,
+                    "rightsId": rightsId,
+                    "publisherName": entry.get("publisherName")
+                })
             total = sum(len(v) for v in trk_comp_by_isrc.values())
             sample_comps = []
             for isrc, arr in list(trk_comp_by_isrc.items())[:2]:
                 sample_comps.append({"isrc": isrc, "first": arr[0] if arr else None})
-            s.info(compositions=total, sample=sample_comps)
+            if comp_warnings:
+                debug_trace["composer_warnings"].extend(comp_warnings[:50])
+            s.info(compositions=total, sample=sample_comps, warnings=len(comp_warnings))
 
         # Track properties
         with progress.step("Parse track properties") as s:
@@ -1852,14 +2158,48 @@ def main():
                             except Exception:
                                 s_num = 0.0
                         pct_val = s_num*100.0 if scale == "unit" else s_num
+                        role_id_out = cc.get("roleId")
+                        rights_id_out = cc.get("rightsId")
+                        if role_id_out is None or rights_id_out is None:
+                            comp_warnings_entry = {
+                                "isrc": isrc,
+                                "composer": cc.get("composerName"),
+                                "issue": "missing_role_or_rights_at_attach"
+                            }
+                            comp_share_diag.setdefault(isrc, {}).setdefault("warnings", []).append(comp_warnings_entry)
+                            continue
                         out_vals.append(pct_val)
-                        item = {
+                        item: Dict[str, Any] = {
                             "share": fmt_pct(pct_val),
-                            "roleName": cc["roleName"],
-                            "composer": {"name": cc["composerName"]}
+                            "composerName": cc["composerName"],
+                            "roleId": role_id_out,
+                            "rightsId": rights_id_out
                         }
-                        if "rightsId" in cc: item["rightsId"] = cc["rightsId"]
-                        if "publisherName" in cc: item["publisher"] = {"name": cc["publisherName"]}
+                        if cc.get("composerId"):
+                            item["composerId"] = cc["composerId"]
+                        if rights_id_out == 2:
+                            item["publisherName"] = cc.get("publisherName")
+                            if cc.get("publisherId") is not None:
+                                item["publisherId"] = cc.get("publisherId")
+                        # Composer locals (use track language and version when available)
+                        comp_local = {}
+                        if track.get("languageId"):
+                            comp_local["languageId"] = track.get("languageId")
+                        comp_local_name = cc.get("composerName")
+                        if comp_local_name:
+                            comp_local["name"] = comp_local_name
+                        track_version = track.get("version")
+                        if track_version:
+                            comp_local["version"] = track_version
+                        if comp_local:
+                            item["composersLocals"] = [comp_local]
+                        add_debug_sample(debug_trace["composer_entries"], {
+                            "isrc": isrc,
+                            "composerName": cc.get("composerName"),
+                            "roleId": role_id_out,
+                            "rightsId": rights_id_out,
+                            "publisherName": cc.get("publisherName")
+                        })
                         comp_out.append(item)
                     comp_share_diag[isrc] = {
                         "in_values": nums,
@@ -1888,6 +2228,24 @@ def main():
                         if track.get("version"):
                             loc["version"] = track.get("version")
                         track["trackLocals"] = [loc]
+                add_debug_sample(debug_trace["final_tracks"], {
+                    "upc": upc,
+                    "isrc": isrc,
+                    "previewStartSeconds": track.get("previewStartSeconds"),
+                    "version": track.get("version"),
+                    "composerCount": len(track.get("composerContentsDTO") or []),
+                    "contributorsCount": len(track.get("contributors") or []),
+                    "trackProperties": track.get("trackProperties"),
+                    "artistExternalIds": track.get("artistExternalIds"),
+                    "recordingVersions": [
+                        {
+                            "isrc": rv.get("isrc"),
+                            "recordingVersionType": rv.get("recordingVersionType"),
+                            "audioFiles": rv.get("audioFiles")
+                        }
+                        for rv in track.get("trackRecordingVersions", [])
+                    ]
+                })
                 tracks_payload.append((upc, track))
             s.info(tracks=len(tracks_payload))
 
@@ -1915,6 +2273,17 @@ def main():
                         applied.append({"roleId": c["roleId"], "artist": {"name": c["artistName"]}})
                     if applied:
                         rel["contributors"] = applied
+                add_debug_sample(debug_trace["final_releases"], {
+                    "upc": upc,
+                    "name": rel.get("name"),
+                    "version": rel.get("version"),
+                    "copyrightP": rel.get("copyrightP"),
+                    "copyrightC": rel.get("copyrightC"),
+                    "artistName": rel.get("artistName"),
+                    "labelName": rel.get("labelName"),
+                    "contributorsCount": len(rel.get("contributors") or []),
+                    "hasReleaseLocals": bool(rel.get("releaseLocals"))
+                })
             s.info(releases=len(releases_payload))
 
         # ===== Emit dry-run artifacts
@@ -1980,6 +2349,10 @@ def main():
             try:
                 if 'props_diag' in locals():
                     (ARTIFACTS/"track_properties_analysis.json").write_text(json.dumps(props_diag, indent=2, ensure_ascii=False))
+            except Exception:
+                pass
+            try:
+                (ARTIFACTS/"debug_field_trace.json").write_text(json.dumps(debug_trace, indent=2, ensure_ascii=False))
             except Exception:
                 pass
             try:
@@ -2117,6 +2490,26 @@ def main():
                                 aid = None
                             if aid:
                                 c["artist"] = {"artistId": int(aid)}
+                for rel in releases_payload:
+                    contribs = rel.get("contributors") or []
+                    contribs_with_ids = sum(1 for c in contribs if isinstance(c.get("artist"), dict) and "artistId" in c.get("artist", {}))
+                    add_debug_sample(debug_trace["final_releases"], {
+                        "upc": rel.get("upc"),
+                        "labelId": rel.get("labelId"),
+                        "artistExternalIds": rel.get("artistExternalIds"),
+                        "contributorsCount": len(contribs),
+                        "contributorsWithIds": contribs_with_ids
+                    })
+                for upc, track in tracks_payload:
+                    contribs = track.get("contributors") or []
+                    contribs_with_ids = sum(1 for c in contribs if isinstance(c.get("artist"), dict) and "artistId" in c.get("artist", {}))
+                    add_debug_sample(debug_trace["final_tracks"], {
+                        "upc": upc,
+                        "previewStartSeconds": track.get("previewStartSeconds"),
+                        "artistExternalIds": track.get("artistExternalIds"),
+                        "contributorsCount": len(contribs),
+                        "contributorsWithIds": contribs_with_ids
+                    })
             finally:
                 # Summaries
                 counted_rel_label_ids = sum(1 for rel in releases_payload if rel.get("labelId"))
@@ -2218,6 +2611,14 @@ def main():
         if http_errors:
             (ARTIFACTS/"http_errors.json").write_text(json.dumps(http_errors, indent=2, ensure_ascii=False))
             print(f"[LOG] Wrote HTTP error details to {(ARTIFACTS/ 'http_errors.json').resolve()}")
+
+        if args.live and SENT_HTTP_PAYLOADS:
+            try:
+                path = ARTIFACTS/"http_sent_payloads.json"
+                path.write_text(json.dumps(SENT_HTTP_PAYLOADS, indent=2, ensure_ascii=False))
+                print(f"[LOG] Wrote payload audit to {path.resolve()}")
+            except Exception as e:
+                print(f"[WARN] Failed to write sent payloads artifact: {e}")
 
         # Upload logs for audio
         try:

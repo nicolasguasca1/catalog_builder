@@ -47,6 +47,17 @@
         "fill_rate": 0.6667
       },
       {
+        "column": "Meta ArtistId",
+        "notes": {
+          "row1": "2",
+          "row3": "Meta ArtistId",
+          "row4": "Facebook Audio Library & Rights Manager ArtistId"
+        },
+        "rows_with_values": 2,
+        "rows_total": 3,
+        "fill_rate": 0.6667
+      },
+      {
         "column": "Spotify Artist URI",
         "notes": {
           "row1": "2",
@@ -75,17 +86,6 @@
           "row2": "TenantId=",
           "row3": "Duplicate Names",
           "row4": "0"
-        },
-        "rows_with_values": 0,
-        "rows_total": 3,
-        "fill_rate": 0.0
-      },
-      {
-        "column": "Meta ArtistId",
-        "notes": {
-          "row1": "0",
-          "row3": "Meta ArtistId",
-          "row4": "Facebook Audio Library & Rights Manager ArtistId"
         },
         "rows_with_values": 0,
         "rows_total": 3,
@@ -169,6 +169,16 @@
         "column": "GENRE 1",
         "notes": {
           "row3": "GENRE 1",
+          "row4": "(select from list, start typing or drag)"
+        },
+        "rows_with_values": 2,
+        "rows_total": 2,
+        "fill_rate": 1.0
+      },
+      {
+        "column": "GENRE 2",
+        "notes": {
+          "row3": "GENRE 2",
           "row4": "(select from list, start typing or drag)"
         },
         "rows_with_values": 2,
@@ -290,32 +300,22 @@
         "fill_rate": 1.0
       },
       {
-        "column": "CATALOG RELEASE ID",
-        "notes": {
-          "row1": "0",
-          "row3": "CATALOG RELEASE ID",
-          "row4": "Internal Ref. ID\nrequired if no code yet"
-        },
-        "rows_with_values": 0,
-        "rows_total": 2,
-        "fill_rate": 0.0
-      },
-      {
-        "column": "GENRE 2",
-        "notes": {
-          "row3": "GENRE 2",
-          "row4": "(select from list, start typing or drag)"
-        },
-        "rows_with_values": 0,
-        "rows_total": 2,
-        "fill_rate": 0.0
-      },
-      {
         "column": "RELEASE VERSION",
         "notes": {
           "row1": "= OPTIONAL",
           "row3": "RELEASE VERSION",
           "row4": "If applicable"
+        },
+        "rows_with_values": 1,
+        "rows_total": 2,
+        "fill_rate": 0.5
+      },
+      {
+        "column": "CATALOG RELEASE ID",
+        "notes": {
+          "row1": "0",
+          "row3": "CATALOG RELEASE ID",
+          "row4": "Internal Ref. ID\nrequired if no code yet"
         },
         "rows_with_values": 0,
         "rows_total": 2,
@@ -392,20 +392,20 @@
         "fill_rate": 0.5
       },
       {
+        "column": "RELEASE VERSION",
+        "notes": {
+          "row3": "RELEASE VERSION"
+        },
+        "rows_with_values": 3,
+        "rows_total": 6,
+        "fill_rate": 0.5
+      },
+      {
         "column": "CATALOG RELEASE ID",
         "notes": {
           "row1": "0",
           "row3": "CATALOG RELEASE ID",
           "row4": "from Release_Label tab"
-        },
-        "rows_with_values": 0,
-        "rows_total": 6,
-        "fill_rate": 0.0
-      },
-      {
-        "column": "RELEASE VERSION",
-        "notes": {
-          "row3": "RELEASE VERSION"
         },
         "rows_with_values": 0,
         "rows_total": 6,
@@ -432,6 +432,15 @@
           "row1": "2",
           "row3": "AUDIO TYPE",
           "row4": "wav /\nflac\nONLY"
+        },
+        "rows_with_values": 2,
+        "rows_total": 2,
+        "fill_rate": 1.0
+      },
+      {
+        "column": "COMPOSITION\n ISWC",
+        "notes": {
+          "row3": "COMPOSITION\n ISWC"
         },
         "rows_with_values": 2,
         "rows_total": 2,
@@ -492,6 +501,16 @@
         "fill_rate": 1.0
       },
       {
+        "column": "TRACK PREVIEW",
+        "notes": {
+          "row3": "TRACK PREVIEW",
+          "row4": "Preview Start Time (in seconds)"
+        },
+        "rows_with_values": 2,
+        "rows_total": 2,
+        "fill_rate": 1.0
+      },
+      {
         "column": "TRACK TITLE",
         "notes": {
           "row1": "= READ NOTES / INSTRUCTIONS",
@@ -525,6 +544,26 @@
         "fill_rate": 1.0
       },
       {
+        "column": "RELEASE VERSION",
+        "notes": {
+          "row3": "RELEASE VERSION"
+        },
+        "rows_with_values": 1,
+        "rows_total": 2,
+        "fill_rate": 0.5
+      },
+      {
+        "column": "TRACK VERSION",
+        "notes": {
+          "row1": "= OPTIONAL",
+          "row3": "TRACK VERSION",
+          "row4": "If applicable"
+        },
+        "rows_with_values": 1,
+        "rows_total": 2,
+        "fill_rate": 0.5
+      },
+      {
         "column": "CATALOG RELEASE ID",
         "notes": {
           "row1": "0",
@@ -541,45 +580,6 @@
           "row1": "0",
           "row3": "CATALOG TRACK ID",
           "row4": "Internal Ref. ID required if no ISRC/vISRC"
-        },
-        "rows_with_values": 0,
-        "rows_total": 2,
-        "fill_rate": 0.0
-      },
-      {
-        "column": "COMPOSITION\n ISWC",
-        "notes": {
-          "row3": "COMPOSITION\n ISWC"
-        },
-        "rows_with_values": 0,
-        "rows_total": 2,
-        "fill_rate": 0.0
-      },
-      {
-        "column": "RELEASE VERSION",
-        "notes": {
-          "row3": "RELEASE VERSION"
-        },
-        "rows_with_values": 0,
-        "rows_total": 2,
-        "fill_rate": 0.0
-      },
-      {
-        "column": "TRACK PREVIEW",
-        "notes": {
-          "row3": "TRACK PREVIEW",
-          "row4": "Preview Start Time (in seconds)"
-        },
-        "rows_with_values": 0,
-        "rows_total": 2,
-        "fill_rate": 0.0
-      },
-      {
-        "column": "TRACK VERSION",
-        "notes": {
-          "row1": "= OPTIONAL",
-          "row3": "TRACK VERSION",
-          "row4": "If applicable"
         },
         "rows_with_values": 0,
         "rows_total": 2,
@@ -635,20 +635,20 @@
         "fill_rate": 1.0
       },
       {
+        "column": "TRACK VERSION",
+        "notes": {
+          "row3": "TRACK VERSION"
+        },
+        "rows_with_values": 3,
+        "rows_total": 6,
+        "fill_rate": 0.5
+      },
+      {
         "column": "CATALOG TRACK ID",
         "notes": {
           "row1": "0",
           "row3": "CATALOG TRACK ID",
           "row4": "from Release_Track tab"
-        },
-        "rows_with_values": 0,
-        "rows_total": 6,
-        "fill_rate": 0.0
-      },
-      {
-        "column": "TRACK VERSION",
-        "notes": {
-          "row3": "TRACK VERSION"
         },
         "rows_with_values": 0,
         "rows_total": 6,
@@ -678,23 +678,23 @@
         "fill_rate": 1.0
       },
       {
-        "column": "0",
-        "notes": {
-          "row1": "2",
-          "row2": "Duplicate Names",
-          "row3": "0"
-        },
-        "rows_with_values": 0,
-        "rows_total": 2,
-        "fill_rate": 0.0
-      },
-      {
         "column": "Publisher Name",
         "notes": {
           "row1": "List all Compostion Publishers to Import",
           "row2": "= READ NOTES / INSTRUCTIONS",
           "row3": "Publisher Name",
           "row4": "Only publishers that manage compositions.\nDo not include publishers that are self-publishing."
+        },
+        "rows_with_values": 2,
+        "rows_total": 2,
+        "fill_rate": 1.0
+      },
+      {
+        "column": "0",
+        "notes": {
+          "row1": "2",
+          "row2": "Duplicate Names",
+          "row3": "0"
         },
         "rows_with_values": 0,
         "rows_total": 2,
@@ -730,7 +730,7 @@
       {
         "column": "PUBLISHING",
         "notes": {
-          "row1": "0",
+          "row1": "2",
           "row3": "PUBLISHING",
           "row4": "(select from list, start typing or drag)"
         },
@@ -782,31 +782,31 @@
         "fill_rate": 1.0
       },
       {
-        "column": "CATALOG TRACK ID",
-        "notes": {
-          "row1": "0",
-          "row3": "CATALOG TRACK ID",
-          "row4": "from Release_Track tab"
-        },
-        "rows_with_values": 0,
-        "rows_total": 4,
-        "fill_rate": 0.0
-      },
-      {
         "column": "PUBLISHER",
         "notes": {
-          "row1": "0",
+          "row1": "2",
           "row3": "PUBLISHER",
           "row4": "fill out ONLY when 'Published' selected"
         },
-        "rows_with_values": 0,
+        "rows_with_values": 2,
         "rows_total": 4,
-        "fill_rate": 0.0
+        "fill_rate": 0.5
       },
       {
         "column": "TRACK VERSION",
         "notes": {
           "row3": "TRACK VERSION"
+        },
+        "rows_with_values": 2,
+        "rows_total": 4,
+        "fill_rate": 0.5
+      },
+      {
+        "column": "CATALOG TRACK ID",
+        "notes": {
+          "row1": "0",
+          "row3": "CATALOG TRACK ID",
+          "row4": "from Release_Track tab"
         },
         "rows_with_values": 0,
         "rows_total": 4,
@@ -915,20 +915,20 @@
         "fill_rate": 1.0
       },
       {
+        "column": "TRACK VERSION",
+        "notes": {
+          "row3": "TRACK VERSION"
+        },
+        "rows_with_values": 1,
+        "rows_total": 2,
+        "fill_rate": 0.5
+      },
+      {
         "column": "CATALOG TRACK ID",
         "notes": {
           "row1": "0",
           "row3": "CATALOG TRACK ID",
           "row4": "from Release_Track tab"
-        },
-        "rows_with_values": 0,
-        "rows_total": 2,
-        "fill_rate": 0.0
-      },
-      {
-        "column": "TRACK VERSION",
-        "notes": {
-          "row3": "TRACK VERSION"
         },
         "rows_with_values": 0,
         "rows_total": 2,

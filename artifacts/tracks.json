@@ -2,12 +2,12 @@
   {
     "upc": "789294845633",
     "name": "Receba",
-    "version": null,
+    "version": "Extended",
     "languageId": 31,
     "explicit": false,
     "trackType": 1,
     "trackNumber": 1,
-    "previewStartSeconds": null,
+    "previewStartSeconds": 140,
     "trackRecordingVersions": [
       {
         "isrc": "QZW9M2221000",
@@ -38,22 +38,38 @@
       {
         "distributorStoreId": 9,
         "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+      },
+      {
+        "distributorStoreId": 309,
+        "profileId": "697315585919469"
       }
     ],
     "composerContentsDTO": [
       {
         "share": "60",
-        "roleName": "Composer & Lyricist",
-        "composer": {
-          "name": "Agnaldo Paulino de Jesus Júnior"
-        }
+        "composerName": "Agnaldo Paulino de Jesus Júnior",
+        "roleId": 39,
+        "rightsId": 1,
+        "composersLocals": [
+          {
+            "languageId": 31,
+            "name": "Agnaldo Paulino de Jesus Júnior",
+            "version": "Extended"
+          }
+        ]
       },
       {
         "share": "40",
-        "roleName": "Composer & Lyricist",
-        "composer": {
-          "name": "Jackson Bertholdo Dos Santos"
-        }
+        "composerName": "Jackson Bertholdo Dos Santos",
+        "roleId": 39,
+        "rightsId": 1,
+        "composersLocals": [
+          {
+            "languageId": 31,
+            "name": "Jackson Bertholdo Dos Santos",
+            "version": "Extended"
+          }
+        ]
       }
     ],
     "trackProperties": [
@@ -62,7 +78,8 @@
     "trackLocals": [
       {
         "name": "Receba",
-        "languageId": 31
+        "languageId": 31,
+        "version": "Extended"
       }
     ]
   },
@@ -74,7 +91,7 @@
     "explicit": false,
     "trackType": 1,
     "trackNumber": 1,
-    "previewStartSeconds": null,
+    "previewStartSeconds": 200,
     "trackRecordingVersions": [
       {
         "isrc": "QZW9M2236571",
@@ -105,22 +122,40 @@
       {
         "distributorStoreId": 9,
         "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+      },
+      {
+        "distributorStoreId": 309,
+        "profileId": "697315585919468"
       }
     ],
     "composerContentsDTO": [
       {
         "share": "50",
-        "roleName": "Composer & Lyricist",
-        "composer": {
-          "name": "Jackson Bertholdo Dos Santos"
-        }
+        "composerName": "Jackson Bertholdo Dos Santos",
+        "roleId": 39,
+        "rightsId": 2,
+        "publisherName": "SONY ATV",
+        "publisherId": 89881,
+        "composersLocals": [
+          {
+            "languageId": 31,
+            "name": "Jackson Bertholdo Dos Santos"
+          }
+        ]
       },
       {
         "share": "50",
-        "roleName": "Composer & Lyricist",
-        "composer": {
-          "name": "Agnaldo Paulino de Jesus Júnior"
-        }
+        "composerName": "Agnaldo Paulino de Jesus Júnior",
+        "roleId": 39,
+        "rightsId": 2,
+        "publisherName": "WARNER CHAPPEL",
+        "publisherId": 89882,
+        "composersLocals": [
+          {
+            "languageId": 31,
+            "name": "Agnaldo Paulino de Jesus Júnior"
+          }
+        ]
       }
     ],
     "trackProperties": [
