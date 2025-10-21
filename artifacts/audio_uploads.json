@@ -6,8 +6,8 @@
       "fileName": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav"
     },
     "status": 200,
-    "responseText": "{\"fileId\":\"b675b0e9-02b1-4c97-885b-5b2b7d799f3d\",\"isTemp\":true,\"filename\":\"Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav\",\"externalUrl\":null,\"lastUpdateDate\":\"0001-01-01T00:00:00\"}",
-    "audioId": "b675b0e9-02b1-4c97-885b-5b2b7d799f3d",
+    "responseText": "{\"fileId\":\"34ad0a23-2e20-4019-b04a-081639d93060\",\"isTemp\":true,\"filename\":\"Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav\",\"externalUrl\":null,\"lastUpdateDate\":\"0001-01-01T00:00:00\"}",
+    "audioId": "34ad0a23-2e20-4019-b04a-081639d93060",
     "isrc": "QZW9M2221000"
   },
   {
@@ -17,8 +17,8 @@
       "fileName": "Joy-Mejia-Te-Fall.wav"
     },
     "status": 200,
-    "responseText": "{\"fileId\":\"5afe9276-f35b-4ffc-9304-b4cff5ce0235\",\"isTemp\":true,\"filename\":\"Joy-Mejia-Te-Fall.wav\",\"externalUrl\":null,\"lastUpdateDate\":\"0001-01-01T00:00:00\"}",
-    "audioId": "5afe9276-f35b-4ffc-9304-b4cff5ce0235",
+    "responseText": "{\"fileId\":\"ebc87ff2-3362-4756-b19b-9fa0832dddf1\",\"isTemp\":true,\"filename\":\"Joy-Mejia-Te-Fall.wav\",\"externalUrl\":null,\"lastUpdateDate\":\"0001-01-01T00:00:00\"}",
+    "audioId": "ebc87ff2-3362-4756-b19b-9fa0832dddf1",
     "isrc": "QZW9M2236571"
   }
 ]

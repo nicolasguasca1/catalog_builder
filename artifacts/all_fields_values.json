@@ -301,18 +301,19 @@
       "values_sample": [
         {
           "row": 5,
-          "value": "TokyoRecords",
+          "value": "TokyoP",
           "source_duplicate_index": 0
         },
         {
           "row": 6,
-          "value": "TokyoRecords",
+          "value": "PEJOTAP",
           "source_duplicate_index": 0
         }
       ],
       "values_sample_capped": false,
       "unique_values_sample": [
-        "TokyoRecords"
+        "TokyoP",
+        "PEJOTAP"
       ]
     },
     "(C) Copyright": {

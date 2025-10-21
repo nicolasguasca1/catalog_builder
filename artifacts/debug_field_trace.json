@@ -67,8 +67,8 @@
       "upc": "789294845633",
       "title": "Receba",
       "version": "Extended",
-      "copyrightP": null,
-      "copyrightC": null,
+      "copyrightP": "2022 TokyoP",
+      "copyrightC": "2022 TokyoC",
       "languageId": 31,
       "labelName": "TokyoRecords"
     },
@@ -76,8 +76,8 @@
       "upc": "789294962088",
       "title": "A Cláusula do Contrato",
       "version": null,
-      "copyrightP": null,
-      "copyrightC": null,
+      "copyrightP": "2022 PEJOTAP",
+      "copyrightC": "2022 PEJOTAC",
       "languageId": 31,
       "labelName": "PEJOTA10*"
     }
@@ -214,7 +214,13 @@
         {
           "isrc": "QZW9M2221000",
           "recordingVersionType": 1,
-          "audioFiles": []
+          "audioFiles": [
+            {
+              "audioId": "34ad0a23-2e20-4019-b04a-081639d93060",
+              "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
+              "fileFormat": 2
+            }
+          ]
         }
       ]
     },
@@ -246,7 +252,13 @@
         {
           "isrc": "QZW9M2236571",
           "recordingVersionType": 1,
-          "audioFiles": []
+          "audioFiles": [
+            {
+              "audioId": "ebc87ff2-3362-4756-b19b-9fa0832dddf1",
+              "audioFilename": "Joy-Mejia-Te-Fall.wav",
+              "fileFormat": 2
+            }
+          ]
         }
       ]
     }
@@ -256,8 +268,8 @@
       "upc": "789294845633",
       "name": "Receba",
       "version": "Extended",
-      "copyrightP": null,
-      "copyrightC": null,
+      "copyrightP": "2022 TokyoP",
+      "copyrightC": "2022 TokyoC",
       "artistName": "JKZ",
       "labelName": "TokyoRecords",
       "contributorsCount": 2,
@@ -267,12 +279,662 @@
       "upc": "789294962088",
       "name": "A Cláusula do Contrato",
       "version": null,
-      "copyrightP": null,
-      "copyrightC": null,
+      "copyrightP": "2022 PEJOTAP",
+      "copyrightC": "2022 PEJOTAC",
       "artistName": "Flash Beats Manow",
       "labelName": "PEJOTA10*",
       "contributorsCount": 2,
       "hasReleaseLocals": true
+    }
+  ],
+  "release_copyright_debug": [
+    {
+      "sheet_row": 5,
+      "target": "p_copyright_year",
+      "stage": "invoke",
+      "note": {
+        "candidates": [
+          {
+            "column_index": 9,
+            "effective": "(P) Copyright Year",
+            "meta": {
+              "row3": "(P) Copyright",
+              "row4": "Year",
+              "effective": "(P) Copyright Year"
+            },
+            "raw": 2022,
+            "origin": "primary"
+          }
+        ],
+        "row3_tokens": [
+          "(p)",
+          "copyright"
+        ],
+        "row4_tokens": [
+          "year"
+        ],
+        "fallback_names": [
+          "(P) Copyright Year",
+          "(P) Copyright"
+        ]
+      }
+    },
+    {
+      "sheet_row": 5,
+      "target": "p_copyright_year",
+      "stage": "primary_match",
+      "column_index": 9,
+      "effective_header": "(P) Copyright Year",
+      "meta": {
+        "row3": "(P) Copyright",
+        "row4": "Year",
+        "effective": "(P) Copyright Year"
+      },
+      "value": 2022,
+      "note": {
+        "origin": "primary"
+      }
+    },
+    {
+      "sheet_row": 5,
+      "target": "p_copyright_holder",
+      "stage": "invoke",
+      "note": {
+        "candidates": [
+          {
+            "column_index": 10,
+            "effective": "Holder",
+            "meta": {
+              "row3": null,
+              "row4": "Holder",
+              "effective": "Holder"
+            },
+            "raw": "TokyoP",
+            "origin": "preferred"
+          },
+          {
+            "column_index": 12,
+            "effective": "Holder",
+            "meta": {
+              "row3": null,
+              "row4": "Holder",
+              "effective": "Holder"
+            },
+            "raw": 2022,
+            "origin": "fallback_effective"
+          },
+          {
+            "column_index": 11,
+            "effective": "(C) Copyright Year",
+            "meta": {
+              "row3": "(C) Copyright",
+              "row4": "Year",
+              "effective": "(C) Copyright Year"
+            },
+            "raw": "TokyoC",
+            "origin": "fallback_scan"
+          },
+          {
+            "column_index": 13,
+            "effective": "ORIGINAL RELEASE DATE",
+            "meta": {
+              "row3": "ORIGINAL RELEASE DATE",
+              "row4": "YYYY-MM-DD",
+              "effective": "ORIGINAL RELEASE DATE"
+            },
+            "raw": "TokyoP",
+            "origin": "fallback_scan"
+          },
+          {
+            "column_index": 14,
+            "effective": "GENRE 1",
+            "meta": {
+              "row3": "GENRE 1",
+              "row4": "(select from list, start typing or drag)",
+              "effective": "GENRE 1"
+            },
+            "raw": "TokyoC",
+            "origin": "fallback_scan"
+          }
+        ],
+        "row3_tokens": [
+          "(p)",
+          "copyright"
+        ],
+        "row4_tokens": [
+          "holder"
+        ],
+        "fallback_names": [
+          "(P) Copyright Holder",
+          "Holder"
+        ]
+      }
+    },
+    {
+      "sheet_row": 5,
+      "target": "p_copyright_holder",
+      "stage": "preferred_match",
+      "column_index": 10,
+      "effective_header": "Holder",
+      "meta": {
+        "row3": null,
+        "row4": "Holder",
+        "effective": "Holder"
+      },
+      "value": "TokyoP",
+      "note": {
+        "origin": "preferred"
+      }
+    },
+    {
+      "sheet_row": 5,
+      "target": "c_copyright_year",
+      "stage": "invoke",
+      "note": {
+        "candidates": [
+          {
+            "column_index": 11,
+            "effective": "(C) Copyright Year",
+            "meta": {
+              "row3": "(C) Copyright",
+              "row4": "Year",
+              "effective": "(C) Copyright Year"
+            },
+            "raw": "TokyoC",
+            "origin": "primary"
+          },
+          {
+            "column_index": 12,
+            "effective": "Holder",
+            "meta": {
+              "row3": null,
+              "row4": "Holder",
+              "effective": "Holder"
+            },
+            "raw": 2022,
+            "origin": "fallback_scan"
+          }
+        ],
+        "row3_tokens": [
+          "(c)",
+          "copyright"
+        ],
+        "row4_tokens": [
+          "year"
+        ],
+        "fallback_names": [
+          "(C) Copyright Year",
+          "(C) Copyright"
+        ]
+      }
+    },
+    {
+      "sheet_row": 5,
+      "target": "c_copyright_year",
+      "stage": "candidate_rejected",
+      "column_index": 11,
+      "effective_header": "(C) Copyright Year",
+      "meta": {
+        "row3": "(C) Copyright",
+        "row4": "Year",
+        "effective": "(C) Copyright Year"
+      },
+      "value": "TokyoC",
+      "note": {
+        "origin": "primary"
+      }
+    },
+    {
+      "sheet_row": 5,
+      "target": "c_copyright_year",
+      "stage": "no_match"
+    },
+    {
+      "sheet_row": 5,
+      "target": "c_copyright_year",
+      "stage": "neighbor_fallback",
+      "column_index": 12,
+      "effective_header": "Holder",
+      "meta": {
+        "row3": null,
+        "row4": "Holder",
+        "effective": "Holder"
+      },
+      "value": 2022,
+      "note": {
+        "direction": 1,
+        "steps": 3
+      }
+    },
+    {
+      "sheet_row": 5,
+      "target": "c_copyright_holder",
+      "stage": "invoke",
+      "note": {
+        "candidates": [
+          {
+            "column_index": 11,
+            "effective": "(C) Copyright Year",
+            "meta": {
+              "row3": "(C) Copyright",
+              "row4": "Year",
+              "effective": "(C) Copyright Year"
+            },
+            "raw": "TokyoC",
+            "origin": "preferred"
+          },
+          {
+            "column_index": 10,
+            "effective": "Holder",
+            "meta": {
+              "row3": null,
+              "row4": "Holder",
+              "effective": "Holder"
+            },
+            "raw": "TokyoP",
+            "origin": "fallback_effective"
+          },
+          {
+            "column_index": 12,
+            "effective": "Holder",
+            "meta": {
+              "row3": null,
+              "row4": "Holder",
+              "effective": "Holder"
+            },
+            "raw": 2022,
+            "origin": "fallback_effective"
+          },
+          {
+            "column_index": 13,
+            "effective": "ORIGINAL RELEASE DATE",
+            "meta": {
+              "row3": "ORIGINAL RELEASE DATE",
+              "row4": "YYYY-MM-DD",
+              "effective": "ORIGINAL RELEASE DATE"
+            },
+            "raw": "TokyoP",
+            "origin": "fallback_scan"
+          },
+          {
+            "column_index": 14,
+            "effective": "GENRE 1",
+            "meta": {
+              "row3": "GENRE 1",
+              "row4": "(select from list, start typing or drag)",
+              "effective": "GENRE 1"
+            },
+            "raw": "TokyoC",
+            "origin": "fallback_scan"
+          }
+        ],
+        "row3_tokens": [
+          "(c)",
+          "copyright"
+        ],
+        "row4_tokens": [
+          "holder"
+        ],
+        "fallback_names": [
+          "(C) Copyright Holder",
+          "Holder"
+        ]
+      }
+    },
+    {
+      "sheet_row": 5,
+      "target": "c_copyright_holder",
+      "stage": "preferred_match",
+      "column_index": 11,
+      "effective_header": "(C) Copyright Year",
+      "meta": {
+        "row3": "(C) Copyright",
+        "row4": "Year",
+        "effective": "(C) Copyright Year"
+      },
+      "value": "TokyoC",
+      "note": {
+        "origin": "preferred"
+      }
+    },
+    {
+      "sheet_row": 5,
+      "target": "summary",
+      "stage": "resolved",
+      "upc": "789294845633",
+      "title": "Receba",
+      "value": {
+        "p_year": 2022,
+        "p_holder": "TokyoP",
+        "c_year": 2022,
+        "c_holder": "TokyoC",
+        "p_line": "2022 TokyoP",
+        "c_line": "2022 TokyoC"
+      }
+    },
+    {
+      "sheet_row": 6,
+      "target": "p_copyright_year",
+      "stage": "invoke",
+      "note": {
+        "candidates": [
+          {
+            "column_index": 9,
+            "effective": "(P) Copyright Year",
+            "meta": {
+              "row3": "(P) Copyright",
+              "row4": "Year",
+              "effective": "(P) Copyright Year"
+            },
+            "raw": 2022,
+            "origin": "primary"
+          }
+        ],
+        "row3_tokens": [
+          "(p)",
+          "copyright"
+        ],
+        "row4_tokens": [
+          "year"
+        ],
+        "fallback_names": [
+          "(P) Copyright Year",
+          "(P) Copyright"
+        ]
+      }
+    },
+    {
+      "sheet_row": 6,
+      "target": "p_copyright_year",
+      "stage": "primary_match",
+      "column_index": 9,
+      "effective_header": "(P) Copyright Year",
+      "meta": {
+        "row3": "(P) Copyright",
+        "row4": "Year",
+        "effective": "(P) Copyright Year"
+      },
+      "value": 2022,
+      "note": {
+        "origin": "primary"
+      }
+    },
+    {
+      "sheet_row": 6,
+      "target": "p_copyright_holder",
+      "stage": "invoke",
+      "note": {
+        "candidates": [
+          {
+            "column_index": 10,
+            "effective": "Holder",
+            "meta": {
+              "row3": null,
+              "row4": "Holder",
+              "effective": "Holder"
+            },
+            "raw": "PEJOTAP",
+            "origin": "preferred"
+          },
+          {
+            "column_index": 12,
+            "effective": "Holder",
+            "meta": {
+              "row3": null,
+              "row4": "Holder",
+              "effective": "Holder"
+            },
+            "raw": 2022,
+            "origin": "fallback_effective"
+          },
+          {
+            "column_index": 11,
+            "effective": "(C) Copyright Year",
+            "meta": {
+              "row3": "(C) Copyright",
+              "row4": "Year",
+              "effective": "(C) Copyright Year"
+            },
+            "raw": "PEJOTAC",
+            "origin": "fallback_scan"
+          },
+          {
+            "column_index": 13,
+            "effective": "ORIGINAL RELEASE DATE",
+            "meta": {
+              "row3": "ORIGINAL RELEASE DATE",
+              "row4": "YYYY-MM-DD",
+              "effective": "ORIGINAL RELEASE DATE"
+            },
+            "raw": "PEJOTAP",
+            "origin": "fallback_scan"
+          },
+          {
+            "column_index": 14,
+            "effective": "GENRE 1",
+            "meta": {
+              "row3": "GENRE 1",
+              "row4": "(select from list, start typing or drag)",
+              "effective": "GENRE 1"
+            },
+            "raw": "PEJOTAC",
+            "origin": "fallback_scan"
+          }
+        ],
+        "row3_tokens": [
+          "(p)",
+          "copyright"
+        ],
+        "row4_tokens": [
+          "holder"
+        ],
+        "fallback_names": [
+          "(P) Copyright Holder",
+          "Holder"
+        ]
+      }
+    },
+    {
+      "sheet_row": 6,
+      "target": "p_copyright_holder",
+      "stage": "preferred_match",
+      "column_index": 10,
+      "effective_header": "Holder",
+      "meta": {
+        "row3": null,
+        "row4": "Holder",
+        "effective": "Holder"
+      },
+      "value": "PEJOTAP",
+      "note": {
+        "origin": "preferred"
+      }
+    },
+    {
+      "sheet_row": 6,
+      "target": "c_copyright_year",
+      "stage": "invoke",
+      "note": {
+        "candidates": [
+          {
+            "column_index": 11,
+            "effective": "(C) Copyright Year",
+            "meta": {
+              "row3": "(C) Copyright",
+              "row4": "Year",
+              "effective": "(C) Copyright Year"
+            },
+            "raw": "PEJOTAC",
+            "origin": "primary"
+          },
+          {
+            "column_index": 12,
+            "effective": "Holder",
+            "meta": {
+              "row3": null,
+              "row4": "Holder",
+              "effective": "Holder"
+            },
+            "raw": 2022,
+            "origin": "fallback_scan"
+          }
+        ],
+        "row3_tokens": [
+          "(c)",
+          "copyright"
+        ],
+        "row4_tokens": [
+          "year"
+        ],
+        "fallback_names": [
+          "(C) Copyright Year",
+          "(C) Copyright"
+        ]
+      }
+    },
+    {
+      "sheet_row": 6,
+      "target": "c_copyright_year",
+      "stage": "candidate_rejected",
+      "column_index": 11,
+      "effective_header": "(C) Copyright Year",
+      "meta": {
+        "row3": "(C) Copyright",
+        "row4": "Year",
+        "effective": "(C) Copyright Year"
+      },
+      "value": "PEJOTAC",
+      "note": {
+        "origin": "primary"
+      }
+    },
+    {
+      "sheet_row": 6,
+      "target": "c_copyright_year",
+      "stage": "no_match"
+    },
+    {
+      "sheet_row": 6,
+      "target": "c_copyright_year",
+      "stage": "neighbor_fallback",
+      "column_index": 12,
+      "effective_header": "Holder",
+      "meta": {
+        "row3": null,
+        "row4": "Holder",
+        "effective": "Holder"
+      },
+      "value": 2022,
+      "note": {
+        "direction": 1,
+        "steps": 3
+      }
+    },
+    {
+      "sheet_row": 6,
+      "target": "c_copyright_holder",
+      "stage": "invoke",
+      "note": {
+        "candidates": [
+          {
+            "column_index": 11,
+            "effective": "(C) Copyright Year",
+            "meta": {
+              "row3": "(C) Copyright",
+              "row4": "Year",
+              "effective": "(C) Copyright Year"
+            },
+            "raw": "PEJOTAC",
+            "origin": "preferred"
+          },
+          {
+            "column_index": 10,
+            "effective": "Holder",
+            "meta": {
+              "row3": null,
+              "row4": "Holder",
+              "effective": "Holder"
+            },
+            "raw": "PEJOTAP",
+            "origin": "fallback_effective"
+          },
+          {
+            "column_index": 12,
+            "effective": "Holder",
+            "meta": {
+              "row3": null,
+              "row4": "Holder",
+              "effective": "Holder"
+            },
+            "raw": 2022,
+            "origin": "fallback_effective"
+          },
+          {
+            "column_index": 13,
+            "effective": "ORIGINAL RELEASE DATE",
+            "meta": {
+              "row3": "ORIGINAL RELEASE DATE",
+              "row4": "YYYY-MM-DD",
+              "effective": "ORIGINAL RELEASE DATE"
+            },
+            "raw": "PEJOTAP",
+            "origin": "fallback_scan"
+          },
+          {
+            "column_index": 14,
+            "effective": "GENRE 1",
+            "meta": {
+              "row3": "GENRE 1",
+              "row4": "(select from list, start typing or drag)",
+              "effective": "GENRE 1"
+            },
+            "raw": "PEJOTAC",
+            "origin": "fallback_scan"
+          }
+        ],
+        "row3_tokens": [
+          "(c)",
+          "copyright"
+        ],
+        "row4_tokens": [
+          "holder"
+        ],
+        "fallback_names": [
+          "(C) Copyright Holder",
+          "Holder"
+        ]
+      }
+    },
+    {
+      "sheet_row": 6,
+      "target": "c_copyright_holder",
+      "stage": "preferred_match",
+      "column_index": 11,
+      "effective_header": "(C) Copyright Year",
+      "meta": {
+        "row3": "(C) Copyright",
+        "row4": "Year",
+        "effective": "(C) Copyright Year"
+      },
+      "value": "PEJOTAC",
+      "note": {
+        "origin": "preferred"
+      }
+    },
+    {
+      "sheet_row": 6,
+      "target": "summary",
+      "stage": "resolved",
+      "upc": "789294962088",
+      "title": "A Cláusula do Contrato",
+      "value": {
+        "p_year": 2022,
+        "p_holder": "PEJOTAP",
+        "c_year": 2022,
+        "c_holder": "PEJOTAC",
+        "p_line": "2022 PEJOTAP",
+        "c_line": "2022 PEJOTAC"
+      }
     }
   ]
 }

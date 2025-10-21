@@ -4,7 +4,7 @@ from urllib.parse import urlparse, parse_qsl, urlunparse, urlencode
 from urllib.parse import urlparse
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 from pathlib import Path
 
 import pandas as pd
@@ -631,9 +631,17 @@ def require_columns(df: pd.DataFrame, req_map: Dict[str,bool]) -> List[Tuple[int
     return errs
 
 def parse_year_holder(year, holder) -> Optional[str]:
-    y = norm_int(year); h = norm_str(holder)
-    if y and h: return f"{y} {h}"
-    return None
+    """Combine year/holder into a single copyright line.
+
+    Accept partial data so that we still emit whichever portion is present.
+    """
+    y_int = norm_int(year)
+    y = str(y_int) if y_int is not None else norm_str(year)
+    h = norm_str(holder)
+    parts = [p for p in (y, h) if p]
+    if not parts:
+        return None
+    return " ".join(parts)
 
 def resolve_language_id(name: Optional[str], session: requests.Session, base_url: str, token: str) -> Optional[int]:
     if not name: return None
@@ -1070,7 +1078,8 @@ def main():
             "composer_entries": [],
             "composer_warnings": [],
             "final_tracks": [],
-            "final_releases": []
+            "final_releases": [],
+            "release_copyright_debug": []
         }
         lookup_headers = {"X-EnterpriseId": str(enterpriseId), "X-TenantId": str(tenantId)}
         composer_role_map: Dict[str, Dict[str, Any]] = {}
@@ -1674,14 +1683,18 @@ def main():
 
             # Build effective headers for Release_Label sheet to resolve subheaders (e.g., (P)/(C) Year/Holder)
             rel_effective_by_index: Dict[int, str] = {}
+            rel_header_meta: Dict[int, Dict[str, Optional[str]]] = {}
+            cols_rel = list(df_rel.columns)
             try:
                 wb_rel = load_workbook(xlsx_path, data_only=True)
                 ws_rel = wb_rel[s3]
             except Exception:
                 ws_rel = None
-            if ws_rel is not None:
-                for j, c in enumerate(list(df_rel.columns)):
-                    eff: Optional[str] = None
+            for j, c in enumerate(cols_rel):
+                h3s: Optional[str] = None
+                h4s: Optional[str] = None
+                eff: Optional[str] = None
+                if ws_rel is not None:
                     try:
                         colnum = j + 1
                         h3 = ws_rel.cell(row=3, column=colnum).value
@@ -1698,12 +1711,52 @@ def main():
                         else:
                             eff = h3s or h4s or norm_str(c) or f"col_{j}"
                     except Exception:
-                        eff = norm_str(c) or f"col_{j}"
-                    rel_effective_by_index[j] = eff
+                        eff = None
+                if not eff:
+                    eff = norm_str(c) or f"col_{j}"
+                rel_effective_by_index[j] = eff
+                rel_header_meta[j] = {"row3": h3s, "row4": h4s, "effective": eff}
             # Build reverse map eff -> indices
             rel_eff_to_idx: Dict[str, List[int]] = {}
             for j, name in rel_effective_by_index.items():
                 rel_eff_to_idx.setdefault(name, []).append(j)
+
+            release_debug_entries = debug_trace["release_copyright_debug"]
+            release_debug_cap = 200
+            release_sheet_row_offset = int(req_rel.get("_effective_data_start", 5))
+
+            def _serializable(val: Any) -> Any:
+                if is_nan(val):
+                    return None
+                if isinstance(val, (str, int, float, bool)) or val is None:
+                    return val
+                try:
+                    coerced = val.item()
+                    if is_nan(coerced):
+                        return None
+                    return coerced
+                except Exception:
+                    return str(val)
+
+            def log_release_debug(row_index: int, target: str, stage: str, *, idx: Optional[int] = None, value: Any = None, note: Optional[Dict[str, Any]] = None, meta: Optional[Dict[str, Any]] = None) -> None:
+                if len(release_debug_entries) >= release_debug_cap:
+                    return
+                entry: Dict[str, Any] = {
+                    "sheet_row": release_sheet_row_offset + row_index,
+                    "target": target,
+                    "stage": stage,
+                }
+                if idx is not None:
+                    entry["column_index"] = idx
+                    entry["effective_header"] = rel_effective_by_index.get(idx)
+                    entry["meta"] = meta if meta is not None else rel_header_meta.get(idx)
+                if value is not None:
+                    value_ser = _serializable(value)
+                    if value_ser is not None:
+                        entry["value"] = value_ser
+                if note:
+                    entry["note"] = note
+                release_debug_entries.append(entry)
 
             def rel_val(row: pd.Series, eff_name: str) -> Optional[Any]:
                 idxs = rel_eff_to_idx.get(eff_name) or []
@@ -1713,6 +1766,160 @@ def main():
                     return row.iloc[idxs[0]]
                 except Exception:
                     return None
+            def rel_pull(
+                row: pd.Series,
+                row_index: int,
+                target: str,
+                *,
+                row3_tokens: Tuple[str, ...] = (),
+                row4_tokens: Tuple[str, ...] = (),
+                fallback_names: Tuple[str, ...] = (),
+                allow_missing_row3: bool = False,
+                allow_missing_row4: bool = False,
+                preferred_indices: Tuple[Optional[int], ...] = (),
+                validator: Optional[Callable[[Any], bool]] = None
+            ) -> Tuple[Optional[Any], Optional[int]]:
+                origins: Dict[int, str] = {}
+                candidate_idxs: List[int] = []
+
+                def _push(idx: Optional[int], origin: str) -> None:
+                    if idx is None:
+                        return
+                    if idx < 0 or idx >= len(cols_rel):
+                        return
+                    candidate_idxs.append(idx)
+                    origins.setdefault(idx, origin)
+
+                for idx in preferred_indices:
+                    _push(idx, "preferred")
+
+                if row3_tokens or row4_tokens:
+                    for idx, meta in rel_header_meta.items():
+                        text3 = meta.get("row3") if meta else None
+                        text4 = meta.get("row4") if meta else None
+                        cond3 = not row3_tokens or text3 and all(tok in text3.lower() for tok in row3_tokens)
+                        cond4 = not row4_tokens or text4 and all(tok in text4.lower() for tok in row4_tokens)
+                        if cond3 and cond4:
+                            _push(idx, "primary")
+                for name in fallback_names:
+                    idx_list = rel_eff_to_idx.get(name)
+                    if idx_list:
+                        for idx in idx_list:
+                            _push(idx, "fallback_effective")
+                for name in fallback_names:
+                    norm_name = (name or "").strip().lower()
+                    if not norm_name:
+                        continue
+                    for idx, col in enumerate(cols_rel):
+                        if not isinstance(col, str):
+                            continue
+                        col_norm = col.strip().lower()
+                        if col_norm != norm_name and not col_norm.startswith(f"{norm_name}."):
+                            continue
+                        _push(idx, "fallback_scan")
+
+                # Build snapshot for diagnostics
+                snapshot: List[Dict[str, Any]] = []
+                seen_snapshot: set[int] = set()
+                for idx in candidate_idxs:
+                    if idx in seen_snapshot:
+                        continue
+                    seen_snapshot.add(idx)
+                    meta = rel_header_meta.get(idx, {})
+                    try:
+                        raw_val = row.iloc[idx]
+                    except Exception:
+                        raw_val = None
+                    snapshot.append({
+                        "column_index": idx,
+                        "effective": rel_effective_by_index.get(idx),
+                        "meta": meta,
+                        "raw": _serializable(raw_val),
+                        "origin": origins.get(idx)
+                    })
+                log_release_debug(row_index, target, "invoke", note={"candidates": snapshot, "row3_tokens": row3_tokens, "row4_tokens": row4_tokens, "fallback_names": fallback_names} if snapshot else None)
+
+                def tokens_match(text: Optional[str], tokens: Tuple[str, ...], allow_missing: bool) -> bool:
+                    if not tokens:
+                        return True
+                    if not text:
+                        return allow_missing
+                    low = text.lower()
+                    return all(tok in low for tok in tokens)
+
+                ordered: List[int] = []
+                seen: set[int] = set()
+                for idx in candidate_idxs:
+                    if idx in seen:
+                        continue
+                    seen.add(idx)
+                    ordered.append(idx)
+
+                for idx in ordered:
+                    meta = rel_header_meta.get(idx, {})
+                    origin = origins.get(idx, "primary")
+                    if origin != "preferred":
+                        if row3_tokens and not tokens_match(meta.get("row3"), row3_tokens, allow_missing_row3):
+                            continue
+                        if row4_tokens and not tokens_match(meta.get("row4"), row4_tokens, allow_missing_row4):
+                            continue
+                    try:
+                        val = row.iloc[idx]
+                    except Exception:
+                        val = None
+                    if is_nan(val):
+                        continue
+                    if validator and not validator(val):
+                        log_release_debug(row_index, target, "candidate_rejected", idx=idx, value=val, note={"origin": origin})
+                        continue
+                    stage = {
+                        "preferred": "preferred_match",
+                        "fallback_effective": "fallback_effective",
+                        "fallback_scan": "fallback_scan",
+                        "primary": "primary_match"
+                    }.get(origin, "primary_match")
+                    log_release_debug(row_index, target, stage, idx=idx, value=val, note={"origin": origin})
+                    return val, idx
+
+                log_release_debug(row_index, target, "no_match")
+                return None, None
+
+            def neighbor_scan(
+                row: pd.Series,
+                row_index: int,
+                start_idx: Optional[int],
+                *,
+                directions: Tuple[int, ...],
+                limit: int,
+                predicate: Callable[[Any, int], bool],
+                target: str,
+                note: Optional[Dict[str, Any]] = None
+            ) -> Tuple[Optional[Any], Optional[int]]:
+                if start_idx is None:
+                    return None, None
+                for direction in directions:
+                    steps = 0
+                    idx = start_idx
+                    while True:
+                        idx += direction
+                        if idx < 0 or idx >= len(cols_rel):
+                            break
+                        steps += 1
+                        if limit and steps > limit:
+                            break
+                        try:
+                            val = row.iloc[idx]
+                        except Exception:
+                            val = None
+                        if is_nan(val):
+                            continue
+                        if predicate(val, idx):
+                            extra_note = {"direction": direction, "steps": steps}
+                            if note:
+                                extra_note.update(note)
+                            log_release_debug(row_index, target, "neighbor_fallback", idx=idx, value=val, note=extra_note)
+                            return val, idx
+                return None, None
 
             for i,rw in df_rel.iterrows():
                 upc = norm_str(get_val(rw, cm_rel, UPC_COL))
@@ -1721,12 +1928,105 @@ def main():
                 title_lang = norm_str(get_val(rw, cm_rel, "TITLE LANGUAGE"))
                 img_url = norm_str(get_val(rw, cm_rel, "COVER IMAGE URL", "COVER IMAGE url"))
                 # Pull (P)/(C) from subheaders when present
-                p_year = rel_val(rw, "(P) Copyright Year") or rw.get("(P) Copyright Year")
-                p_holder = rel_val(rw, "(P) Copyright Holder") or rw.get("(P) Copyright Holder")
-                c_year = rel_val(rw, "(C) Copyright Year") or rw.get("(C) Copyright Year")
-                c_holder = rel_val(rw, "(C) Copyright Holder") or rw.get("(C) Copyright Holder")
+                p_year, p_year_idx = rel_pull(
+                    rw,
+                    i,
+                    "p_copyright_year",
+                    row3_tokens=("(p)", "copyright"),
+                    row4_tokens=("year",),
+                    fallback_names=("(P) Copyright Year", "(P) Copyright"),
+                    allow_missing_row4=True
+                )
+                holder_preferred = (p_year_idx + 1,) if p_year_idx is not None else tuple()
+                p_holder, p_holder_idx = rel_pull(
+                    rw,
+                    i,
+                    "p_copyright_holder",
+                    row3_tokens=("(p)", "copyright"),
+                    row4_tokens=("holder",),
+                    fallback_names=("(P) Copyright Holder", "Holder"),
+                    allow_missing_row3=True,
+                    allow_missing_row4=True,
+                    preferred_indices=holder_preferred
+                )
+                if not norm_str(p_holder):
+                    fallback_val, fallback_idx = neighbor_scan(
+                        rw,
+                        i,
+                        p_year_idx,
+                        directions=(1,),
+                        limit=3,
+                        predicate=lambda v, _: bool(norm_str(v)) and norm_int(v) is None,
+                        target="p_copyright_holder"
+                    )
+                    if fallback_val is not None:
+                        p_holder, p_holder_idx = fallback_val, fallback_idx
+
+                c_year, c_year_idx = rel_pull(
+                    rw,
+                    i,
+                    "c_copyright_year",
+                    row3_tokens=("(c)", "copyright"),
+                    row4_tokens=("year",),
+                    fallback_names=("(C) Copyright Year", "(C) Copyright"),
+                    allow_missing_row4=True,
+                    validator=lambda v: norm_int(v) is not None
+                )
+                if norm_int(c_year) is None:
+                    fallback_val, fallback_idx = neighbor_scan(
+                        rw,
+                        i,
+                        c_year_idx if c_year_idx is not None else p_year_idx,
+                        directions=(1,),
+                        limit=4,
+                        predicate=lambda v, _: norm_int(v) is not None,
+                        target="c_copyright_year"
+                    )
+                    if fallback_val is not None:
+                        c_year, c_year_idx = fallback_val, fallback_idx
+
+                holder_preferred_c = (c_year_idx - 1,) if c_year_idx is not None else tuple()
+                c_holder, c_holder_idx = rel_pull(
+                    rw,
+                    i,
+                    "c_copyright_holder",
+                    row3_tokens=("(c)", "copyright"),
+                    row4_tokens=("holder",),
+                    fallback_names=("(C) Copyright Holder", "Holder"),
+                    allow_missing_row3=True,
+                    allow_missing_row4=True,
+                    preferred_indices=holder_preferred_c
+                )
+                if not norm_str(c_holder):
+                    fallback_val, fallback_idx = neighbor_scan(
+                        rw,
+                        i,
+                        c_year_idx,
+                        directions=(-1, 1),
+                        limit=4,
+                        predicate=lambda v, idx: bool(norm_str(v)) and norm_int(v) is None and idx != p_holder_idx,
+                        target="c_copyright_holder"
+                    )
+                    if fallback_val is not None:
+                        c_holder, c_holder_idx = fallback_val, fallback_idx
                 p_line = parse_year_holder(p_year, p_holder)
                 c_line = parse_year_holder(c_year, c_holder)
+                if len(release_debug_entries) < release_debug_cap:
+                    release_debug_entries.append({
+                        "sheet_row": release_sheet_row_offset + i,
+                        "target": "summary",
+                        "stage": "resolved",
+                        "upc": upc,
+                        "title": title,
+                        "value": {
+                            "p_year": _serializable(p_year),
+                            "p_holder": _serializable(p_holder),
+                            "c_year": _serializable(c_year),
+                            "c_holder": _serializable(c_holder),
+                            "p_line": _serializable(p_line),
+                            "c_line": _serializable(c_line),
+                        }
+                    })
                 g1 = norm_str(get_val(rw, cm_rel, "GENRE 1")); g2 = norm_str(get_val(rw, cm_rel, "GENRE 2"))
                 label_name = norm_str(get_val(rw, cm_rel, "LABEL", "Label Name", "LABEL NAME"))
 

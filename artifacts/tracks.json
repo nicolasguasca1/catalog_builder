@@ -12,7 +12,13 @@
       {
         "isrc": "QZW9M2221000",
         "recordingVersionType": 1,
-        "audioFiles": []
+        "audioFiles": [
+          {
+            "audioId": "34ad0a23-2e20-4019-b04a-081639d93060",
+            "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
+            "fileFormat": 2
+          }
+        ]
       }
     ],
     "contributors": [
@@ -96,7 +102,13 @@
       {
         "isrc": "QZW9M2236571",
         "recordingVersionType": 1,
-        "audioFiles": []
+        "audioFiles": [
+          {
+            "audioId": "ebc87ff2-3362-4756-b19b-9fa0832dddf1",
+            "audioFilename": "Joy-Mejia-Te-Fall.wav",
+            "fileFormat": 2
+          }
+        ]
       }
     ],
     "contributors": [
@@ -135,7 +147,7 @@
         "roleId": 39,
         "rightsId": 2,
         "publisherName": "SONY ATV",
-        "publisherId": 89881,
+        "publisherId": 89909,
         "composersLocals": [
           {
             "languageId": 31,
@@ -149,7 +161,7 @@
         "roleId": 39,
         "rightsId": 2,
         "publisherName": "WARNER CHAPPEL",
-        "publisherId": 89882,
+        "publisherId": 89910,
         "composersLocals": [
           {
             "languageId": 31,

@@ -1,6 +1,6 @@
 [
   {
-    "timestamp": 1760957028.117,
+    "timestamp": 1761042235.43,
     "method": "POST",
     "url": "https://api.revelator.com/media/audio/pullexternal/wav",
     "json": {
@@ -14,7 +14,7 @@
     }
   },
   {
-    "timestamp": 1760957032.727,
+    "timestamp": 1761042238.507,
     "method": "POST",
     "url": "https://api.revelator.com/media/audio/pullexternal/wav",
     "json": {
@@ -28,7 +28,7 @@
     }
   },
   {
-    "timestamp": 1760957040.19,
+    "timestamp": 1761042245.545,
     "method": "POST",
     "url": "https://api.revelator.com/content/publisher/save",
     "json": {
@@ -41,7 +41,7 @@
     }
   },
   {
-    "timestamp": 1760957040.377,
+    "timestamp": 1761042245.744,
     "method": "POST",
     "url": "https://api.revelator.com/content/publisher/save",
     "json": {
@@ -54,7 +54,7 @@
     }
   },
   {
-    "timestamp": 1760957040.554,
+    "timestamp": 1761042245.939,
     "method": "POST",
     "url": "https://api.revelator.com/content/composer/save",
     "json": {
@@ -67,7 +67,7 @@
     }
   },
   {
-    "timestamp": 1760957040.846,
+    "timestamp": 1761042246.206,
     "method": "POST",
     "url": "https://api.revelator.com/content/composer/save",
     "json": {
@@ -80,7 +80,7 @@
     }
   },
   {
-    "timestamp": 1760957052.123,
+    "timestamp": 1761042250.907,
     "method": "POST",
     "url": "https://api.revelator.com/content/release/save",
     "json": {
@@ -89,6 +89,8 @@
       "previouslyReleased": true,
       "releaseDate": "2022-11-21 00:00:00",
       "upc": "789294845633",
+      "copyrightP": "2022 TokyoP",
+      "copyrightC": "2022 TokyoC",
       "releaseLocals": [
         {
           "languageId": 31,
@@ -130,7 +132,7 @@
         }
       ],
       "image": {
-        "fileId": "8532f400-b2b4-473f-888a-f357e786ab2f",
+        "fileId": "2ab71726-de8d-4a2c-8175-3bf6466e2d13",
         "filename": "Receba-789294845633-UPC.jpg"
       },
       "labelId": 1034385,
@@ -149,7 +151,7 @@
               "recordingVersionType": 1,
               "audioFiles": [
                 {
-                  "audioId": "b675b0e9-02b1-4c97-885b-5b2b7d799f3d",
+                  "audioId": "34ad0a23-2e20-4019-b04a-081639d93060",
                   "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
                   "fileFormat": 2
                 }
@@ -233,7 +235,7 @@
     }
   },
   {
-    "timestamp": 1760957055.082,
+    "timestamp": 1761042255.386,
     "method": "POST",
     "url": "https://api.revelator.com/content/release/save",
     "json": {
@@ -241,6 +243,8 @@
       "version": "Extended",
       "previouslyReleased": true,
       "releaseDate": "2022-11-21 00:00:00",
+      "copyrightP": "2022 TokyoP",
+      "copyrightC": "2022 TokyoC",
       "releaseLocals": [
         {
           "languageId": 31,
@@ -282,7 +286,7 @@
         }
       ],
       "image": {
-        "fileId": "8532f400-b2b4-473f-888a-f357e786ab2f",
+        "fileId": "2ab71726-de8d-4a2c-8175-3bf6466e2d13",
         "filename": "Receba-789294845633-UPC.jpg"
       },
       "labelId": 1034385,
@@ -301,7 +305,7 @@
               "recordingVersionType": 1,
               "audioFiles": [
                 {
-                  "audioId": "b675b0e9-02b1-4c97-885b-5b2b7d799f3d",
+                  "audioId": "34ad0a23-2e20-4019-b04a-081639d93060",
                   "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
                   "fileFormat": 2
                 }
@@ -385,7 +389,7 @@
     }
   },
   {
-    "timestamp": 1760957063.458,
+    "timestamp": 1761042265.047,
     "method": "POST",
     "url": "https://api.revelator.com/content/release/save",
     "json": {
@@ -394,6 +398,8 @@
       "previouslyReleased": true,
       "releaseDate": "2022-11-24 00:00:00",
       "upc": "789294962088",
+      "copyrightP": "2022 PEJOTAP",
+      "copyrightC": "2022 PEJOTAC",
       "releaseLocals": [
         {
           "languageId": 31,
@@ -435,7 +441,7 @@
         }
       ],
       "image": {
-        "fileId": "a12465ea-4eb9-40f5-bf06-276c2d011d36",
+        "fileId": "e79edf8a-16ba-417e-b268-7dc981b8580c",
         "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg"
       },
       "labelId": 1034386,
@@ -454,7 +460,7 @@
               "recordingVersionType": 1,
               "audioFiles": [
                 {
-                  "audioId": "5afe9276-f35b-4ffc-9304-b4cff5ce0235",
+                  "audioId": "ebc87ff2-3362-4756-b19b-9fa0832dddf1",
                   "audioFilename": "Joy-Mejia-Te-Fall.wav",
                   "fileFormat": 2
                 }
@@ -495,7 +501,9 @@
               "share": "50",
               "composerName": "Jackson Bertholdo Dos Santos",
               "roleId": 39,
-              "rightsId": 1,
+              "rightsId": 2,
+              "publisherName": "SONY ATV",
+              "publisherId": 89909,
               "composersLocals": [
                 {
                   "languageId": 31,
@@ -507,7 +515,9 @@
               "share": "50",
               "composerName": "Agnaldo Paulino de Jesus Júnior",
               "roleId": 39,
-              "rightsId": 1,
+              "rightsId": 2,
+              "publisherName": "WARNER CHAPPEL",
+              "publisherId": 89910,
               "composersLocals": [
                 {
                   "languageId": 31,
@@ -535,7 +545,7 @@
     }
   },
   {
-    "timestamp": 1760957066.199,
+    "timestamp": 1761042269.841,
     "method": "POST",
     "url": "https://api.revelator.com/content/release/save",
     "json": {
@@ -543,6 +553,8 @@
       "version": null,
       "previouslyReleased": true,
       "releaseDate": "2022-11-24 00:00:00",
+      "copyrightP": "2022 PEJOTAP",
+      "copyrightC": "2022 PEJOTAC",
       "releaseLocals": [
         {
           "languageId": 31,
@@ -584,7 +596,7 @@
         }
       ],
       "image": {
-        "fileId": "a12465ea-4eb9-40f5-bf06-276c2d011d36",
+        "fileId": "e79edf8a-16ba-417e-b268-7dc981b8580c",
         "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg"
       },
       "labelId": 1034386,
@@ -603,7 +615,7 @@
               "recordingVersionType": 1,
               "audioFiles": [
                 {
-                  "audioId": "5afe9276-f35b-4ffc-9304-b4cff5ce0235",
+                  "audioId": "ebc87ff2-3362-4756-b19b-9fa0832dddf1",
                   "audioFilename": "Joy-Mejia-Te-Fall.wav",
                   "fileFormat": 2
                 }
@@ -644,7 +656,9 @@
               "share": "50",
               "composerName": "Jackson Bertholdo Dos Santos",
               "roleId": 39,
-              "rightsId": 1,
+              "rightsId": 2,
+              "publisherName": "SONY ATV",
+              "publisherId": 89909,
               "composersLocals": [
                 {
                   "languageId": 31,
@@ -656,7 +670,9 @@
               "share": "50",
               "composerName": "Agnaldo Paulino de Jesus Júnior",
               "roleId": 39,
-              "rightsId": 1,
+              "rightsId": 2,
+              "publisherName": "WARNER CHAPPEL",
+              "publisherId": 89910,
               "composersLocals": [
                 {
                   "languageId": 31,
@@ -684,7 +700,7 @@
     }
   },
   {
-    "timestamp": 1760957074.164,
+    "timestamp": 1761042284.818,
     "method": "POST",
     "url": "https://api.revelator.com/content/track/save",
     "json": {
@@ -701,7 +717,7 @@
           "recordingVersionType": 1,
           "audioFiles": [
             {
-              "audioId": "b675b0e9-02b1-4c97-885b-5b2b7d799f3d",
+              "audioId": "34ad0a23-2e20-4019-b04a-081639d93060",
               "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
               "fileFormat": 2
             }
@@ -783,7 +799,7 @@
     }
   },
   {
-    "timestamp": 1760957079.043,
+    "timestamp": 1761042291.869,
     "method": "POST",
     "url": "https://api.revelator.com/content/track/save",
     "json": {
@@ -800,7 +816,7 @@
           "recordingVersionType": 1,
           "audioFiles": [
             {
-              "audioId": "5afe9276-f35b-4ffc-9304-b4cff5ce0235",
+              "audioId": "ebc87ff2-3362-4756-b19b-9fa0832dddf1",
               "audioFilename": "Joy-Mejia-Te-Fall.wav",
               "fileFormat": 2
             }
@@ -841,7 +857,9 @@
           "share": "50",
           "composerName": "Jackson Bertholdo Dos Santos",
           "roleId": 39,
-          "rightsId": 1,
+          "rightsId": 2,
+          "publisherName": "SONY ATV",
+          "publisherId": 89909,
           "composersLocals": [
             {
               "languageId": 31,
@@ -853,7 +871,9 @@
           "share": "50",
           "composerName": "Agnaldo Paulino de Jesus Júnior",
           "roleId": 39,
-          "rightsId": 1,
+          "rightsId": 2,
+          "publisherName": "WARNER CHAPPEL",
+          "publisherId": 89910,
           "composersLocals": [
             {
               "languageId": 31,
