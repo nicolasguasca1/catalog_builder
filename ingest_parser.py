@@ -35,7 +35,7 @@ TRACK_PROP_MAP = {
 
 # Hard column limits (1-based inclusive) to skip spreadsheet noise past the template definitions.
 SHEET_COLUMN_LIMITS: Dict[str, int] = {
-    "1) Artists list": 9,
+    "1) Artists list": 12,
     "2) Labels list": 2,
     "3) Release_Label": 16,
     "4) Release_Artist(s)": 8,
@@ -1042,6 +1042,57 @@ def resolve_and_peek(df: pd.DataFrame, *candidates: str) -> Tuple[Optional[str],
     col = resolve_colkey(df, *candidates)
     return col, first_nonempty(df, col)
 
+ACCOUNT_ID_NUMBER_RE = re.compile(r"(-?\d+(?:\.\d+)?)")
+
+def _extract_first_int_token(text: Any) -> Optional[int]:
+    if text is None:
+        return None
+    match = ACCOUNT_ID_NUMBER_RE.search(str(text))
+    if not match:
+        return None
+    try:
+        return int(float(match.group(1)))
+    except Exception:
+        return None
+
+def extract_sheet_account_ids(req_map: Dict[str, Any], column_index_one_based: int = 10) -> Dict[str, Any]:
+    notes = (req_map or {}).get("_notes_row_text") or {}
+    columns = (req_map or {}).get("_optional_columns") or []
+
+    target_rows: Dict[str, Any] = {}
+    target_name: Optional[str] = None
+    target_key: Optional[str] = None
+
+    for entry in columns:
+        if entry.get("column_index") == column_index_one_based - 1:
+            target_key = entry.get("key")
+            target_name = entry.get("name")
+            if target_key and target_key in notes:
+                target_rows = dict(notes.get(target_key) or {})
+            elif target_name and target_name in notes:
+                target_rows = dict(notes.get(target_name) or {})
+            break
+
+    if not target_rows:
+        suffix = f"__col{column_index_one_based}"
+        for key, rows in notes.items():
+            if key.endswith(suffix):
+                target_rows = dict(rows or {})
+                target_key = key
+                break
+
+    enterprise_val = _extract_first_int_token(target_rows.get("row1"))
+    tenant_val = _extract_first_int_token(target_rows.get("row2"))
+
+    return {
+        "enterpriseId": enterprise_val,
+        "tenantId": tenant_val,
+        "column_key": target_key,
+        "column_name": target_name,
+        "rows": target_rows,
+        "column_index_one_based": column_index_one_based,
+    }
+
 # ========= Main pipeline =========
 
 def main():
@@ -1079,7 +1130,8 @@ def main():
             "composer_warnings": [],
             "final_tracks": [],
             "final_releases": [],
-            "release_copyright_debug": []
+            "release_copyright_debug": [],
+            "sheet_account_metadata": []
         }
         lookup_headers = {"X-EnterpriseId": str(enterpriseId), "X-TenantId": str(tenantId)}
         composer_role_map: Dict[str, Dict[str, Any]] = {}
@@ -1209,6 +1261,50 @@ def main():
             }
             (ARTIFACTS/"headers.json").write_text(json.dumps(headers_snapshot, indent=2, ensure_ascii=False))
 
+        sheet_account_meta = extract_sheet_account_ids(req_art, column_index_one_based=10)
+        sheet_metadata_entry = {
+            **sheet_account_meta,
+            "input_enterpriseId": enterpriseId,
+            "input_tenantId": tenantId,
+            "sheet": s1,
+        }
+        debug_trace["sheet_account_metadata"].append(sheet_metadata_entry)
+
+        with progress.step("Validate sheet account metadata") as s:
+            sheet_ent = sheet_account_meta.get("enterpriseId")
+            sheet_ten = sheet_account_meta.get("tenantId")
+            s.info(
+                sheet_enterpriseId=sheet_ent,
+                sheet_tenantId=sheet_ten,
+                input_enterpriseId=enterpriseId,
+                input_tenantId=tenantId,
+            )
+
+            issues: List[str] = []
+            if sheet_ent is not None and sheet_ent != enterpriseId:
+                issues.append(f"EnterpriseId mismatch: sheet={sheet_ent} input={enterpriseId}")
+            if sheet_ten is not None and sheet_ten != tenantId:
+                issues.append(f"TenantId mismatch: sheet={sheet_ten} input={tenantId}")
+
+            if issues:
+                sheet_metadata_entry["status"] = "mismatch"
+                print("[FATAL] Spreadsheet account metadata mismatch detected:")
+                for msg in issues:
+                    print(f"  - {msg}")
+                print("Please update the Artists sheet metadata rows 1-2 (column 10) or rerun with matching identifiers.")
+                sys.exit(2)
+
+            missing: List[str] = []
+            if sheet_ent is None:
+                missing.append("EnterpriseId (row1, column10)")
+            if sheet_ten is None:
+                missing.append("TenantId (row2, column10)")
+
+            if missing:
+                sheet_metadata_entry["status"] = "missing"
+                print("[WARN] Sheet metadata is missing " + ", ".join(missing) + ". Continuing without spreadsheet validation.")
+            else:
+                sheet_metadata_entry["status"] = "matched"
         # ===== Optional fields audit (visibility in dry-run and live)
         with progress.step("Audit optional fields usage") as s:
             def extract_optional_series(df: pd.DataFrame, entry: Dict[str, Any]) -> Optional[pd.Series]:

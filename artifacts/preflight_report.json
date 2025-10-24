@@ -1,12 +1,22 @@
 [
   {
-    "sheet": "8) Track_Composition(s)",
-    "row": "-",
-    "error": "Composition shares for ISRC QZW9M2221000 sum to 1.0, expected 100"
+    "sheet": "4) Release_Artist(s)",
+    "row": 8,
+    "error": "Missing required 'ARTIST ROLE'"
   },
   {
-    "sheet": "8) Track_Composition(s)",
-    "row": "-",
-    "error": "Composition shares for ISRC QZW9M2236571 sum to 1.0, expected 100"
+    "sheet": "4) Release_Artist(s)",
+    "row": 9,
+    "error": "Missing required 'ARTIST ROLE'"
+  },
+  {
+    "sheet": "4) Release_Artist(s)",
+    "row": 10,
+    "error": "Missing required 'ARTIST ROLE'"
+  },
+  {
+    "sheet": "4) Release_Artist(s)",
+    "row": 11,
+    "error": "Missing required 'ARTIST ROLE'"
   }
 ]

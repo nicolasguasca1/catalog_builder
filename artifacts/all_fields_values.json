@@ -4,11 +4,11 @@
       "values_sample": [
         {
           "row": 5,
-          "value": "JKZ"
+          "value": "JKZTest"
         },
         {
           "row": 6,
-          "value": "Flash Beats Manow"
+          "value": "Flash Beats ManowTest"
         },
         {
           "row": 7,
@@ -17,8 +17,8 @@
       ],
       "values_sample_capped": false,
       "unique_values_sample": [
-        "JKZ",
-        "Flash Beats Manow",
+        "JKZTest",
+        "Flash Beats ManowTest",
         "Various Artists"
       ]
     },
@@ -95,32 +95,39 @@
       "values_sample_capped": false,
       "unique_values_sample": []
     },
+    "ISNI": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "0000000121032683"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "0000000121032683"
+      ]
+    },
     "2": {
       "values_sample": [],
       "values_sample_capped": false,
       "unique_values_sample": []
     },
     "Duplicate Names": {
-      "values_sample": [],
-      "values_sample_capped": false,
-      "unique_values_sample": []
-    },
-    "332920.0": {
       "values_sample": [
         {
           "row": 5,
-          "value": "Insert into Artists VALUES(N'JKZ', (select CreatedBy from Enterprises where EnterpriseId=414849), (select ImageId from Images where Filename='JKZ414849'), null, null, getdate(), null, null, null, null, 414849, null, null, null, null, 0, null, null, 332920, null, null, null, null, null, null, 0, 0)"
-        },
-        {
-          "row": 6,
-          "value": "Insert into Artists VALUES(N'Flash Beats Manow', (select CreatedBy from Enterprises where EnterpriseId=414849), (select ImageId from Images where Filename='FlashBeatsManow414849'), null, null, getdate(), null, null, null, null, 414849, null, null, null, null, 0, null, null, 332920, null, null, null, null, null, null, 0, 0)"
+          "value": "insert into Images VALUES (NEWID(),'JKZTest2', '', getdate(), 0, null, 'https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1', 0, getdate(), null, null)"
         }
       ],
       "values_sample_capped": false,
       "unique_values_sample": [
-        "Insert into Artists VALUES(N'JKZ', (select CreatedBy from Enterprises where EnterpriseId=414849), (select ImageId from Images where Filename='JKZ414849'), null, null, getdate(), null, null, null, null, 414849, null, null, null, null, 0, null, null, 332920, null, null, null, null, null, null, 0, 0)",
-        "Insert into Artists VALUES(N'Flash Beats Manow', (select CreatedBy from Enterprises where EnterpriseId=414849), (select ImageId from Images where Filename='FlashBeatsManow414849'), null, null, getdate(), null, null, null, null, 414849, null, null, null, null, 0, null, null, 332920, null, null, null, null, null, null, 0, 0)"
+        "insert into Images VALUES (NEWID(),'JKZTest2', '', getdate(), 0, null, 'https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1', 0, getdate(), null, null)"
       ]
+    },
+    "332920.0": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
     }
   },
   "2) Labels list": {
@@ -128,17 +135,17 @@
       "values_sample": [
         {
           "row": 5,
-          "value": "TokyoRecords"
+          "value": "TokyoRecordsFULLTEST"
         },
         {
           "row": 6,
-          "value": "PEJOTA10*"
+          "value": "PEJOTA10*FULLTEST"
         }
       ],
       "values_sample_capped": false,
       "unique_values_sample": [
-        "TokyoRecords",
-        "PEJOTA10*"
+        "TokyoRecordsFULLTEST",
+        "PEJOTA10*FULLTEST"
       ]
     },
     "0": {
@@ -152,17 +159,17 @@
       "values_sample": [
         {
           "row": 5,
-          "value": "TokyoRecords"
+          "value": "TokyoRecordsFULLTEST"
         },
         {
           "row": 6,
-          "value": "PEJOTA10*"
+          "value": "PEJOTA10*FULLTEST"
         }
       ],
       "values_sample_capped": false,
       "unique_values_sample": [
-        "TokyoRecords",
-        "PEJOTA10*"
+        "TokyoRecordsFULLTEST",
+        "PEJOTA10*FULLTEST"
       ]
     },
     "COVER IMAGE URL": {
@@ -478,33 +485,33 @@
       "values_sample": [
         {
           "row": 5,
-          "value": "JKZ"
+          "value": "JKZTest"
         },
         {
           "row": 6,
-          "value": "JKZ"
+          "value": "JKZTest"
         },
         {
           "row": 7,
-          "value": "JKZ"
+          "value": "JKZTest"
         },
         {
           "row": 8,
-          "value": "Flash Beats Manow"
+          "value": "Flash Beats ManowTest"
         },
         {
           "row": 9,
-          "value": "Flash Beats Manow"
+          "value": "Flash Beats ManowTest"
         },
         {
           "row": 10,
-          "value": "Flash Beats Manow"
+          "value": "Flash Beats ManowTest"
         }
       ],
       "values_sample_capped": false,
       "unique_values_sample": [
-        "JKZ",
-        "Flash Beats Manow"
+        "JKZTest",
+        "Flash Beats ManowTest"
       ]
     },
     "ARTIST ROLE": {
@@ -577,23 +584,28 @@
     "0": {
       "values_sample": [
         {
-          "row": 6,
+          "row": 11,
           "value": "sort(if(countif($A$5:$A&$B$5:$B,'3) Release_Label'!$D$5:$D&'3) Release_Label'!$E$5:$E)=0,'3) Release_Label'!$D$5:$D&\" \"&'3) Release_Label'!$E$5:$E,))"
         },
         {
-          "row": 7,
+          "row": 12,
           "value": "sort(if(countif({A5:A,B5:B},{'3) Release_Label'!D5:D,'3) Release_Label'!E5:E})=0,{'3) Release_Label'!D5:D,'3) Release_Label'!E5:E},))"
         },
         {
-          "row": 8,
-          "value": "#REF!"
+          "row": 13,
+          "value": "sort(if(countif(filter($A:$B,$F:$F=\"Main Primary Artist\"),'3) Release_Label'!$D$5:$E)=0,'3) Release_Label'!$D$5:$E,))"
+        },
+        {
+          "row": 14,
+          "value": "sort(if(countif(filter($A:$B,$F:$F=\"Main Primary Artist\"),'3) Release_Label'!$D$5:$E)>1,'3) Release_Label'!$D$5:$E,))"
         }
       ],
       "values_sample_capped": false,
       "unique_values_sample": [
         "sort(if(countif($A$5:$A&$B$5:$B,'3) Release_Label'!$D$5:$D&'3) Release_Label'!$E$5:$E)=0,'3) Release_Label'!$D$5:$D&\" \"&'3) Release_Label'!$E$5:$E,))",
         "sort(if(countif({A5:A,B5:B},{'3) Release_Label'!D5:D,'3) Release_Label'!E5:E})=0,{'3) Release_Label'!D5:D,'3) Release_Label'!E5:E},))",
-        "#REF!"
+        "sort(if(countif(filter($A:$B,$F:$F=\"Main Primary Artist\"),'3) Release_Label'!$D$5:$E)=0,'3) Release_Label'!$D$5:$E,))",
+        "sort(if(countif(filter($A:$B,$F:$F=\"Main Primary Artist\"),'3) Release_Label'!$D$5:$E)>1,'3) Release_Label'!$D$5:$E,))"
       ]
     }
   },
@@ -818,17 +830,16 @@
       "values_sample": [
         {
           "row": 5,
-          "value": "12345"
+          "value": "T-123.456.789-0"
         },
         {
           "row": 6,
-          "value": "67890"
+          "value": "T-123.456.789-0"
         }
       ],
       "values_sample_capped": false,
       "unique_values_sample": [
-        "12345",
-        "67890"
+        "T-123.456.789-0"
       ]
     }
   },
@@ -928,33 +939,33 @@
       "values_sample": [
         {
           "row": 5,
-          "value": "JKZ"
+          "value": "JKZTest"
         },
         {
           "row": 6,
-          "value": "JKZ"
+          "value": "JKZTest"
         },
         {
           "row": 7,
-          "value": "JKZ"
+          "value": "JKZTest"
         },
         {
           "row": 8,
-          "value": "Flash Beats Manow"
+          "value": "Flash Beats ManowTest"
         },
         {
           "row": 9,
-          "value": "Flash Beats Manow"
+          "value": "Flash Beats ManowTest"
         },
         {
           "row": 10,
-          "value": "Flash Beats Manow"
+          "value": "Flash Beats ManowTest"
         }
       ],
       "values_sample_capped": false,
       "unique_values_sample": [
-        "JKZ",
-        "Flash Beats Manow"
+        "JKZTest",
+        "Flash Beats ManowTest"
       ]
     },
     "ARTIST ROLE": {
@@ -1010,43 +1021,40 @@
         "Jackson Bertholdo Dos Santos"
       ]
     },
-    "0": {
-      "values_sample": [],
-      "values_sample_capped": false,
-      "unique_values_sample": []
-    },
-    "Column_3": {
+    "ISNI": {
       "values_sample": [
         {
           "row": 5,
-          "value": "insert into Composers VALUES(N'Agnaldo Paulino de Jesus Júnior', null, null, (select CreatedBy from Enterprises where EnterpriseId=414849), getdate(), null, null, null,332920, 414849, null, null, null, null)"
-        },
-        {
-          "row": 6,
-          "value": "insert into Composers VALUES(N'Jackson Bertholdo Dos Santos', null, null, (select CreatedBy from Enterprises where EnterpriseId=414849), getdate(), null, null, null,332920, 414849, null, null, null, null)"
+          "value": "0000000121032683"
         }
       ],
       "values_sample_capped": false,
       "unique_values_sample": [
-        "insert into Composers VALUES(N'Agnaldo Paulino de Jesus Júnior', null, null, (select CreatedBy from Enterprises where EnterpriseId=414849), getdate(), null, null, null,332920, 414849, null, null, null, null)",
-        "insert into Composers VALUES(N'Jackson Bertholdo Dos Santos', null, null, (select CreatedBy from Enterprises where EnterpriseId=414849), getdate(), null, null, null,332920, 414849, null, null, null, null)"
+        "0000000121032683"
       ]
     },
-    "Publisher Name": {
+    "Contributor Country": {
       "values_sample": [
         {
           "row": 5,
-          "value": "SONY ATV"
-        },
-        {
-          "row": 6,
-          "value": "WARNER CHAPPEL"
+          "value": "Brazil"
         }
       ],
       "values_sample_capped": false,
       "unique_values_sample": [
-        "SONY ATV",
-        "WARNER CHAPPEL"
+        "Brazil"
+      ]
+    },
+    "IPI/CAE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "00006718449"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "00006718449"
       ]
     }
   },
@@ -1120,6 +1128,30 @@
       "values_sample_capped": false,
       "unique_values_sample": [
         "Extended"
+      ]
+    },
+    "LYRICS\nLANGUAGE": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Portuguese"
+        },
+        {
+          "row": 6,
+          "value": "Portuguese"
+        },
+        {
+          "row": 7,
+          "value": "Portuguese"
+        },
+        {
+          "row": 8,
+          "value": "Portuguese"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Portuguese"
       ]
     },
     "COMPOSITION CONTRIBUTOR": {
@@ -1247,23 +1279,6 @@
         "Copyright control (self-published)",
         "Published (managed by a publisher)"
       ]
-    },
-    "PUBLISHER": {
-      "values_sample": [
-        {
-          "row": 7,
-          "value": "SONY ATV"
-        },
-        {
-          "row": 8,
-          "value": "WARNER CHAPPEL"
-        }
-      ],
-      "values_sample_capped": false,
-      "unique_values_sample": [
-        "SONY ATV",
-        "WARNER CHAPPEL"
-      ]
     }
   },
   "9) Audio_Properties": {
@@ -1327,9 +1342,201 @@
         {
           "row": 6,
           "value": "False"
+        },
+        {
+          "row": 7,
+          "value": "False"
+        },
+        {
+          "row": 8,
+          "value": "False"
+        },
+        {
+          "row": 9,
+          "value": "False"
+        },
+        {
+          "row": 10,
+          "value": "False"
+        },
+        {
+          "row": 11,
+          "value": "False"
+        },
+        {
+          "row": 12,
+          "value": "False"
+        },
+        {
+          "row": 13,
+          "value": "False"
+        },
+        {
+          "row": 14,
+          "value": "False"
+        },
+        {
+          "row": 15,
+          "value": "False"
+        },
+        {
+          "row": 16,
+          "value": "False"
+        },
+        {
+          "row": 17,
+          "value": "False"
+        },
+        {
+          "row": 18,
+          "value": "False"
+        },
+        {
+          "row": 19,
+          "value": "False"
+        },
+        {
+          "row": 20,
+          "value": "False"
+        },
+        {
+          "row": 21,
+          "value": "False"
+        },
+        {
+          "row": 22,
+          "value": "False"
+        },
+        {
+          "row": 23,
+          "value": "False"
+        },
+        {
+          "row": 24,
+          "value": "False"
+        },
+        {
+          "row": 25,
+          "value": "False"
+        },
+        {
+          "row": 26,
+          "value": "False"
+        },
+        {
+          "row": 27,
+          "value": "False"
+        },
+        {
+          "row": 28,
+          "value": "False"
+        },
+        {
+          "row": 29,
+          "value": "False"
+        },
+        {
+          "row": 30,
+          "value": "False"
+        },
+        {
+          "row": 31,
+          "value": "False"
+        },
+        {
+          "row": 32,
+          "value": "False"
+        },
+        {
+          "row": 33,
+          "value": "False"
+        },
+        {
+          "row": 34,
+          "value": "False"
+        },
+        {
+          "row": 35,
+          "value": "False"
+        },
+        {
+          "row": 36,
+          "value": "False"
+        },
+        {
+          "row": 37,
+          "value": "False"
+        },
+        {
+          "row": 38,
+          "value": "False"
+        },
+        {
+          "row": 39,
+          "value": "False"
+        },
+        {
+          "row": 40,
+          "value": "False"
+        },
+        {
+          "row": 41,
+          "value": "False"
+        },
+        {
+          "row": 42,
+          "value": "False"
+        },
+        {
+          "row": 43,
+          "value": "False"
+        },
+        {
+          "row": 44,
+          "value": "False"
+        },
+        {
+          "row": 45,
+          "value": "False"
+        },
+        {
+          "row": 46,
+          "value": "False"
+        },
+        {
+          "row": 47,
+          "value": "False"
+        },
+        {
+          "row": 48,
+          "value": "False"
+        },
+        {
+          "row": 49,
+          "value": "False"
+        },
+        {
+          "row": 50,
+          "value": "False"
+        },
+        {
+          "row": 51,
+          "value": "False"
+        },
+        {
+          "row": 52,
+          "value": "False"
+        },
+        {
+          "row": 53,
+          "value": "False"
+        },
+        {
+          "row": 54,
+          "value": "False"
         }
       ],
-      "values_sample_capped": false,
+      "values_sample_capped": true,
       "unique_values_sample": [
         "False"
       ]
@@ -1343,9 +1550,201 @@
         {
           "row": 6,
           "value": "False"
+        },
+        {
+          "row": 7,
+          "value": "False"
+        },
+        {
+          "row": 8,
+          "value": "False"
+        },
+        {
+          "row": 9,
+          "value": "False"
+        },
+        {
+          "row": 10,
+          "value": "False"
+        },
+        {
+          "row": 11,
+          "value": "False"
+        },
+        {
+          "row": 12,
+          "value": "False"
+        },
+        {
+          "row": 13,
+          "value": "False"
+        },
+        {
+          "row": 14,
+          "value": "False"
+        },
+        {
+          "row": 15,
+          "value": "False"
+        },
+        {
+          "row": 16,
+          "value": "False"
+        },
+        {
+          "row": 17,
+          "value": "False"
+        },
+        {
+          "row": 18,
+          "value": "False"
+        },
+        {
+          "row": 19,
+          "value": "False"
+        },
+        {
+          "row": 20,
+          "value": "False"
+        },
+        {
+          "row": 21,
+          "value": "False"
+        },
+        {
+          "row": 22,
+          "value": "False"
+        },
+        {
+          "row": 23,
+          "value": "False"
+        },
+        {
+          "row": 24,
+          "value": "False"
+        },
+        {
+          "row": 25,
+          "value": "False"
+        },
+        {
+          "row": 26,
+          "value": "False"
+        },
+        {
+          "row": 27,
+          "value": "False"
+        },
+        {
+          "row": 28,
+          "value": "False"
+        },
+        {
+          "row": 29,
+          "value": "False"
+        },
+        {
+          "row": 30,
+          "value": "False"
+        },
+        {
+          "row": 31,
+          "value": "False"
+        },
+        {
+          "row": 32,
+          "value": "False"
+        },
+        {
+          "row": 33,
+          "value": "False"
+        },
+        {
+          "row": 34,
+          "value": "False"
+        },
+        {
+          "row": 35,
+          "value": "False"
+        },
+        {
+          "row": 36,
+          "value": "False"
+        },
+        {
+          "row": 37,
+          "value": "False"
+        },
+        {
+          "row": 38,
+          "value": "False"
+        },
+        {
+          "row": 39,
+          "value": "False"
+        },
+        {
+          "row": 40,
+          "value": "False"
+        },
+        {
+          "row": 41,
+          "value": "False"
+        },
+        {
+          "row": 42,
+          "value": "False"
+        },
+        {
+          "row": 43,
+          "value": "False"
+        },
+        {
+          "row": 44,
+          "value": "False"
+        },
+        {
+          "row": 45,
+          "value": "False"
+        },
+        {
+          "row": 46,
+          "value": "False"
+        },
+        {
+          "row": 47,
+          "value": "False"
+        },
+        {
+          "row": 48,
+          "value": "False"
+        },
+        {
+          "row": 49,
+          "value": "False"
+        },
+        {
+          "row": 50,
+          "value": "False"
+        },
+        {
+          "row": 51,
+          "value": "False"
+        },
+        {
+          "row": 52,
+          "value": "False"
+        },
+        {
+          "row": 53,
+          "value": "False"
+        },
+        {
+          "row": 54,
+          "value": "False"
         }
       ],
-      "values_sample_capped": false,
+      "values_sample_capped": true,
       "unique_values_sample": [
         "False"
       ]
@@ -1359,9 +1758,201 @@
         {
           "row": 6,
           "value": "False"
+        },
+        {
+          "row": 7,
+          "value": "False"
+        },
+        {
+          "row": 8,
+          "value": "False"
+        },
+        {
+          "row": 9,
+          "value": "False"
+        },
+        {
+          "row": 10,
+          "value": "False"
+        },
+        {
+          "row": 11,
+          "value": "False"
+        },
+        {
+          "row": 12,
+          "value": "False"
+        },
+        {
+          "row": 13,
+          "value": "False"
+        },
+        {
+          "row": 14,
+          "value": "False"
+        },
+        {
+          "row": 15,
+          "value": "False"
+        },
+        {
+          "row": 16,
+          "value": "False"
+        },
+        {
+          "row": 17,
+          "value": "False"
+        },
+        {
+          "row": 18,
+          "value": "False"
+        },
+        {
+          "row": 19,
+          "value": "False"
+        },
+        {
+          "row": 20,
+          "value": "False"
+        },
+        {
+          "row": 21,
+          "value": "False"
+        },
+        {
+          "row": 22,
+          "value": "False"
+        },
+        {
+          "row": 23,
+          "value": "False"
+        },
+        {
+          "row": 24,
+          "value": "False"
+        },
+        {
+          "row": 25,
+          "value": "False"
+        },
+        {
+          "row": 26,
+          "value": "False"
+        },
+        {
+          "row": 27,
+          "value": "False"
+        },
+        {
+          "row": 28,
+          "value": "False"
+        },
+        {
+          "row": 29,
+          "value": "False"
+        },
+        {
+          "row": 30,
+          "value": "False"
+        },
+        {
+          "row": 31,
+          "value": "False"
+        },
+        {
+          "row": 32,
+          "value": "False"
+        },
+        {
+          "row": 33,
+          "value": "False"
+        },
+        {
+          "row": 34,
+          "value": "False"
+        },
+        {
+          "row": 35,
+          "value": "False"
+        },
+        {
+          "row": 36,
+          "value": "False"
+        },
+        {
+          "row": 37,
+          "value": "False"
+        },
+        {
+          "row": 38,
+          "value": "False"
+        },
+        {
+          "row": 39,
+          "value": "False"
+        },
+        {
+          "row": 40,
+          "value": "False"
+        },
+        {
+          "row": 41,
+          "value": "False"
+        },
+        {
+          "row": 42,
+          "value": "False"
+        },
+        {
+          "row": 43,
+          "value": "False"
+        },
+        {
+          "row": 44,
+          "value": "False"
+        },
+        {
+          "row": 45,
+          "value": "False"
+        },
+        {
+          "row": 46,
+          "value": "False"
+        },
+        {
+          "row": 47,
+          "value": "False"
+        },
+        {
+          "row": 48,
+          "value": "False"
+        },
+        {
+          "row": 49,
+          "value": "False"
+        },
+        {
+          "row": 50,
+          "value": "False"
+        },
+        {
+          "row": 51,
+          "value": "False"
+        },
+        {
+          "row": 52,
+          "value": "False"
+        },
+        {
+          "row": 53,
+          "value": "False"
+        },
+        {
+          "row": 54,
+          "value": "False"
         }
       ],
-      "values_sample_capped": false,
+      "values_sample_capped": true,
       "unique_values_sample": [
         "False"
       ]
@@ -1375,9 +1966,201 @@
         {
           "row": 6,
           "value": "False"
+        },
+        {
+          "row": 7,
+          "value": "False"
+        },
+        {
+          "row": 8,
+          "value": "False"
+        },
+        {
+          "row": 9,
+          "value": "False"
+        },
+        {
+          "row": 10,
+          "value": "False"
+        },
+        {
+          "row": 11,
+          "value": "False"
+        },
+        {
+          "row": 12,
+          "value": "False"
+        },
+        {
+          "row": 13,
+          "value": "False"
+        },
+        {
+          "row": 14,
+          "value": "False"
+        },
+        {
+          "row": 15,
+          "value": "False"
+        },
+        {
+          "row": 16,
+          "value": "False"
+        },
+        {
+          "row": 17,
+          "value": "False"
+        },
+        {
+          "row": 18,
+          "value": "False"
+        },
+        {
+          "row": 19,
+          "value": "False"
+        },
+        {
+          "row": 20,
+          "value": "False"
+        },
+        {
+          "row": 21,
+          "value": "False"
+        },
+        {
+          "row": 22,
+          "value": "False"
+        },
+        {
+          "row": 23,
+          "value": "False"
+        },
+        {
+          "row": 24,
+          "value": "False"
+        },
+        {
+          "row": 25,
+          "value": "False"
+        },
+        {
+          "row": 26,
+          "value": "False"
+        },
+        {
+          "row": 27,
+          "value": "False"
+        },
+        {
+          "row": 28,
+          "value": "False"
+        },
+        {
+          "row": 29,
+          "value": "False"
+        },
+        {
+          "row": 30,
+          "value": "False"
+        },
+        {
+          "row": 31,
+          "value": "False"
+        },
+        {
+          "row": 32,
+          "value": "False"
+        },
+        {
+          "row": 33,
+          "value": "False"
+        },
+        {
+          "row": 34,
+          "value": "False"
+        },
+        {
+          "row": 35,
+          "value": "False"
+        },
+        {
+          "row": 36,
+          "value": "False"
+        },
+        {
+          "row": 37,
+          "value": "False"
+        },
+        {
+          "row": 38,
+          "value": "False"
+        },
+        {
+          "row": 39,
+          "value": "False"
+        },
+        {
+          "row": 40,
+          "value": "False"
+        },
+        {
+          "row": 41,
+          "value": "False"
+        },
+        {
+          "row": 42,
+          "value": "False"
+        },
+        {
+          "row": 43,
+          "value": "False"
+        },
+        {
+          "row": 44,
+          "value": "False"
+        },
+        {
+          "row": 45,
+          "value": "False"
+        },
+        {
+          "row": 46,
+          "value": "False"
+        },
+        {
+          "row": 47,
+          "value": "False"
+        },
+        {
+          "row": 48,
+          "value": "False"
+        },
+        {
+          "row": 49,
+          "value": "False"
+        },
+        {
+          "row": 50,
+          "value": "False"
+        },
+        {
+          "row": 51,
+          "value": "False"
+        },
+        {
+          "row": 52,
+          "value": "False"
+        },
+        {
+          "row": 53,
+          "value": "False"
+        },
+        {
+          "row": 54,
+          "value": "False"
         }
       ],
-      "values_sample_capped": false,
+      "values_sample_capped": true,
       "unique_values_sample": [
         "False"
       ]
@@ -1391,9 +2174,201 @@
         {
           "row": 6,
           "value": "False"
+        },
+        {
+          "row": 7,
+          "value": "False"
+        },
+        {
+          "row": 8,
+          "value": "False"
+        },
+        {
+          "row": 9,
+          "value": "False"
+        },
+        {
+          "row": 10,
+          "value": "False"
+        },
+        {
+          "row": 11,
+          "value": "False"
+        },
+        {
+          "row": 12,
+          "value": "False"
+        },
+        {
+          "row": 13,
+          "value": "False"
+        },
+        {
+          "row": 14,
+          "value": "False"
+        },
+        {
+          "row": 15,
+          "value": "False"
+        },
+        {
+          "row": 16,
+          "value": "False"
+        },
+        {
+          "row": 17,
+          "value": "False"
+        },
+        {
+          "row": 18,
+          "value": "False"
+        },
+        {
+          "row": 19,
+          "value": "False"
+        },
+        {
+          "row": 20,
+          "value": "False"
+        },
+        {
+          "row": 21,
+          "value": "False"
+        },
+        {
+          "row": 22,
+          "value": "False"
+        },
+        {
+          "row": 23,
+          "value": "False"
+        },
+        {
+          "row": 24,
+          "value": "False"
+        },
+        {
+          "row": 25,
+          "value": "False"
+        },
+        {
+          "row": 26,
+          "value": "False"
+        },
+        {
+          "row": 27,
+          "value": "False"
+        },
+        {
+          "row": 28,
+          "value": "False"
+        },
+        {
+          "row": 29,
+          "value": "False"
+        },
+        {
+          "row": 30,
+          "value": "False"
+        },
+        {
+          "row": 31,
+          "value": "False"
+        },
+        {
+          "row": 32,
+          "value": "False"
+        },
+        {
+          "row": 33,
+          "value": "False"
+        },
+        {
+          "row": 34,
+          "value": "False"
+        },
+        {
+          "row": 35,
+          "value": "False"
+        },
+        {
+          "row": 36,
+          "value": "False"
+        },
+        {
+          "row": 37,
+          "value": "False"
+        },
+        {
+          "row": 38,
+          "value": "False"
+        },
+        {
+          "row": 39,
+          "value": "False"
+        },
+        {
+          "row": 40,
+          "value": "False"
+        },
+        {
+          "row": 41,
+          "value": "False"
+        },
+        {
+          "row": 42,
+          "value": "False"
+        },
+        {
+          "row": 43,
+          "value": "False"
+        },
+        {
+          "row": 44,
+          "value": "False"
+        },
+        {
+          "row": 45,
+          "value": "False"
+        },
+        {
+          "row": 46,
+          "value": "False"
+        },
+        {
+          "row": 47,
+          "value": "False"
+        },
+        {
+          "row": 48,
+          "value": "False"
+        },
+        {
+          "row": 49,
+          "value": "False"
+        },
+        {
+          "row": 50,
+          "value": "False"
+        },
+        {
+          "row": 51,
+          "value": "False"
+        },
+        {
+          "row": 52,
+          "value": "False"
+        },
+        {
+          "row": 53,
+          "value": "False"
+        },
+        {
+          "row": 54,
+          "value": "False"
         }
       ],
-      "values_sample_capped": false,
+      "values_sample_capped": true,
       "unique_values_sample": [
         "False"
       ]
@@ -1407,9 +2382,201 @@
         {
           "row": 6,
           "value": "False"
+        },
+        {
+          "row": 7,
+          "value": "False"
+        },
+        {
+          "row": 8,
+          "value": "False"
+        },
+        {
+          "row": 9,
+          "value": "False"
+        },
+        {
+          "row": 10,
+          "value": "False"
+        },
+        {
+          "row": 11,
+          "value": "False"
+        },
+        {
+          "row": 12,
+          "value": "False"
+        },
+        {
+          "row": 13,
+          "value": "False"
+        },
+        {
+          "row": 14,
+          "value": "False"
+        },
+        {
+          "row": 15,
+          "value": "False"
+        },
+        {
+          "row": 16,
+          "value": "False"
+        },
+        {
+          "row": 17,
+          "value": "False"
+        },
+        {
+          "row": 18,
+          "value": "False"
+        },
+        {
+          "row": 19,
+          "value": "False"
+        },
+        {
+          "row": 20,
+          "value": "False"
+        },
+        {
+          "row": 21,
+          "value": "False"
+        },
+        {
+          "row": 22,
+          "value": "False"
+        },
+        {
+          "row": 23,
+          "value": "False"
+        },
+        {
+          "row": 24,
+          "value": "False"
+        },
+        {
+          "row": 25,
+          "value": "False"
+        },
+        {
+          "row": 26,
+          "value": "False"
+        },
+        {
+          "row": 27,
+          "value": "False"
+        },
+        {
+          "row": 28,
+          "value": "False"
+        },
+        {
+          "row": 29,
+          "value": "False"
+        },
+        {
+          "row": 30,
+          "value": "False"
+        },
+        {
+          "row": 31,
+          "value": "False"
+        },
+        {
+          "row": 32,
+          "value": "False"
+        },
+        {
+          "row": 33,
+          "value": "False"
+        },
+        {
+          "row": 34,
+          "value": "False"
+        },
+        {
+          "row": 35,
+          "value": "False"
+        },
+        {
+          "row": 36,
+          "value": "False"
+        },
+        {
+          "row": 37,
+          "value": "False"
+        },
+        {
+          "row": 38,
+          "value": "False"
+        },
+        {
+          "row": 39,
+          "value": "False"
+        },
+        {
+          "row": 40,
+          "value": "False"
+        },
+        {
+          "row": 41,
+          "value": "False"
+        },
+        {
+          "row": 42,
+          "value": "False"
+        },
+        {
+          "row": 43,
+          "value": "False"
+        },
+        {
+          "row": 44,
+          "value": "False"
+        },
+        {
+          "row": 45,
+          "value": "False"
+        },
+        {
+          "row": 46,
+          "value": "False"
+        },
+        {
+          "row": 47,
+          "value": "False"
+        },
+        {
+          "row": 48,
+          "value": "False"
+        },
+        {
+          "row": 49,
+          "value": "False"
+        },
+        {
+          "row": 50,
+          "value": "False"
+        },
+        {
+          "row": 51,
+          "value": "False"
+        },
+        {
+          "row": 52,
+          "value": "False"
+        },
+        {
+          "row": 53,
+          "value": "False"
+        },
+        {
+          "row": 54,
+          "value": "False"
         }
       ],
-      "values_sample_capped": false,
+      "values_sample_capped": true,
       "unique_values_sample": [
         "False"
       ]
@@ -1423,9 +2590,201 @@
         {
           "row": 6,
           "value": "False"
+        },
+        {
+          "row": 7,
+          "value": "False"
+        },
+        {
+          "row": 8,
+          "value": "False"
+        },
+        {
+          "row": 9,
+          "value": "False"
+        },
+        {
+          "row": 10,
+          "value": "False"
+        },
+        {
+          "row": 11,
+          "value": "False"
+        },
+        {
+          "row": 12,
+          "value": "False"
+        },
+        {
+          "row": 13,
+          "value": "False"
+        },
+        {
+          "row": 14,
+          "value": "False"
+        },
+        {
+          "row": 15,
+          "value": "False"
+        },
+        {
+          "row": 16,
+          "value": "False"
+        },
+        {
+          "row": 17,
+          "value": "False"
+        },
+        {
+          "row": 18,
+          "value": "False"
+        },
+        {
+          "row": 19,
+          "value": "False"
+        },
+        {
+          "row": 20,
+          "value": "False"
+        },
+        {
+          "row": 21,
+          "value": "False"
+        },
+        {
+          "row": 22,
+          "value": "False"
+        },
+        {
+          "row": 23,
+          "value": "False"
+        },
+        {
+          "row": 24,
+          "value": "False"
+        },
+        {
+          "row": 25,
+          "value": "False"
+        },
+        {
+          "row": 26,
+          "value": "False"
+        },
+        {
+          "row": 27,
+          "value": "False"
+        },
+        {
+          "row": 28,
+          "value": "False"
+        },
+        {
+          "row": 29,
+          "value": "False"
+        },
+        {
+          "row": 30,
+          "value": "False"
+        },
+        {
+          "row": 31,
+          "value": "False"
+        },
+        {
+          "row": 32,
+          "value": "False"
+        },
+        {
+          "row": 33,
+          "value": "False"
+        },
+        {
+          "row": 34,
+          "value": "False"
+        },
+        {
+          "row": 35,
+          "value": "False"
+        },
+        {
+          "row": 36,
+          "value": "False"
+        },
+        {
+          "row": 37,
+          "value": "False"
+        },
+        {
+          "row": 38,
+          "value": "False"
+        },
+        {
+          "row": 39,
+          "value": "False"
+        },
+        {
+          "row": 40,
+          "value": "False"
+        },
+        {
+          "row": 41,
+          "value": "False"
+        },
+        {
+          "row": 42,
+          "value": "False"
+        },
+        {
+          "row": 43,
+          "value": "False"
+        },
+        {
+          "row": 44,
+          "value": "False"
+        },
+        {
+          "row": 45,
+          "value": "False"
+        },
+        {
+          "row": 46,
+          "value": "False"
+        },
+        {
+          "row": 47,
+          "value": "False"
+        },
+        {
+          "row": 48,
+          "value": "False"
+        },
+        {
+          "row": 49,
+          "value": "False"
+        },
+        {
+          "row": 50,
+          "value": "False"
+        },
+        {
+          "row": 51,
+          "value": "False"
+        },
+        {
+          "row": 52,
+          "value": "False"
+        },
+        {
+          "row": 53,
+          "value": "False"
+        },
+        {
+          "row": 54,
+          "value": "False"
         }
       ],
-      "values_sample_capped": false,
+      "values_sample_capped": true,
       "unique_values_sample": [
         "False"
       ]
@@ -1439,11 +2798,204 @@
         {
           "row": 6,
           "value": "True"
+        },
+        {
+          "row": 7,
+          "value": "False"
+        },
+        {
+          "row": 8,
+          "value": "False"
+        },
+        {
+          "row": 9,
+          "value": "False"
+        },
+        {
+          "row": 10,
+          "value": "False"
+        },
+        {
+          "row": 11,
+          "value": "False"
+        },
+        {
+          "row": 12,
+          "value": "False"
+        },
+        {
+          "row": 13,
+          "value": "False"
+        },
+        {
+          "row": 14,
+          "value": "False"
+        },
+        {
+          "row": 15,
+          "value": "False"
+        },
+        {
+          "row": 16,
+          "value": "False"
+        },
+        {
+          "row": 17,
+          "value": "False"
+        },
+        {
+          "row": 18,
+          "value": "False"
+        },
+        {
+          "row": 19,
+          "value": "False"
+        },
+        {
+          "row": 20,
+          "value": "False"
+        },
+        {
+          "row": 21,
+          "value": "False"
+        },
+        {
+          "row": 22,
+          "value": "False"
+        },
+        {
+          "row": 23,
+          "value": "False"
+        },
+        {
+          "row": 24,
+          "value": "False"
+        },
+        {
+          "row": 25,
+          "value": "False"
+        },
+        {
+          "row": 26,
+          "value": "False"
+        },
+        {
+          "row": 27,
+          "value": "False"
+        },
+        {
+          "row": 28,
+          "value": "False"
+        },
+        {
+          "row": 29,
+          "value": "False"
+        },
+        {
+          "row": 30,
+          "value": "False"
+        },
+        {
+          "row": 31,
+          "value": "False"
+        },
+        {
+          "row": 32,
+          "value": "False"
+        },
+        {
+          "row": 33,
+          "value": "False"
+        },
+        {
+          "row": 34,
+          "value": "False"
+        },
+        {
+          "row": 35,
+          "value": "False"
+        },
+        {
+          "row": 36,
+          "value": "False"
+        },
+        {
+          "row": 37,
+          "value": "False"
+        },
+        {
+          "row": 38,
+          "value": "False"
+        },
+        {
+          "row": 39,
+          "value": "False"
+        },
+        {
+          "row": 40,
+          "value": "False"
+        },
+        {
+          "row": 41,
+          "value": "False"
+        },
+        {
+          "row": 42,
+          "value": "False"
+        },
+        {
+          "row": 43,
+          "value": "False"
+        },
+        {
+          "row": 44,
+          "value": "False"
+        },
+        {
+          "row": 45,
+          "value": "False"
+        },
+        {
+          "row": 46,
+          "value": "False"
+        },
+        {
+          "row": 47,
+          "value": "False"
+        },
+        {
+          "row": 48,
+          "value": "False"
+        },
+        {
+          "row": 49,
+          "value": "False"
+        },
+        {
+          "row": 50,
+          "value": "False"
+        },
+        {
+          "row": 51,
+          "value": "False"
+        },
+        {
+          "row": 52,
+          "value": "False"
+        },
+        {
+          "row": 53,
+          "value": "False"
+        },
+        {
+          "row": 54,
+          "value": "False"
         }
       ],
-      "values_sample_capped": false,
+      "values_sample_capped": true,
       "unique_values_sample": [
-        "True"
+        "True",
+        "False"
       ]
     }
   }
