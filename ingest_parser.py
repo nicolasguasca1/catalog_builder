@@ -35,14 +35,14 @@ TRACK_PROP_MAP = {
 
 # Hard column limits (1-based inclusive) to skip spreadsheet noise past the template definitions.
 SHEET_COLUMN_LIMITS: Dict[str, int] = {
-    "1) Artists list": 12,
-    "2) Labels list": 2,
+    "1) Artists list": 7,
+    "2) Labels list": 1,
     "3) Release_Label": 16,
-    "4) Release_Artist(s)": 8,
+    "4) Release_Artist(s)": 7,
     "5) Release_Track": 16,
-    "6) Track_Artist(s)": 6,
-    "7) Comp ContributorPublisher li": 4,
-    "8) Track_Composition(s)": 10,
+    "6) Track_Artist(s)": 7,
+    "7) Comp ContributorPublisher li": 9,
+    "8) Track_Composition(s)": 11,
     "9) Audio_Properties": 12,
 }
 

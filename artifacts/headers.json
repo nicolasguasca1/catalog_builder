@@ -7,10 +7,7 @@
       "Spotify Artist URI",
       "Meta ArtistId",
       "SoundCloud ProfileId",
-      "ISNI",
-      "2",
-      "Duplicate Names",
-      "332920.0"
+      "ISNI"
     ],
     "norm": [
       "artist name",
@@ -19,20 +16,15 @@
       "spotify artist uri",
       "meta artistid",
       "soundcloud profileid",
-      "isni",
-      "2",
-      "duplicate names",
-      "332920.0"
+      "isni"
     ]
   },
   "2) Labels list": {
     "raw": [
-      "Label Name",
-      "0"
+      "Label Name"
     ],
     "norm": [
-      "label name",
-      "0"
+      "label name"
     ]
   },
   "3) Release_Label": {
@@ -85,8 +77,7 @@
       "RELEASE VERSION",
       "ARTIST",
       "ARTIST ROLE",
-      "ARTIST ROLE\nCATEGORY",
-      "0"
+      "ARTIST ROLE\nCATEGORY"
     ],
     "norm": [
       "upc / ean / jan",
@@ -95,8 +86,7 @@
       "release version",
       "artist",
       "artist role",
-      "artist role category",
-      "0"
+      "artist role category"
     ]
   },
   "5) Release_Track": {
@@ -144,7 +134,8 @@
       "TRACK TITLE",
       "TRACK VERSION",
       "ARTIST",
-      "ARTIST ROLE"
+      "ARTIST ROLE",
+      "ARTIST ROLE\nCATEGORY"
     ],
     "norm": [
       "isrc/visrc",
@@ -152,7 +143,8 @@
       "track title",
       "track version",
       "artist",
-      "artist role"
+      "artist role",
+      "artist role category"
     ]
   },
   "7) Comp ContributorPublisher li": {
@@ -160,12 +152,26 @@
       "Composition Contributor",
       "ISNI",
       "Contributor Country",
+      "IPI/CAE",
+      "IPI/CAE",
+      "0",
+      "Column_6",
+      "Publisher Name",
+      "Publisher Country",
+      "IPI/CAE",
       "IPI/CAE"
     ],
     "norm": [
       "composition contributor",
       "isni",
       "contributor country",
+      "ipi/cae",
+      "ipi/cae",
+      "0",
+      "column 6",
+      "publisher name",
+      "publisher country",
+      "ipi/cae",
       "ipi/cae"
     ]
   },
@@ -180,7 +186,8 @@
       "ROLE",
       "SHARE%",
       "TOTAL%",
-      "PUBLISHING"
+      "PUBLISHING",
+      "PUBLISHER"
     ],
     "norm": [
       "isrc/visrc",
@@ -192,7 +199,8 @@
       "role",
       "share%",
       "total%",
-      "publishing"
+      "publishing",
+      "publisher"
     ]
   },
   "9) Audio_Properties": {

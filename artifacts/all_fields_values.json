@@ -106,28 +106,6 @@
       "unique_values_sample": [
         "0000000121032683"
       ]
-    },
-    "2": {
-      "values_sample": [],
-      "values_sample_capped": false,
-      "unique_values_sample": []
-    },
-    "Duplicate Names": {
-      "values_sample": [
-        {
-          "row": 5,
-          "value": "insert into Images VALUES (NEWID(),'JKZTest2', '', getdate(), 0, null, 'https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1', 0, getdate(), null, null)"
-        }
-      ],
-      "values_sample_capped": false,
-      "unique_values_sample": [
-        "insert into Images VALUES (NEWID(),'JKZTest2', '', getdate(), 0, null, 'https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1', 0, getdate(), null, null)"
-      ]
-    },
-    "332920.0": {
-      "values_sample": [],
-      "values_sample_capped": false,
-      "unique_values_sample": []
     }
   },
   "2) Labels list": {
@@ -147,11 +125,6 @@
         "TokyoRecordsFULLTEST",
         "PEJOTA10*FULLTEST"
       ]
-    },
-    "0": {
-      "values_sample": [],
-      "values_sample_capped": false,
-      "unique_values_sample": []
     }
   },
   "3) Release_Label": {
@@ -580,33 +553,6 @@
         "Main Primary Artist",
         "Producer & Engineer"
       ]
-    },
-    "0": {
-      "values_sample": [
-        {
-          "row": 11,
-          "value": "sort(if(countif($A$5:$A&$B$5:$B,'3) Release_Label'!$D$5:$D&'3) Release_Label'!$E$5:$E)=0,'3) Release_Label'!$D$5:$D&\" \"&'3) Release_Label'!$E$5:$E,))"
-        },
-        {
-          "row": 12,
-          "value": "sort(if(countif({A5:A,B5:B},{'3) Release_Label'!D5:D,'3) Release_Label'!E5:E})=0,{'3) Release_Label'!D5:D,'3) Release_Label'!E5:E},))"
-        },
-        {
-          "row": 13,
-          "value": "sort(if(countif(filter($A:$B,$F:$F=\"Main Primary Artist\"),'3) Release_Label'!$D$5:$E)=0,'3) Release_Label'!$D$5:$E,))"
-        },
-        {
-          "row": 14,
-          "value": "sort(if(countif(filter($A:$B,$F:$F=\"Main Primary Artist\"),'3) Release_Label'!$D$5:$E)>1,'3) Release_Label'!$D$5:$E,))"
-        }
-      ],
-      "values_sample_capped": false,
-      "unique_values_sample": [
-        "sort(if(countif($A$5:$A&$B$5:$B,'3) Release_Label'!$D$5:$D&'3) Release_Label'!$E$5:$E)=0,'3) Release_Label'!$D$5:$D&\" \"&'3) Release_Label'!$E$5:$E,))",
-        "sort(if(countif({A5:A,B5:B},{'3) Release_Label'!D5:D,'3) Release_Label'!E5:E})=0,{'3) Release_Label'!D5:D,'3) Release_Label'!E5:E},))",
-        "sort(if(countif(filter($A:$B,$F:$F=\"Main Primary Artist\"),'3) Release_Label'!$D$5:$E)=0,'3) Release_Label'!$D$5:$E,))",
-        "sort(if(countif(filter($A:$B,$F:$F=\"Main Primary Artist\"),'3) Release_Label'!$D$5:$E)>1,'3) Release_Label'!$D$5:$E,))"
-      ]
     }
   },
   "5) Release_Track": {
@@ -1001,6 +947,39 @@
         "Producer",
         "Engineer"
       ]
+    },
+    "ARTIST ROLE\nCATEGORY": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Main Primary Artist"
+        },
+        {
+          "row": 6,
+          "value": "Producer & Engineer"
+        },
+        {
+          "row": 7,
+          "value": "Producer & Engineer"
+        },
+        {
+          "row": 8,
+          "value": "Producer & Engineer"
+        },
+        {
+          "row": 9,
+          "value": "Main Primary Artist"
+        },
+        {
+          "row": 10,
+          "value": "Producer & Engineer"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Main Primary Artist",
+        "Producer & Engineer"
+      ]
     }
   },
   "7) Comp ContributorPublisher li": {
@@ -1049,12 +1028,52 @@
       "values_sample": [
         {
           "row": 5,
-          "value": "00006718449"
+          "value": "00006718449",
+          "source_duplicate_index": 0
         }
       ],
       "values_sample_capped": false,
       "unique_values_sample": [
         "00006718449"
+      ]
+    },
+    "0": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "Column_6": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "Publisher Name": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "SONY ATV"
+        },
+        {
+          "row": 6,
+          "value": "WARNER CHAPPEL"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "SONY ATV",
+        "WARNER CHAPPEL"
+      ]
+    },
+    "Publisher Country": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "Brazil"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "Brazil"
       ]
     }
   },
@@ -1278,6 +1297,23 @@
       "unique_values_sample": [
         "Copyright control (self-published)",
         "Published (managed by a publisher)"
+      ]
+    },
+    "PUBLISHER": {
+      "values_sample": [
+        {
+          "row": 7,
+          "value": "SONY ATV"
+        },
+        {
+          "row": 8,
+          "value": "WARNER CHAPPEL"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "SONY ATV",
+        "WARNER CHAPPEL"
       ]
     }
   },

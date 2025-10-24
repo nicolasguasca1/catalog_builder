@@ -1,6 +1,6 @@
 [
   {
-    "name": "JKZ",
+    "name": "JKZTest",
     "artistExternalIds": [
       {
         "distributorStoreId": 1,
@@ -21,7 +21,7 @@
     }
   },
   {
-    "name": "Flash Beats Manow",
+    "name": "Flash Beats ManowTest",
     "artistExternalIds": [
       {
         "distributorStoreId": 1,

@@ -1,7 +1,7 @@
 {
   "artists_raw": [
     {
-      "name": "JKZ",
+      "name": "JKZTest",
       "apple": "1532352644",
       "spotify_raw": "spotify:artist:1Gn8eEXtOWHA7XU8wEWXOb",
       "spotify_id": "1Gn8eEXtOWHA7XU8wEWXOb",
@@ -23,7 +23,7 @@
       ]
     },
     {
-      "name": "Flash Beats Manow",
+      "name": "Flash Beats ManowTest",
       "apple": "1601139620",
       "spotify_raw": "spotify:artist:0ZIlwtVZkqtMZUpbHrz8TL",
       "spotify_id": "0ZIlwtVZkqtMZUpbHrz8TL",
@@ -70,7 +70,7 @@
       "copyrightP": "2022 TokyoP",
       "copyrightC": "2022 TokyoC",
       "languageId": 31,
-      "labelName": "TokyoRecords"
+      "labelName": "TokyoRecordsFULLTEST"
     },
     {
       "upc": "789294962088",
@@ -79,7 +79,7 @@
       "copyrightP": "2022 PEJOTAP",
       "copyrightC": "2022 PEJOTAC",
       "languageId": 31,
-      "labelName": "PEJOTA10*"
+      "labelName": "PEJOTA10*FULLTEST"
     }
   ],
   "tracks_raw": [
@@ -216,7 +216,7 @@
           "recordingVersionType": 1,
           "audioFiles": [
             {
-              "audioId": "34ad0a23-2e20-4019-b04a-081639d93060",
+              "audioId": "cebbf1a4-4dca-43bb-8bcf-0189ee561e6b",
               "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
               "fileFormat": 2
             }
@@ -254,7 +254,7 @@
           "recordingVersionType": 1,
           "audioFiles": [
             {
-              "audioId": "ebc87ff2-3362-4756-b19b-9fa0832dddf1",
+              "audioId": "9cb4fd8b-9d32-4bd2-a46c-86f11454bb3d",
               "audioFilename": "Joy-Mejia-Te-Fall.wav",
               "fileFormat": 2
             }
@@ -270,8 +270,8 @@
       "version": "Extended",
       "copyrightP": "2022 TokyoP",
       "copyrightC": "2022 TokyoC",
-      "artistName": "JKZ",
-      "labelName": "TokyoRecords",
+      "artistName": "JKZTest",
+      "labelName": "TokyoRecordsFULLTEST",
       "contributorsCount": 2,
       "hasReleaseLocals": true
     },
@@ -281,8 +281,8 @@
       "version": null,
       "copyrightP": "2022 PEJOTAP",
       "copyrightC": "2022 PEJOTAC",
-      "artistName": "Flash Beats Manow",
-      "labelName": "PEJOTA10*",
+      "artistName": "Flash Beats ManowTest",
+      "labelName": "PEJOTA10*FULLTEST",
       "contributorsCount": 2,
       "hasReleaseLocals": true
     }
@@ -935,6 +935,20 @@
         "p_line": "2022 PEJOTAP",
         "c_line": "2022 PEJOTAC"
       }
+    }
+  ],
+  "sheet_account_metadata": [
+    {
+      "enterpriseId": null,
+      "tenantId": null,
+      "column_key": null,
+      "column_name": null,
+      "rows": {},
+      "column_index_one_based": 10,
+      "input_enterpriseId": 691097,
+      "input_tenantId": 332920,
+      "sheet": "1) Artists list",
+      "status": "missing"
     }
   ]
 }

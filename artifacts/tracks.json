@@ -14,7 +14,7 @@
         "recordingVersionType": 1,
         "audioFiles": [
           {
-            "audioId": "34ad0a23-2e20-4019-b04a-081639d93060",
+            "audioId": "cebbf1a4-4dca-43bb-8bcf-0189ee561e6b",
             "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
             "fileFormat": 2
           }
@@ -25,17 +25,17 @@
       {
         "roleId": 34,
         "artist": {
-          "name": "JKZ"
+          "name": "JKZTest"
         }
       },
       {
         "roleId": 19,
         "artist": {
-          "name": "JKZ"
+          "name": "JKZTest"
         }
       }
     ],
-    "artistName": "JKZ",
+    "artistName": "JKZTest",
     "artistExternalIds": [
       {
         "distributorStoreId": 1,
@@ -104,7 +104,7 @@
         "recordingVersionType": 1,
         "audioFiles": [
           {
-            "audioId": "ebc87ff2-3362-4756-b19b-9fa0832dddf1",
+            "audioId": "9cb4fd8b-9d32-4bd2-a46c-86f11454bb3d",
             "audioFilename": "Joy-Mejia-Te-Fall.wav",
             "fileFormat": 2
           }
@@ -115,17 +115,17 @@
       {
         "roleId": 34,
         "artist": {
-          "name": "Flash Beats Manow"
+          "name": "Flash Beats ManowTest"
         }
       },
       {
         "roleId": 19,
         "artist": {
-          "name": "Flash Beats Manow"
+          "name": "Flash Beats ManowTest"
         }
       }
     ],
-    "artistName": "Flash Beats Manow",
+    "artistName": "Flash Beats ManowTest",
     "artistExternalIds": [
       {
         "distributorStoreId": 1,
@@ -147,7 +147,7 @@
         "roleId": 39,
         "rightsId": 2,
         "publisherName": "SONY ATV",
-        "publisherId": 89909,
+        "publisherId": 0,
         "composersLocals": [
           {
             "languageId": 31,
@@ -161,7 +161,7 @@
         "roleId": 39,
         "rightsId": 2,
         "publisherName": "WARNER CHAPPEL",
-        "publisherId": 89910,
+        "publisherId": 0,
         "composersLocals": [
           {
             "languageId": 31,

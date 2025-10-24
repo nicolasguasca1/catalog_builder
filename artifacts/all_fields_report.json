@@ -60,18 +60,6 @@
         "fill_rate": 0.6667
       },
       {
-        "column": "Duplicate Names",
-        "notes": {
-          "row1": "EnterpriseId=",
-          "row2": "TenantId=",
-          "row3": "Duplicate Names",
-          "row4": "0"
-        },
-        "rows_with_values": 1,
-        "rows_total": 3,
-        "fill_rate": 0.3333
-      },
-      {
         "column": "ISNI",
         "notes": {
           "row1": "1",
@@ -80,26 +68,6 @@
         "rows_with_values": 1,
         "rows_total": 3,
         "fill_rate": 0.3333
-      },
-      {
-        "column": "2",
-        "notes": {
-          "row1": "2",
-          "row2": "2"
-        },
-        "rows_with_values": 0,
-        "rows_total": 3,
-        "fill_rate": 0.0
-      },
-      {
-        "column": "332920.0",
-        "notes": {
-          "row1": "691097.0",
-          "row2": "332920.0"
-        },
-        "rows_with_values": 0,
-        "rows_total": 3,
-        "fill_rate": 0.0
       },
       {
         "column": "SoundCloud ProfileId",
@@ -128,17 +96,6 @@
         "rows_with_values": 2,
         "rows_total": 2,
         "fill_rate": 1.0
-      },
-      {
-        "column": "0",
-        "notes": {
-          "row1": "2",
-          "row2": "Duplicate Names",
-          "row3": "0"
-        },
-        "rows_with_values": 0,
-        "rows_total": 2,
-        "fill_rate": 0.0
       }
     ]
   },
@@ -343,8 +300,8 @@
           "row4": "ONE ARTIST PER ROW\nselect from Artists list, start typing or drag\nIf compilation: Various Artists"
         },
         "rows_with_values": 6,
-        "rows_total": 10,
-        "fill_rate": 0.6
+        "rows_total": 6,
+        "fill_rate": 1.0
       },
       {
         "column": "ARTIST ROLE",
@@ -354,8 +311,8 @@
           "row4": "(select from list, start typing or drag)"
         },
         "rows_with_values": 6,
-        "rows_total": 10,
-        "fill_rate": 0.6
+        "rows_total": 6,
+        "fill_rate": 1.0
       },
       {
         "column": "ARTIST ROLE\nCATEGORY",
@@ -365,8 +322,8 @@
           "row4": "artist category auto-fills based on artist role"
         },
         "rows_with_values": 6,
-        "rows_total": 10,
-        "fill_rate": 0.6
+        "rows_total": 6,
+        "fill_rate": 1.0
       },
       {
         "column": "RELEASE TITLE",
@@ -376,8 +333,8 @@
           "row4": "auto-fills if Release Code/Id matches \nCode/Id in Release_Label tab"
         },
         "rows_with_values": 6,
-        "rows_total": 10,
-        "fill_rate": 0.6
+        "rows_total": 6,
+        "fill_rate": 1.0
       },
       {
         "column": "UPC / EAN / JAN",
@@ -388,19 +345,8 @@
           "row4": "from Release_Label tab"
         },
         "rows_with_values": 6,
-        "rows_total": 10,
-        "fill_rate": 0.6
-      },
-      {
-        "column": "0",
-        "notes": {
-          "row1": "= READ NOTES / INSTRUCTIONS",
-          "row3": "0",
-          "row4": "-2"
-        },
-        "rows_with_values": 4,
-        "rows_total": 10,
-        "fill_rate": 0.4
+        "rows_total": 6,
+        "fill_rate": 1.0
       },
       {
         "column": "RELEASE VERSION",
@@ -408,8 +354,8 @@
           "row3": "RELEASE VERSION"
         },
         "rows_with_values": 3,
-        "rows_total": 10,
-        "fill_rate": 0.3
+        "rows_total": 6,
+        "fill_rate": 0.5
       },
       {
         "column": "CATALOG RELEASE ID",
@@ -419,7 +365,7 @@
           "row4": "from Release_Label tab"
         },
         "rows_with_values": 0,
-        "rows_total": 10,
+        "rows_total": 6,
         "fill_rate": 0.0
       }
     ]
@@ -623,6 +569,17 @@
         "fill_rate": 1.0
       },
       {
+        "column": "ARTIST ROLE\nCATEGORY",
+        "notes": {
+          "row1": "0",
+          "row3": "ARTIST ROLE\nCATEGORY",
+          "row4": "artist category auto-fills based on artist role"
+        },
+        "rows_with_values": 6,
+        "rows_total": 6,
+        "fill_rate": 1.0
+      },
+      {
         "column": "ISRC/vISRC",
         "notes": {
           "row1": "0",
@@ -682,11 +639,53 @@
         "fill_rate": 1.0
       },
       {
+        "column": "Publisher Name",
+        "notes": {
+          "row1": "List all Compostion Publishers to Import",
+          "row2": "= READ NOTES / INSTRUCTIONS",
+          "row3": "Publisher Name",
+          "row4": "Only publishers that manage compositions.\nDo not include publishers that are self-publishing."
+        },
+        "rows_with_values": 2,
+        "rows_total": 2,
+        "fill_rate": 1.0
+      },
+      {
         "column": "Contributor Country",
         "notes": {
           "row2": "= OPTIONAL",
           "row3": "Contributor Country",
           "row4": "(select from list, start typing or drag)"
+        },
+        "rows_with_values": 1,
+        "rows_total": 2,
+        "fill_rate": 0.5
+      },
+      {
+        "column": "IPI/CAE",
+        "notes": {
+          "row1": "1",
+          "row3": "IPI/CAE"
+        },
+        "rows_with_values": 1,
+        "rows_total": 2,
+        "fill_rate": 0.5
+      },
+      {
+        "column": "IPI/CAE",
+        "notes": {
+          "row1": "1",
+          "row3": "IPI/CAE"
+        },
+        "rows_with_values": 1,
+        "rows_total": 2,
+        "fill_rate": 0.5
+      },
+      {
+        "column": "IPI/CAE",
+        "notes": {
+          "row1": "1",
+          "row3": "IPI/CAE"
         },
         "rows_with_values": 1,
         "rows_total": 2,
@@ -711,6 +710,34 @@
         "rows_with_values": 1,
         "rows_total": 2,
         "fill_rate": 0.5
+      },
+      {
+        "column": "Publisher Country",
+        "notes": {
+          "row3": "Publisher Country",
+          "row4": "(select from list, start typing or drag)"
+        },
+        "rows_with_values": 1,
+        "rows_total": 2,
+        "fill_rate": 0.5
+      },
+      {
+        "column": "0",
+        "notes": {
+          "row1": "2",
+          "row2": "Duplicate Names",
+          "row3": "0"
+        },
+        "rows_with_values": 0,
+        "rows_total": 2,
+        "fill_rate": 0.0
+      },
+      {
+        "column": "Column_6",
+        "notes": {},
+        "rows_with_values": 0,
+        "rows_total": 2,
+        "fill_rate": 0.0
       }
     ]
   },
@@ -801,6 +828,17 @@
         "rows_with_values": 4,
         "rows_total": 4,
         "fill_rate": 1.0
+      },
+      {
+        "column": "PUBLISHER",
+        "notes": {
+          "row1": "2",
+          "row3": "PUBLISHER",
+          "row4": "fill out ONLY when 'Published' selected"
+        },
+        "rows_with_values": 2,
+        "rows_total": 4,
+        "fill_rate": 0.5
       },
       {
         "column": "TRACK VERSION",
