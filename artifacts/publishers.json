@@ -1,6 +1,9 @@
 [
   {
-    "name": "SONY ATV"
+    "name": "SONY ATV",
+    "ipiCae": "00006718450",
+    "_ipi_source_col": null,
+    "countryId": 900
   },
   {
     "name": "WARNER CHAPPEL"

@@ -671,6 +671,16 @@
         "fill_rate": 1.0
       },
       {
+        "column": "ISNI",
+        "notes": {
+          "row1": "2",
+          "row3": "ISNI"
+        },
+        "rows_with_values": 2,
+        "rows_total": 2,
+        "fill_rate": 1.0
+      },
+      {
         "column": "Publisher Name",
         "notes": {
           "row1": "List all Compostion Publishers to Import",
@@ -734,16 +744,6 @@
         "fill_rate": 0.5
       },
       {
-        "column": "ISNI",
-        "notes": {
-          "row1": "1",
-          "row3": "ISNI"
-        },
-        "rows_with_values": 1,
-        "rows_total": 2,
-        "fill_rate": 0.5
-      },
-      {
         "column": "Publisher Country",
         "notes": {
           "row3": "Publisher Country",
@@ -752,6 +752,39 @@
         "rows_with_values": 1,
         "rows_total": 2,
         "fill_rate": 0.5
+      },
+      {
+        "column": "0",
+        "notes": {
+          "row1": "2",
+          "row2": "Duplicate Names",
+          "row3": "0"
+        },
+        "rows_with_values": 0,
+        "rows_total": 2,
+        "fill_rate": 0.0
+      },
+      {
+        "column": "0",
+        "notes": {
+          "row1": "2",
+          "row2": "Duplicate Names",
+          "row3": "0"
+        },
+        "rows_with_values": 0,
+        "rows_total": 2,
+        "fill_rate": 0.0
+      },
+      {
+        "column": "0",
+        "notes": {
+          "row1": "2",
+          "row2": "Duplicate Names",
+          "row3": "0"
+        },
+        "rows_with_values": 0,
+        "rows_total": 2,
+        "fill_rate": 0.0
       },
       {
         "column": "0",

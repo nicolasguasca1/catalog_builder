@@ -122,7 +122,9 @@
       "roleId": 39,
       "share": "0.6",
       "rightsId": 1,
-      "publisherName": null
+      "publisherName": null,
+      "isni": "0000000121032684",
+      "ipiCae": "00006718449"
     },
     {
       "isrc": "QZW9M2221000",
@@ -131,7 +133,8 @@
       "roleId": 39,
       "share": "0.4",
       "rightsId": 1,
-      "publisherName": null
+      "publisherName": null,
+      "isni": "0000000121032685"
     },
     {
       "isrc": "QZW9M2236571",
@@ -140,7 +143,8 @@
       "roleId": 39,
       "share": "0.5",
       "rightsId": 2,
-      "publisherName": "SONY ATV"
+      "publisherName": "SONY ATV",
+      "isni": "0000000121032685"
     },
     {
       "isrc": "QZW9M2236571",
@@ -149,45 +153,61 @@
       "roleId": 39,
       "share": "0.5",
       "rightsId": 2,
-      "publisherName": "WARNER CHAPPEL"
+      "publisherName": "WARNER CHAPPEL",
+      "isni": "0000000121032684",
+      "ipiCae": "00006718449"
     }
   ],
   "composer_entries": [
     {
       "composerName": "Agnaldo Paulino de Jesus Júnior",
-      "source": "masters"
+      "source": "masters",
+      "isni": "0000000121032684",
+      "ipiCae": "00006718449",
+      "contributor_ipi_source_col_one_based": 4
     },
     {
       "composerName": "Jackson Bertholdo Dos Santos",
-      "source": "masters"
+      "source": "masters",
+      "isni": "0000000121032685",
+      "ipiCae": null,
+      "contributor_ipi_source_col_one_based": 4
     },
     {
       "isrc": "QZW9M2221000",
       "composerName": "Agnaldo Paulino de Jesus Júnior",
       "roleId": 39,
       "rightsId": 1,
-      "publisherName": null
+      "publisherName": null,
+      "isni": "0000000121032684",
+      "ipiCae": "00006718449"
     },
     {
       "isrc": "QZW9M2221000",
       "composerName": "Jackson Bertholdo Dos Santos",
       "roleId": 39,
       "rightsId": 1,
-      "publisherName": null
+      "publisherName": null,
+      "isni": "0000000121032685",
+      "ipiCae": null
     },
     {
       "isrc": "QZW9M2236571",
       "composerName": "Jackson Bertholdo Dos Santos",
       "roleId": 39,
       "rightsId": 2,
-      "publisherName": "SONY ATV"
+      "publisherName": "SONY ATV",
+      "isni": "0000000121032685",
+      "ipiCae": null
     },
     {
       "isrc": "QZW9M2236571",
       "composerName": "Agnaldo Paulino de Jesus Júnior",
       "roleId": 39,
       "rightsId": 2,
-      "publisherName": "WARNER CHAPPEL"
+      "publisherName": "WARNER CHAPPEL",
+      "isni": "0000000121032684",
+      "ipiCae": "00006718449"
     }
   ],
   "composer_warnings": [],
@@ -198,6 +218,7 @@
       "previewStartSeconds": 140,
       "version": "Extended",
       "composerCount": 2,
+      "compositionsCount": 1,
       "contributorsCount": 2,
       "trackProperties": [
         1
@@ -230,6 +251,7 @@
       "previewStartSeconds": 200,
       "version": null,
       "composerCount": 2,
+      "compositionsCount": 1,
       "contributorsCount": 2,
       "trackProperties": [
         1
@@ -959,5 +981,129 @@
       "status": "matched"
     }
   ],
-  "identifier_warnings": []
+  "identifier_warnings": [
+    {
+      "entity": "publisher",
+      "name": "WARNER CHAPPEL",
+      "field": "ipi_cae",
+      "value": null,
+      "issue": "publisher_ipi_not_found"
+    }
+  ],
+  "ipi_column_detection": {
+    "mode": "hard-coded",
+    "contributor_ipi_col_index_one_based": 4,
+    "publisher_ipi_col_index_one_based": 11,
+    "publisher_ipi_header": "IPI/CAE",
+    "publisher_ipi_candidate_indices_one_based": [
+      11,
+      12
+    ],
+    "raw_headers_sample": [
+      "Composition Contributor",
+      "ISNI",
+      "Contributor Country",
+      "IPI/CAE",
+      "IPI/CAE",
+      "0",
+      "0",
+      "Column_6",
+      "Publisher Name",
+      "Publisher Country",
+      "IPI/CAE",
+      "IPI/CAE",
+      "0",
+      "0"
+    ]
+  },
+  "publisher_ipi_candidate_values": [
+    {
+      "row": 1,
+      "publisher": "SONY ATV",
+      "contributor_ipi": "00006718449",
+      "candidates": [
+        {
+          "source": "header[0]",
+          "index_zero_based": null,
+          "raw": "00006718449",
+          "normalized": "00006718449",
+          "issue": null
+        },
+        {
+          "source": "header[1]",
+          "index_zero_based": null,
+          "raw": "00006718450",
+          "normalized": "00006718450",
+          "issue": null
+        }
+      ],
+      "chosen_source": "header[1]"
+    },
+    {
+      "row": 2,
+      "publisher": "WARNER CHAPPEL",
+      "contributor_ipi": null,
+      "candidates": [
+        {
+          "source": "header[0]",
+          "index_zero_based": null,
+          "raw": null,
+          "normalized": null,
+          "issue": null
+        },
+        {
+          "source": "header[1]",
+          "index_zero_based": null,
+          "raw": null,
+          "normalized": null,
+          "issue": null
+        },
+        {
+          "source": "header[2]",
+          "index_zero_based": null,
+          "raw": null,
+          "normalized": null,
+          "issue": null
+        },
+        {
+          "source": "header[3]",
+          "index_zero_based": null,
+          "raw": null,
+          "normalized": null,
+          "issue": null
+        },
+        {
+          "source": "index[10]",
+          "index_zero_based": 10,
+          "raw": null,
+          "normalized": null,
+          "issue": null
+        },
+        {
+          "source": "index[11]",
+          "index_zero_based": 11,
+          "raw": null,
+          "normalized": null,
+          "issue": null
+        },
+        {
+          "source": "fallback_index8",
+          "index_zero_based": 8,
+          "raw": "WARNER CHAPPEL",
+          "normalized": null,
+          "issue": "invalid_length"
+        }
+      ],
+      "chosen_source": null
+    }
+  ],
+  "publisher_ipi_assignments": [
+    {
+      "name": "SONY ATV",
+      "action": "assign",
+      "val": "00006718450",
+      "src_zero_based": null,
+      "source": "header[1]"
+    }
+  ]
 }

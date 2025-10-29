@@ -310,12 +310,161 @@
           "row": 6,
           "value": "PEJOTAP",
           "source_duplicate_index": 0
+        },
+        {
+          "row": 5,
+          "value": "TokyoC",
+          "source_duplicate_index": 1
+        },
+        {
+          "row": 6,
+          "value": "PEJOTAC",
+          "source_duplicate_index": 1
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "TokyoP",
+        "PEJOTAP",
+        "TokyoC",
+        "PEJOTAC"
+      ],
+      "duplicates": 4
+    },
+    "Holder#1": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "TokyoP"
+        },
+        {
+          "row": 6,
+          "value": "PEJOTAP"
         }
       ],
       "values_sample_capped": false,
       "unique_values_sample": [
         "TokyoP",
         "PEJOTAP"
+      ]
+    },
+    "Holder#2": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "TokyoC"
+        },
+        {
+          "row": 6,
+          "value": "PEJOTAC"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "TokyoC",
+        "PEJOTAC"
+      ]
+    },
+    "Holder#3": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "TokyoP"
+        },
+        {
+          "row": 6,
+          "value": "PEJOTAP"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "TokyoP",
+        "PEJOTAP"
+      ]
+    },
+    "Holder#4": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "TokyoC"
+        },
+        {
+          "row": 6,
+          "value": "PEJOTAC"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "TokyoC",
+        "PEJOTAC"
+      ]
+    },
+    "Holder#1_1": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "TokyoP"
+        },
+        {
+          "row": 6,
+          "value": "PEJOTAP"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "TokyoP",
+        "PEJOTAP"
+      ]
+    },
+    "Holder#2_2": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "TokyoC"
+        },
+        {
+          "row": 6,
+          "value": "PEJOTAC"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "TokyoC",
+        "PEJOTAC"
+      ]
+    },
+    "Holder#3_3": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "TokyoP"
+        },
+        {
+          "row": 6,
+          "value": "PEJOTAP"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "TokyoP",
+        "PEJOTAP"
+      ]
+    },
+    "Holder#4_4": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "TokyoC"
+        },
+        {
+          "row": 6,
+          "value": "PEJOTAC"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "TokyoC",
+        "PEJOTAC"
       ]
     },
     "(C) Copyright": {
@@ -1026,12 +1175,17 @@
       "values_sample": [
         {
           "row": 5,
-          "value": "0000000121032683"
+          "value": "0000000121032684"
+        },
+        {
+          "row": 6,
+          "value": "0000000121032685"
         }
       ],
       "values_sample_capped": false,
       "unique_values_sample": [
-        "0000000121032683"
+        "0000000121032684",
+        "0000000121032685"
       ]
     },
     "Contributor Country": {
@@ -1052,6 +1206,25 @@
           "row": 5,
           "value": "00006718449",
           "source_duplicate_index": 0
+        },
+        {
+          "row": 5,
+          "value": "00006718450",
+          "source_duplicate_index": 1
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "00006718449",
+        "00006718450"
+      ],
+      "duplicates": 2
+    },
+    "IPI/CAE (Contributor)": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "00006718449"
         }
       ],
       "values_sample_capped": false,
@@ -1059,7 +1232,60 @@
         "00006718449"
       ]
     },
+    "IPI/CAE (Publisher)": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "00006718450"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "00006718450"
+      ]
+    },
     "0": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": [],
+      "duplicates": 4
+    },
+    "0#1": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "0#2": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "0#3": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "0#4": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "0#1_1": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "0#2_2": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "0#3_3": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "0#4_4": {
       "values_sample": [],
       "values_sample_capped": false,
       "unique_values_sample": []

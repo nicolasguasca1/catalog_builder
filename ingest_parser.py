@@ -5,7 +5,7 @@ from urllib.parse import urlparse, parse_qsl, urlunparse, urlencode
 from urllib.parse import urlparse
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 from pathlib import Path
 
 import pandas as pd
@@ -42,7 +42,8 @@ SHEET_COLUMN_LIMITS: Dict[str, int] = {
     "4) Release_Artist(s)": 7,
     "5) Release_Track": 16,
     "6) Track_Artist(s)": 7,
-    "7) Comp ContributorPublisher li": 9,
+    # Increase to 11 to read both contributor IPI (col 4) and publisher IPI (now col 10) when template provides extra spacer columns.
+    "7) Comp ContributorPublisher li": 11,
     "8) Track_Composition(s)": 11,
     "9) Audio_Properties": 12,
 }
@@ -51,6 +52,92 @@ SHEET_COLUMN_LIMITS: Dict[str, int] = {
 ROLE_FALLBACK = { (str(v).strip().lower()): k for k, v in roles_dict.items() }
 
 # Fallback language & genre maps (used if API lookup fails)
+def all_fields_values(df: 'pd.DataFrame', req_map: Dict[str, bool], cap_per_column: int = 50, sheet_name: Optional[str] = None) -> Dict[str, Any]:
+    """Enumerate sample values per column with duplicate header handling.
+    Special handling: if sheet_name matches the contributors/publishers sheet ("7) Comp ContributorPublisher li"),
+    collapse duplicate IPI headers to at most two logical columns (Contributor, Publisher) and provide deterministic naming.
+    """
+    try:
+        import pandas as pd  # type: ignore
+    except Exception:
+        pass
+    start_row = int((req_map or {}).get('_effective_data_start') or 5)
+    out: Dict[str, Any] = {}
+    for col in [c for c in df.columns if isinstance(c, str)]:
+        obj = df[col]
+        # Simple column
+        if hasattr(obj, 'items') and not isinstance(obj, type(df)):  # Series
+            vals = []; uniques = []; seen = set(); taken = 0
+            for idx, v in obj.items():
+                if is_nan(v):
+                    continue
+                excel_row = start_row + int(idx)
+                sval = str(v)
+                if taken < cap_per_column:
+                    vals.append({'row': excel_row, 'value': sval}); taken += 1
+                if sval not in seen:
+                    seen.add(sval)
+                    if len(uniques) < 10:
+                        uniques.append(sval)
+            out[col] = {
+                'values_sample': vals,
+                'values_sample_capped': len(vals) >= cap_per_column,
+                'unique_values_sample': uniques
+            }
+            continue
+        # Duplicate header region (DataFrame of same-named columns)
+        sub = obj if not hasattr(obj, 'items') else df[[col]]
+        subcols = list(sub.columns)
+        special_ipi_mode = sheet_name == "7) Comp ContributorPublisher li" and col.strip().lower() in ("ipi/cae","ipi cae","ipi")
+        if special_ipi_mode and len(subcols) > 2:
+            sub = sub.iloc[:, :2]; subcols = list(sub.columns)
+        composite_vals = []; composite_uniques = []; composite_seen = set(); composite_taken = 0
+        per_dup_col_samples: List[Dict[str, Any]] = []
+        for dup_idx in range(len(subcols)):
+            dup_vals = []; dup_uniques = []; dup_seen = set(); dup_taken = 0
+            for ridx, row in sub.iterrows():
+                try:
+                    v = row.iloc[dup_idx]
+                except Exception:
+                    v = None
+                if is_nan(v):
+                    continue
+                excel_row = start_row + int(ridx)
+                sval = str(v)
+                if dup_taken < cap_per_column:
+                    dup_vals.append({'row': excel_row, 'value': sval}); dup_taken += 1
+                if sval not in dup_seen:
+                    dup_seen.add(sval)
+                    if len(dup_uniques) < 10:
+                        dup_uniques.append(sval)
+                if composite_taken < cap_per_column and sval not in composite_seen:
+                    composite_vals.append({'row': excel_row, 'value': sval, 'source_duplicate_index': dup_idx}); composite_taken += 1
+                if sval not in composite_seen:
+                    composite_seen.add(sval)
+                    if len(composite_uniques) < 10:
+                        composite_uniques.append(sval)
+            per_dup_col_samples.append({
+                'values_sample': dup_vals,
+                'values_sample_capped': len(dup_vals) >= cap_per_column,
+                'unique_values_sample': dup_uniques
+            })
+        out[col] = {
+            'values_sample': composite_vals,
+            'values_sample_capped': len(composite_vals) >= cap_per_column,
+            'unique_values_sample': composite_uniques,
+            'duplicates': len(subcols)
+        }
+        if not special_ipi_mode:
+            for dup_idx in range(len(subcols)):
+                suffix_name = f"{col}#{dup_idx+1}"
+                if suffix_name in out:
+                    suffix_name = f"{suffix_name}_{dup_idx+1}"
+                out[suffix_name] = per_dup_col_samples[dup_idx]
+        else:
+            role_names = ["IPI/CAE (Contributor)", "IPI/CAE (Publisher)"]
+            for dup_idx in range(len(subcols)):
+                out[role_names[dup_idx]] = per_dup_col_samples[dup_idx]
+    return out
 LANGUAGE_FALLBACK = {
     1:"English",2:"Hebrew",3:"French",4:"Afrikaans",5:"Arabic",6:"Bulgarian",8:"Catalan",9:"Croatian",
     10:"Czech",11:"Danish",12:"Dutch",13:"Estonian",14:"Finnish",15:"German",16:"Greek",17:"Hindi",
@@ -1338,6 +1425,7 @@ def build_dry_run_payload_doc(
     lines.append(f"- `{base_url}/common/lookup/contributorRoles`")
     lines.append(f"- `{base_url}/common/lookup/languages` (on demand)")
     lines.append(f"- `{base_url}/common/lookup/musicstyles` (on demand)")
+    lines.append(f"- `{base_url}/common/lookup/countries` (on demand)")
     lines.append("")
 
     _add_section(
@@ -1516,6 +1604,17 @@ def main():
             except Exception as exc:
                 print(f"[WARN] Could not fetch publishers: {exc}")
                 publisher_lookup = {}
+            # Countries lookup (single call) to support countryId and countryOfResidenceId mapping
+            countries_lookup: Dict[str, Dict[str, Any]] = {}
+            try:
+                resp = http(session, "GET", f"{base_url}/common/lookup/countries", token, headers=lookup_headers)
+                if resp.ok:
+                    for it in resp.json() or []:
+                        nm = str(it.get("name") or "").strip().lower()
+                        if nm:
+                            countries_lookup[nm] = it
+            except Exception as exc:
+                print(f"[WARN] Could not fetch countries lookup: {exc}")
             s.info(contributor_roles=len(composer_role_map), publishers=len(publisher_lookup))
 
         # ===== Read sheets
@@ -1808,59 +1907,87 @@ def main():
                 cols_sum = sorted(cols_sum, key=lambda e: (-e["rows_with_values"], e["column"]))
                 return {"columns": cols_sum}
 
-            def all_fields_values(df: pd.DataFrame, req_map: Dict[str, bool], cap_per_column: int = 50) -> Dict[str, Any]:
-                start_row = int((req_map or {}).get("_effective_data_start") or 5)
-                out: Dict[str, Any] = {}
-                for col in [c for c in df.columns if isinstance(c, str)]:
-                    vals = []
-                    uniques = []
-                    seen = set()
-                    taken = 0
-                    obj = df[col]
-                    if hasattr(obj, "items") and not isinstance(obj, pd.DataFrame):
-                        iterator = obj.items()
-                        for idx, v in iterator:
-                            if is_nan(v):
-                                continue
-                            excel_row = start_row + int(idx)
-                            sval = str(v)
-                            if taken < cap_per_column:
-                                vals.append({"row": excel_row, "value": sval})
-                                taken += 1
-                            if sval not in seen:
-                                seen.add(sval)
-                                if len(uniques) < 10:
-                                    uniques.append(sval)
-                    else:
-                        # Duplicate header case
+                def all_fields_values(df: pd.DataFrame, req_map: Dict[str, bool], cap_per_column: int = 50, sheet_name: Optional[str] = None) -> Dict[str, Any]:
+                    start_row = int((req_map or {}).get("_effective_data_start") or 5)
+                    out: Dict[str, Any] = {}
+                    for col in [c for c in df.columns if isinstance(c, str)]:
+                        obj = df[col]
+                        # Simple series case
+                        if hasattr(obj, "items") and not isinstance(obj, pd.DataFrame):
+                            vals = []; uniques = []; seen = set(); taken = 0
+                            for idx, v in obj.items():
+                                if is_nan(v):
+                                    continue
+                                excel_row = start_row + int(idx)
+                                sval = str(v)
+                                if taken < cap_per_column:
+                                    vals.append({"row": excel_row, "value": sval})
+                                    taken += 1
+                                if sval not in seen:
+                                    seen.add(sval)
+                                    if len(uniques) < 10:
+                                        uniques.append(sval)
+                            out[col] = {
+                                "values_sample": vals,
+                                "values_sample_capped": len(vals) >= cap_per_column,
+                                "unique_values_sample": uniques
+                            }
+                            continue
+                        # Duplicate header region
                         sub = obj if isinstance(obj, pd.DataFrame) else df[[col]]
                         subcols = list(sub.columns)
-                        for idx, row in sub.iterrows():
-                            picked = None; src_dup_idx = None
-                            for j in range(len(subcols)):
+                        special_ipi_mode = sheet_name == s7 and col.strip().lower() in ("ipi/cae","ipi cae","ipi")
+                        if special_ipi_mode and len(subcols) > 2:
+                            sub = sub.iloc[:, :2]; subcols = list(sub.columns)
+                        composite_vals = []; composite_uniques = []; composite_seen = set(); composite_taken = 0
+                        per_dup_col_samples: List[Dict[str, Any]] = []
+                        for dup_idx in range(len(subcols)):
+                            dup_vals = []; dup_uniques = []; dup_seen = set(); dup_taken = 0
+                            for ridx, row in sub.iterrows():
                                 try:
-                                    v = row.iloc[j]
+                                    v = row.iloc[dup_idx]
                                 except Exception:
                                     v = None
-                                if not is_nan(v):
-                                    picked = v; src_dup_idx = j; break
-                            if picked is None:
-                                continue
-                            excel_row = start_row + int(idx)
-                            sval = str(picked)
-                            if taken < cap_per_column:
-                                vals.append({"row": excel_row, "value": sval, "source_duplicate_index": src_dup_idx})
-                                taken += 1
-                            if sval not in seen:
-                                seen.add(sval)
-                                if len(uniques) < 10:
-                                    uniques.append(sval)
-                    out[col] = {
-                        "values_sample": vals,
-                        "values_sample_capped": len(vals) >= cap_per_column,
-                        "unique_values_sample": uniques
-                    }
-                return out
+                                if is_nan(v):
+                                    continue
+                                excel_row = start_row + int(ridx)
+                                sval = str(v)
+                                if dup_taken < cap_per_column:
+                                    dup_vals.append({"row": excel_row, "value": sval})
+                                    dup_taken += 1
+                                if sval not in dup_seen:
+                                    dup_seen.add(sval)
+                                    if len(dup_uniques) < 10:
+                                        dup_uniques.append(sval)
+                                if composite_taken < cap_per_column and sval not in composite_seen:
+                                    composite_vals.append({"row": excel_row, "value": sval, "source_duplicate_index": dup_idx})
+                                    composite_taken += 1
+                                if sval not in composite_seen:
+                                    composite_seen.add(sval)
+                                    if len(composite_uniques) < 10:
+                                        composite_uniques.append(sval)
+                            per_dup_col_samples.append({
+                                "values_sample": dup_vals,
+                                "values_sample_capped": len(dup_vals) >= cap_per_column,
+                                "unique_values_sample": dup_uniques
+                            })
+                        out[col] = {
+                            "values_sample": composite_vals,
+                            "values_sample_capped": len(composite_vals) >= cap_per_column,
+                            "unique_values_sample": composite_uniques,
+                            "duplicates": len(subcols)
+                        }
+                        if not special_ipi_mode:
+                            for dup_idx in range(len(subcols)):
+                                suffix_name = f"{col}#{dup_idx+1}"
+                                if suffix_name in out:
+                                    suffix_name = f"{suffix_name}_{dup_idx+1}"
+                                out[suffix_name] = per_dup_col_samples[dup_idx]
+                        else:
+                            role_names = ["IPI/CAE (Contributor)", "IPI/CAE (Publisher)"]
+                            for dup_idx in range(len(subcols)):
+                                out[role_names[dup_idx]] = per_dup_col_samples[dup_idx]
+                    return out
 
             all_report = {
                 s1: all_fields_report(df_art, req_art),
@@ -1876,15 +2003,15 @@ def main():
             (ARTIFACTS/"all_fields_report.json").write_text(json.dumps(all_report, indent=2, ensure_ascii=False))
 
             all_values = {
-                s1: all_fields_values(df_art, req_art),
-                s2: all_fields_values(df_lab, req_lab),
-                s3: all_fields_values(df_rel, req_rel),
-                s4: all_fields_values(df_relart, req_relart),
-                s5: all_fields_values(df_reltrk, req_reltrk),
-                s6: all_fields_values(df_trkart, req_trkart),
-                s7: all_fields_values(df_comp_masters, req_comp_masters),
-                s8: all_fields_values(df_trkcomp, req_trkcomp),
-                s9: all_fields_values(df_props, req_props),
+                s1: all_fields_values(df_art, req_art, sheet_name=s1),
+                s2: all_fields_values(df_lab, req_lab, sheet_name=s2),
+                s3: all_fields_values(df_rel, req_rel, sheet_name=s3),
+                s4: all_fields_values(df_relart, req_relart, sheet_name=s4),
+                s5: all_fields_values(df_reltrk, req_reltrk, sheet_name=s5),
+                s6: all_fields_values(df_trkart, req_trkart, sheet_name=s6),
+                s7: all_fields_values(df_comp_masters, req_comp_masters, sheet_name=s7),
+                s8: all_fields_values(df_trkcomp, req_trkcomp, sheet_name=s8),
+                s9: all_fields_values(df_props, req_props, sheet_name=s9),
             }
             (ARTIFACTS/"all_fields_values.json").write_text(json.dumps(all_values, indent=2, ensure_ascii=False))
             # Log a tiny sample pointing to columns likely to be present (top by fill-rate)
@@ -1980,6 +2107,8 @@ def main():
 
     # ===== Build master maps (Artists, Labels, Composers, Publishers)
     artist_image_tasks: List[Dict[str, Any]] = []
+    composer_master_by_name: Dict[str, Dict[str, Any]] = {}
+    publisher_master_by_name: Dict[str, Dict[str, Any]] = {}
     # Artists
     with progress.step("Build artists & labels & master entities") as s:
         cm_art = make_colmap(df_art)
@@ -2086,21 +2215,334 @@ def main():
         cm_cm = make_colmap(df_comp_masters)
         pub_col = resolve_colkey(df_comp_masters, "Publisher Name", "PUBLISHER NAME", "Publisher")
         comp_col = resolve_colkey(df_comp_masters, "Composition Contributor", "COMPOSITION CONTRIBUTOR", "Contributor")
+        # Robust dual IPI detection with validity-based scoring.
+        # Strategy:
+        # 1. Identify publisher name column position to separate contributor vs publisher regions.
+        # 2. Collect all columns whose header matches an IPI pattern ("IPI/CAE", "IPI CAE", "IPI").
+        # 3. Pre-publisher region: pick earliest valid IPI column as contributor IPI.
+        # 4. Post-publisher region: score candidates by number of rows containing a valid normalized IPI; choose highest.
+        #    If no valid IPIs found post-publisher but at least one header candidate exists, choose the first candidate as a fallback.
+        # 5. Provide rich debug stats (raw headers sample, candidate lists, counts, chosen one-based indices).
+        contributor_ipi_col_index: Optional[int] = None
+        publisher_ipi_col_index: Optional[int] = None
+        publisher_ipi_candidate_indices: List[int] = []
+        publisher_ipi_header: Optional[str] = None  # Prefer explicit publisher IPI header if present
+        ipi_detection_debug: Dict[str, Any] = {}
+        try:
+            raw_headers = list(df_comp_masters.columns)
+            pub_positions = [i for i, h in enumerate(raw_headers) if isinstance(h, str) and h.strip().lower() in ("publisher name", "publisher", "publisher name ")]
+            first_pub_pos = min(pub_positions) if pub_positions else None
+            ipi_positions = [i for i, h in enumerate(raw_headers) if isinstance(h, str) and h.strip().lower() in ("ipi/cae", "ipi cae", "ipi")]
+            pre_pub_candidates = [i for i in ipi_positions if first_pub_pos is not None and i < first_pub_pos]
+            post_pub_candidates = [i for i in ipi_positions if first_pub_pos is None or i >= first_pub_pos]
+
+            def count_valid_ipis(col_index: int) -> int:
+                cnt = 0
+                try:
+                    for _, rw in df_comp_masters.iterrows():
+                        raw_val = norm_str(rw.iloc[col_index])
+                        if raw_val:
+                            norm_val, _issue = normalize_ipi_cae(raw_val)
+                            if norm_val:
+                                cnt += 1
+                except Exception:
+                    return 0
+                return cnt
+
+            # Simplified hard-coded contributor/publisher IPI columns for sheet 7.
+            if s7 == "7) Comp ContributorPublisher li":
+                publisher_name_index = first_pub_pos
+                if pre_pub_candidates:
+                    contributor_ipi_col_index = pre_pub_candidates[0]
+                elif ipi_positions:
+                    contributor_ipi_col_index = ipi_positions[0]
+                else:
+                    contributor_ipi_col_index = 3  # fallback (one-based 4)
+
+                if publisher_name_index is not None:
+                    publisher_ipi_candidate_indices = [idx for idx in ipi_positions if idx > publisher_name_index]
+                else:
+                    publisher_ipi_candidate_indices = ipi_positions[1:]
+
+                if publisher_ipi_candidate_indices:
+                    publisher_ipi_col_index = publisher_ipi_candidate_indices[0]
+                    header_candidate = raw_headers[publisher_ipi_col_index]
+                    publisher_ipi_header = header_candidate if isinstance(header_candidate, str) else None
+                else:
+                    publisher_ipi_col_index = 8  # fallback (one-based 9)
+                ipi_detection_debug = {
+                    "mode": "hard-coded",
+                    "contributor_ipi_col_index_one_based": 4,
+                    "publisher_ipi_col_index_one_based": (publisher_ipi_col_index + 1) if publisher_ipi_col_index is not None else None,
+                    "publisher_ipi_header": publisher_ipi_header,
+                    "publisher_ipi_candidate_indices_one_based": [idx + 1 for idx in publisher_ipi_candidate_indices],
+                    "raw_headers_sample": raw_headers[:25]  # include a slice for debugging
+                }
+            else:
+                ipi_detection_debug = {
+                    "mode": "not-applicable",
+                    "contributor_ipi_col_index_one_based": None,
+                    "publisher_ipi_col_index_one_based": None,
+                    "publisher_ipi_header": None
+                }
+        except Exception as e:
+            ipi_detection_debug = {"error": f"ipi detection failed: {e}"}
+
+        # Debug visibility of detected columns (overwrite existing structure if present)
+        debug_trace["ipi_column_detection"] = ipi_detection_debug
         publishers_payload = []
         composers_payload = []
-        pub_names = set(); comp_names = set()
+        publisher_master_by_name.clear()
+        composer_master_by_name.clear()
         if pub_col:
-            for _, rw in df_comp_masters.iterrows():
+            for ridx, rw in df_comp_masters.iterrows():
                 pn = norm_str(rw.get(pub_col))
-                if pn and pn.lower() not in pub_names:
-                    publishers_payload.append({"name": pn}); pub_names.add(pn.lower())
+                if not pn:
+                    continue
+                key = pn.lower()
+                existing_pub = publisher_master_by_name.get(key)
+                if existing_pub is None:
+                    existing_pub = {"name": pn}
+                    publisher_master_by_name[key] = existing_pub
+                    publishers_payload.append(existing_pub)
                     add_debug_sample(debug_trace["publishers_raw"], {"name": pn})
+                # Optional publisher IPI/CAE extraction (9 or 11 digits) strictly from publisher IPI column region
+                contrib_ipi_raw = None
+                contrib_ipi_norm = None
+                if contributor_ipi_col_index is not None:
+                    try:
+                        contrib_ipi_raw = norm_str(rw.iloc[contributor_ipi_col_index])
+                        if contrib_ipi_raw:
+                            contrib_ipi_norm, _ = normalize_ipi_cae(contrib_ipi_raw)
+                    except Exception:
+                        contrib_ipi_raw = None
+
+                candidate_values: List[Dict[str, Any]] = []
+                candidate_indices_seen: Set[int] = set()
+
+                if publisher_ipi_header:
+                    header_obj = None
+                    try:
+                        header_obj = rw.loc[publisher_ipi_header]
+                    except Exception:
+                        header_obj = None
+                    if isinstance(header_obj, pd.Series):
+                        for dup_idx, val in enumerate(header_obj.tolist()):
+                            candidate_values.append({
+                                "source": f"header[{dup_idx}]",
+                                "index": None,
+                                "raw": norm_str(val)
+                            })
+                    else:
+                        candidate_values.append({
+                            "source": "header",
+                            "index": publisher_ipi_col_index,
+                            "raw": norm_str(header_obj)
+                        })
+
+                for idx in publisher_ipi_candidate_indices:
+                    candidate_indices_seen.add(idx)
+                    try:
+                        val = norm_str(rw.iloc[idx])
+                    except Exception:
+                        val = None
+                    candidate_values.append({
+                        "source": f"index[{idx}]",
+                        "index": idx,
+                        "raw": val
+                    })
+
+                if publisher_ipi_col_index is not None and publisher_ipi_col_index not in candidate_indices_seen:
+                    candidate_indices_seen.add(publisher_ipi_col_index)
+                    try:
+                        val = norm_str(rw.iloc[publisher_ipi_col_index])
+                    except Exception:
+                        val = None
+                    candidate_values.append({
+                        "source": "primary_index",
+                        "index": publisher_ipi_col_index,
+                        "raw": val
+                    })
+
+                fallback_idx = 8
+                if fallback_idx not in candidate_indices_seen:
+                    candidate_indices_seen.add(fallback_idx)
+                    try:
+                        val = norm_str(rw.iloc[fallback_idx])
+                    except Exception:
+                        val = None
+                    candidate_values.append({
+                        "source": "fallback_index8",
+                        "index": fallback_idx,
+                        "raw": val
+                    })
+
+                candidate_debug_entries: List[Dict[str, Any]] = []
+                chosen_entry: Optional[Dict[str, Any]] = None
+                chosen_norm: Optional[str] = None
+                contributor_match_entry: Optional[Tuple[str, Dict[str, Any]]] = None
+
+                for cand in candidate_values:
+                    raw_val = cand.get("raw")
+                    norm_val = None
+                    issue = None
+                    if raw_val:
+                        norm_val, issue = normalize_ipi_cae(raw_val)
+                    cand_debug = {
+                        "source": cand.get("source"),
+                        "index_zero_based": cand.get("index"),
+                        "raw": raw_val,
+                        "normalized": norm_val,
+                        "issue": issue
+                    }
+                    candidate_debug_entries.append(cand_debug)
+
+                    if not raw_val or not norm_val:
+                        continue
+                    if contrib_ipi_norm and norm_val == contrib_ipi_norm:
+                        if contributor_match_entry is None:
+                            contributor_match_entry = (norm_val, cand)
+                        continue
+                    chosen_entry = cand
+                    chosen_norm = norm_val
+                    break
+
+                if chosen_entry is None and contributor_match_entry is not None:
+                    chosen_norm, chosen_entry = contributor_match_entry
+
+                add_debug_sample(
+                    debug_trace.setdefault("publisher_ipi_candidate_values", []),
+                    {
+                        "row": ridx + 1,
+                        "publisher": pn,
+                        "contributor_ipi": contrib_ipi_norm,
+                        "candidates": candidate_debug_entries,
+                        "chosen_source": chosen_entry.get("source") if chosen_entry else None
+                    }
+                )
+
+                if chosen_entry and chosen_norm:
+                    existing_pub["ipiCae"] = chosen_norm
+                    existing_pub["_ipi_source_col"] = chosen_entry.get("index")
+                    debug_trace.setdefault("publisher_ipi_assignments", []).append({
+                        "name": pn,
+                        "action": "assign",
+                        "val": chosen_norm,
+                        "src_zero_based": chosen_entry.get("index"),
+                        "source": chosen_entry.get("source")
+                    })
+                elif any(cand.get("raw") for cand in candidate_values):
+                    debug_trace["identifier_warnings"].append({
+                        "entity": "publisher",
+                        "name": pn,
+                        "field": "ipi_cae",
+                        "value": None,
+                        "issue": "publisher_ipi_not_found"
+                    })
+                # Publisher country mapping -> countryId
+                pub_country_raw = norm_str(get_val(rw, cm_cm, "Publisher Country", "Publisher country"))
+                if pub_country_raw:
+                    cid_obj = countries_lookup.get(pub_country_raw.lower())
+                    if cid_obj and cid_obj.get("countryId") is not None:
+                        try:
+                            existing_pub.setdefault("countryId", int(cid_obj.get("countryId")))
+                        except Exception:
+                            existing_pub.setdefault("countryId", cid_obj.get("countryId"))
+                    else:
+                        debug_trace["identifier_warnings"].append({
+                            "entity": "publisher",
+                            "name": pn,
+                            "field": "country",
+                            "value": pub_country_raw,
+                            "issue": "not_found"
+                        })
         if comp_col:
-            for _, rw in df_comp_masters.iterrows():
+            for ridx, rw in df_comp_masters.iterrows():
                 cn = norm_str(rw.get(comp_col))
-                if cn and cn.lower() not in comp_names:
-                    composers_payload.append({"name": cn}); comp_names.add(cn.lower())
-                    add_debug_sample(debug_trace["composer_entries"], {"composerName": cn, "source": "masters"})
+                if not cn:
+                    continue
+                key = cn.lower()
+                comp_entry = composer_master_by_name.get(key)
+                if comp_entry is None:
+                    comp_entry = {"name": cn}
+                    composer_master_by_name[key] = comp_entry
+                    composers_payload.append(comp_entry)
+                isni_raw = norm_str(get_val(rw, cm_cm, "ISNI", "Composer ISNI", "Contribution ISNI"))
+                if isni_raw:
+                    isni_val, isni_issue = normalize_isni(isni_raw)
+                    if isni_val:
+                        if comp_entry.get("isni") and comp_entry.get("isni") != isni_val:
+                            debug_trace["identifier_warnings"].append({
+                                "entity": "composer",
+                                "name": cn,
+                                "field": "isni",
+                                "value": isni_raw,
+                                "issue": "conflict_with_existing"
+                            })
+                        else:
+                            comp_entry.setdefault("isni", isni_val)
+                    else:
+                        debug_trace["identifier_warnings"].append({
+                            "entity": "composer",
+                            "name": cn,
+                            "field": "isni",
+                            "value": isni_raw,
+                            "issue": isni_issue or "invalid"
+                        })
+                # Contributor IPI value solely from contributor ipi column region (avoid using publisher ipi column)
+                ipi_raw = None
+                if contributor_ipi_col_index is not None:
+                    try:
+                        ipi_raw = norm_str(rw.iloc[contributor_ipi_col_index])
+                    except Exception:
+                        ipi_raw = None
+                if ipi_raw:
+                    ipi_val, ipi_issue = normalize_ipi_cae(ipi_raw)
+                    if ipi_val:
+                        if comp_entry.get("ipiCae") and comp_entry.get("ipiCae") != ipi_val:
+                            debug_trace["identifier_warnings"].append({
+                                "entity": "composer",
+                                "name": cn,
+                                "field": "ipi_cae",
+                                "value": ipi_raw,
+                                "issue": "conflict_with_existing"
+                            })
+                        else:
+                            comp_entry.setdefault("ipiCae", ipi_val)
+                    else:
+                        debug_trace["identifier_warnings"].append({
+                            "entity": "composer",
+                            "name": cn,
+                            "field": "ipi_cae",
+                            "value": ipi_raw,
+                            "issue": ipi_issue or "invalid"
+                        })
+                # Contributor country mapping -> countryOfResidenceId
+                comp_country_raw = norm_str(get_val(rw, cm_cm, "Contributor Country", "Contribution Country", "Composer Country"))
+                if comp_country_raw:
+                    cid_obj = countries_lookup.get(comp_country_raw.lower())
+                    if cid_obj and cid_obj.get("countryId") is not None:
+                        try:
+                            comp_entry.setdefault("countryOfResidenceId", int(cid_obj.get("countryId")))
+                        except Exception:
+                            comp_entry.setdefault("countryOfResidenceId", cid_obj.get("countryId"))
+                    else:
+                        debug_trace["identifier_warnings"].append({
+                            "entity": "composer",
+                            "name": cn,
+                            "field": "country",
+                            "value": comp_country_raw,
+                            "issue": "not_found"
+                        })
+                comp_debug_rec = {
+                    "composerName": cn,
+                    "source": "masters",
+                    "isni": comp_entry.get("isni"),
+                    "ipiCae": comp_entry.get("ipiCae"),
+                }
+                if contributor_ipi_col_index is not None:
+                    comp_debug_rec["contributor_ipi_source_col_one_based"] = contributor_ipi_col_index + 1
+                add_debug_sample(debug_trace["composer_entries"], comp_debug_rec)
         # Include small samples in the log for quick visibility
         art_samples = []
         if art_name_col:
@@ -2581,6 +3023,7 @@ def main():
         # Tracks (by Release_Track)
         audio_url_map: Dict[str, Optional[str]] = {}
         audio_upload_logs: List[Dict[str, Any]] = []
+        release_iswc_by_isrc: Dict[str, Set[str]] = {}
         with progress.step("Build tracks from Release_Track") as s:
             cm_reltrk = make_colmap(df_reltrk)
             audio_url_col = resolve_colkey(df_reltrk, "AUDIO FILE URL", "AUDIO URL", "AUDIO DOWNLOAD URL", "AUDIO FILE", "FILE URL", "AUDIO")
@@ -2600,6 +3043,19 @@ def main():
                 explicit = norm_bool(get_val(rw, cm_reltrk, "EXPLICIT"))
                 ttype = norm_str(get_val(rw, cm_reltrk, "TYPE"))
                 ttype_id = {"original": 1, "cover": 2, "public domain": 3}.get((ttype or "").strip().lower())
+                iswc_raw_release = norm_str(get_val(rw, cm_reltrk, "COMPOSITION ISWC", "COMPOSITION\n ISWC", "ISWC"))
+                if iswc_raw_release:
+                    iswc_norm_release, iswc_issue_release = normalize_iswc(iswc_raw_release)
+                    if iswc_norm_release:
+                        release_iswc_by_isrc.setdefault(isrc, set()).add(iswc_norm_release)
+                    elif iswc_issue_release:
+                        debug_trace["identifier_warnings"].append({
+                            "entity": "track",
+                            "isrc": isrc,
+                            "field": "iswc",
+                            "value": iswc_raw_release,
+                            "issue": iswc_issue_release
+                        })
                 audio_url_raw = norm_str(rw.get(audio_url_col)) if audio_url_col else norm_str(get_val(rw, cm_reltrk, "AUDIO FILE URL"))
                 audio_url = normalize_audio_url(audio_url_raw)
                 audio_type = norm_str(rw.get(audio_type_col)) if audio_type_col else norm_str(get_val(rw, cm_reltrk, "AUDIO TYPE"))
@@ -2721,6 +3177,8 @@ def main():
                         "raw_rights": rights,
                         "defaulted_to": rightsId
                     })
+                iswc_raw = norm_str(get_val(rw, cm_trkcomp, "COMPOSITION ISWC", "COMPOSITION ISWC", "ISWC"))
+                iswc_norm, iswc_issue = normalize_iswc(iswc_raw)
                 role_key = normalize_role_key(role)
                 role_rec = composer_role_map.get(role_key)
                 role_id = int(role_rec["roleId"]) if role_rec else None
@@ -2735,6 +3193,15 @@ def main():
                     "share_num": share_num,
                     "rightsId": rightsId,
                 }
+                if iswc_norm:
+                    entry["iswc"] = iswc_norm
+                elif iswc_issue and iswc_raw:
+                    comp_warnings.append({
+                        "isrc": isrc,
+                        "composer": comp,
+                        "issue": f"iswc_{iswc_issue}",
+                        "raw_iswc": iswc_raw
+                    })
                 if rightsId == 2:
                     if publisher:
                         pub_key = publisher.lower()
@@ -2752,8 +3219,44 @@ def main():
                     else:
                         comp_warnings.append({"isrc": isrc, "composer": comp, "issue": "missing_publisher_for_published"})
                         continue
+                # Capture row-level identifiers (fallback to master sheet when absent)
+                row_isni_raw = norm_str(get_val(rw, cm_trkcomp, "COMPOSITION CONTRIBUTOR ISNI", "CONTRIBUTOR ISNI", "ISNI"))
+                if row_isni_raw:
+                    row_isni, row_isni_issue = normalize_isni(row_isni_raw)
+                    if row_isni:
+                        entry["isni"] = row_isni
+                    else:
+                        debug_trace["identifier_warnings"].append({
+                            "entity": "track_composer",
+                            "isrc": isrc,
+                            "composer": comp,
+                            "field": "isni",
+                            "value": row_isni_raw,
+                            "issue": row_isni_issue or "invalid"
+                        })
+                row_ipi_raw = norm_str(get_val(rw, cm_trkcomp, "COMPOSITION CONTRIBUTOR IPI/CAE", "CONTRIBUTOR IPI/CAE", "IPI/CAE", "IPI CAE", "IPI"))
+                if row_ipi_raw:
+                    row_ipi, row_ipi_issue = normalize_ipi_cae(row_ipi_raw)
+                    if row_ipi:
+                        entry["ipiCae"] = row_ipi
+                    else:
+                        debug_trace["identifier_warnings"].append({
+                            "entity": "track_composer",
+                            "isrc": isrc,
+                            "composer": comp,
+                            "field": "ipi_cae",
+                            "value": row_ipi_raw,
+                            "issue": row_ipi_issue or "invalid"
+                        })
+                if composer_master_by_name:
+                    master_comp = composer_master_by_name.get(comp.lower())
+                    if master_comp:
+                        if master_comp.get("isni") and not entry.get("isni"):
+                            entry["isni"] = master_comp.get("isni")
+                        if master_comp.get("ipiCae") and not entry.get("ipiCae"):
+                            entry["ipiCae"] = master_comp.get("ipiCae")
                 trk_comp_by_isrc.setdefault(isrc, []).append(entry)
-                add_debug_sample(debug_trace["track_compositions"], {
+                debug_comp_entry = {
                     "isrc": isrc,
                     "composerName": comp,
                     "roleName": role,
@@ -2761,7 +3264,14 @@ def main():
                     "share": share_s,
                     "rightsId": rightsId,
                     "publisherName": entry.get("publisherName")
-                })
+                }
+                if entry.get("iswc"):
+                    debug_comp_entry["iswc"] = entry["iswc"]
+                if entry.get("isni"):
+                    debug_comp_entry["isni"] = entry["isni"]
+                if entry.get("ipiCae"):
+                    debug_comp_entry["ipiCae"] = entry["ipiCae"]
+                add_debug_sample(debug_trace["track_compositions"], debug_comp_entry)
             total = sum(len(v) for v in trk_comp_by_isrc.values())
             sample_comps = []
             for isrc, arr in list(trk_comp_by_isrc.items())[:2]:
@@ -2884,9 +3394,23 @@ def main():
                 except Exception:
                     pass
                 # Compositions
+                compositions_out: List[Dict[str, Any]] = []
+                seen_iswc: Set[str] = set()
+                release_iswcs = release_iswc_by_isrc.get(isrc)
+                if release_iswcs:
+                    for iswc_val in sorted(release_iswcs):
+                        if iswc_val and iswc_val not in seen_iswc:
+                            seen_iswc.add(iswc_val)
+                            compositions_out.append({"iswc": iswc_val})
                 if isrc in trk_comp_by_isrc:
                     # Determine scale and convert to 0-100 percentages for API
                     entries = trk_comp_by_isrc[isrc]
+                    for cc in entries:
+                        iswc_val = cc.get("iswc")
+                        if not iswc_val or iswc_val in seen_iswc:
+                            continue
+                        seen_iswc.add(iswc_val)
+                        compositions_out.append({"iswc": iswc_val})
                     nums = [cc.get("share_num") for cc in entries if cc.get("share_num") is not None]
                     total = sum(nums) if nums else None
                     tol = 1e-3
@@ -2934,6 +3458,10 @@ def main():
                         }
                         if cc.get("composerId"):
                             item["composerId"] = cc["composerId"]
+                        if cc.get("isni"):
+                            item["isni"] = cc["isni"]
+                        if cc.get("ipiCae"):
+                            item["ipiCae"] = cc["ipiCae"]
                         if rights_id_out == 2:
                             item["publisherName"] = cc.get("publisherName")
                             if cc.get("publisherId") is not None:
@@ -2955,7 +3483,9 @@ def main():
                             "composerName": cc.get("composerName"),
                             "roleId": role_id_out,
                             "rightsId": rights_id_out,
-                            "publisherName": cc.get("publisherName")
+                            "publisherName": cc.get("publisherName"),
+                            "isni": cc.get("isni"),
+                            "ipiCae": cc.get("ipiCae")
                         })
                         comp_out.append(item)
                     comp_share_diag[isrc] = {
@@ -2965,8 +3495,13 @@ def main():
                         "out_values": out_vals,
                         "out_total": sum(out_vals) if out_vals else None
                     }
+                    if compositions_out:
+                        track["compositions"] = compositions_out
                     if comp_out:
                         track["composerContentsDTO"] = comp_out
+                else:
+                    if compositions_out:
+                        track["compositions"] = compositions_out
                 # Properties
                 if isrc in props_by_isrc:
                     track["trackProperties"] = props_by_isrc[isrc]
@@ -2991,6 +3526,7 @@ def main():
                     "previewStartSeconds": track.get("previewStartSeconds"),
                     "version": track.get("version"),
                     "composerCount": len(track.get("composerContentsDTO") or []),
+                    "compositionsCount": len(track.get("compositions") or []),
                     "contributorsCount": len(track.get("contributors") or []),
                     "trackProperties": track.get("trackProperties"),
                     "artistExternalIds": track.get("artistExternalIds"),

@@ -44,12 +44,19 @@
         "profileId": "697315585919469"
       }
     ],
+    "compositions": [
+      {
+        "iswc": "T1234567890"
+      }
+    ],
     "composerContentsDTO": [
       {
         "share": "60",
         "composerName": "Agnaldo Paulino de Jesus Júnior",
         "roleId": 39,
         "rightsId": 1,
+        "isni": "0000000121032684",
+        "ipiCae": "00006718449",
         "composersLocals": [
           {
             "languageId": 31,
@@ -63,6 +70,7 @@
         "composerName": "Jackson Bertholdo Dos Santos",
         "roleId": 39,
         "rightsId": 1,
+        "isni": "0000000121032685",
         "composersLocals": [
           {
             "languageId": 31,
@@ -128,12 +136,18 @@
         "profileId": "697315585919468"
       }
     ],
+    "compositions": [
+      {
+        "iswc": "T1234567890"
+      }
+    ],
     "composerContentsDTO": [
       {
         "share": "50",
         "composerName": "Jackson Bertholdo Dos Santos",
         "roleId": 39,
         "rightsId": 2,
+        "isni": "0000000121032685",
         "publisherName": "SONY ATV",
         "publisherId": 90014,
         "composersLocals": [
@@ -148,6 +162,8 @@
         "composerName": "Agnaldo Paulino de Jesus Júnior",
         "roleId": 39,
         "rightsId": 2,
+        "isni": "0000000121032684",
+        "ipiCae": "00006718449",
         "publisherName": "WARNER CHAPPEL",
         "publisherId": 90015,
         "composersLocals": [

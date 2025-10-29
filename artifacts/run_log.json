@@ -2,37 +2,37 @@
   {
     "name": "Validate enterprise",
     "status": "ok",
-    "start_ts": 1761735457.578552,
+    "start_ts": 1761781108.241002,
     "meta": {
       "enterpriseId": 691097,
       "tenantId": 332920,
       "enterpriseName": "Test for MUV"
     },
-    "duration_sec": 1.386
+    "duration_sec": 1.578
   },
   {
     "name": "Load role map",
     "status": "ok",
-    "start_ts": 1761735458.96452,
+    "start_ts": 1761781109.819626,
     "meta": {
       "roles": 399
     },
-    "duration_sec": 0.001
+    "duration_sec": 0.0
   },
   {
     "name": "Fetch composer roles & publishers",
     "status": "ok",
-    "start_ts": 1761735458.965117,
+    "start_ts": 1761781109.819892,
     "meta": {
       "contributor_roles": 10,
       "publishers": 2
     },
-    "duration_sec": 0.314
+    "duration_sec": 0.329
   },
   {
     "name": "Read sheets",
     "status": "ok",
-    "start_ts": 1761735459.278744,
+    "start_ts": 1761781110.148451,
     "meta": {
       "artists": 3,
       "labels": 2,
@@ -98,12 +98,12 @@
         }
       }
     },
-    "duration_sec": 6.608
+    "duration_sec": 6.344
   },
   {
     "name": "Validate sheet account metadata",
     "status": "ok",
-    "start_ts": 1761735465.88723,
+    "start_ts": 1761781116.492401,
     "meta": {
       "sheet_enterpriseId": 691097,
       "sheet_tenantId": 332920,
@@ -115,7 +115,7 @@
   {
     "name": "Audit optional fields usage",
     "status": "ok",
-    "start_ts": 1761735465.887276,
+    "start_ts": 1761781116.4924438,
     "meta": {
       "summary": {
         "1) Artists list": {
@@ -177,7 +177,7 @@
   {
     "name": "Audit all columns values",
     "status": "ok",
-    "start_ts": 1761735465.8884969,
+    "start_ts": 1761781116.493502,
     "meta": {
       "values_artifact": "all_fields_values.json",
       "sample_top": [
@@ -208,12 +208,12 @@
         }
       ]
     },
-    "duration_sec": 0.02
+    "duration_sec": 0.026
   },
   {
     "name": "Preflight validations",
     "status": "ok",
-    "start_ts": 1761735466.037769,
+    "start_ts": 1761781116.651882,
     "meta": {
       "issues": 0
     },
@@ -222,7 +222,7 @@
   {
     "name": "Build releases",
     "status": "ok",
-    "start_ts": 1761735466.038927,
+    "start_ts": 1761781116.653724,
     "meta": {
       "releases": 2,
       "sample_releases": [
@@ -245,12 +245,12 @@
       "with_c_line": 2,
       "with_version": 1
     },
-    "duration_sec": 1.052
+    "duration_sec": 1.056
   },
   {
     "name": "Parse release contributors",
     "status": "ok",
-    "start_ts": 1761735467.090973,
+    "start_ts": 1761781117.709454,
     "meta": {
       "contributors": 4,
       "primaries": 2,
@@ -286,7 +286,7 @@
   {
     "name": "Build tracks from Release_Track",
     "status": "ok",
-    "start_ts": 1761735467.0917928,
+    "start_ts": 1761781117.7102022,
     "meta": {
       "tracks": 2,
       "sample_tracks": [
@@ -310,12 +310,12 @@
       "preview_missing": 0,
       "tracks_with_version": 1
     },
-    "duration_sec": 0.196
+    "duration_sec": 0.111
   },
   {
     "name": "Parse track contributors",
     "status": "ok",
-    "start_ts": 1761735467.287494,
+    "start_ts": 1761781117.821101,
     "meta": {
       "contributors": 4,
       "primaries": 2,
@@ -351,7 +351,7 @@
   {
     "name": "Parse track compositions",
     "status": "ok",
-    "start_ts": 1761735467.288264,
+    "start_ts": 1761781117.821805,
     "meta": {
       "compositions": 4,
       "sample": [
@@ -363,7 +363,9 @@
             "roleId": 39,
             "share": "0.6",
             "share_num": 0.6,
-            "rightsId": 1
+            "rightsId": 1,
+            "isni": "0000000121032684",
+            "ipiCae": "00006718449"
           }
         },
         {
@@ -376,7 +378,8 @@
             "share_num": 0.5,
             "rightsId": 2,
             "publisherName": "SONY ATV",
-            "publisherId": 90014
+            "publisherId": 90014,
+            "isni": "0000000121032685"
           }
         }
       ],
@@ -387,7 +390,7 @@
   {
     "name": "Parse track properties",
     "status": "ok",
-    "start_ts": 1761735467.28896,
+    "start_ts": 1761781117.8225632,
     "meta": {
       "with_properties": 2,
       "defaulted": 0,
@@ -406,12 +409,12 @@
         }
       ]
     },
-    "duration_sec": 0.522
+    "duration_sec": 0.548
   },
   {
     "name": "Attach track contributors/compositions/properties",
     "status": "ok",
-    "start_ts": 1761735467.810745,
+    "start_ts": 1761781118.370684,
     "meta": {
       "tracks": 2
     },
@@ -420,7 +423,7 @@
   {
     "name": "Attach release contributors",
     "status": "ok",
-    "start_ts": 1761735467.810835,
+    "start_ts": 1761781118.370804,
     "meta": {
       "releases": 2
     },
@@ -429,7 +432,7 @@
   {
     "name": "Write dry-run artifacts",
     "status": "ok",
-    "start_ts": 1761735467.810868,
+    "start_ts": 1761781118.3708448,
     "meta": {
       "artists": 3,
       "labels": 2,
@@ -439,6 +442,6 @@
       "releases": 2,
       "tracks": 2
     },
-    "duration_sec": 0.435
+    "duration_sec": 0.444
   }
 ]

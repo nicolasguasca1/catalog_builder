@@ -72,17 +72,22 @@ This document lists every API endpoint the current ingestion script (`ingest_par
      - `name`: `1) Artists list` → `Artist Name`.
      - `artistExternalIds`: Built from optional columns on same sheet: `Apple ArtistId`, `Spotify Artist URI` (normalized to ID), `Meta ArtistId`, `SoundCloud ProfileId` with fixed distributorStoreId mapping (Apple=1, Spotify=9, SoundCloud=68, Meta=309).
        - `image`: When `Artist Image url` is provided, the script downloads the asset, uploads it via `/media/image/upload?cover=false`, and injects `{ filename, fileId }` using the returned identifier.
-   - Not currently included: `ISNI` column (visible but unused in payload).
+       - `isni`: When the `ISNI` column contains a valid identifier it is normalized (punctuation stripped, check-digit validated) and attached; invalid values are logged to `identifier_warnings` without blocking the run.
 
 3. `/content/publisher/save`
 
-   - Body: `{ "name": <Publisher Name> }` from `7) Comp ContributorPublisher li` → `Publisher Name`.
-   - Other columns like `Publisher Country` are presently ignored.
+   - Body: `{ "name": <Publisher Name>, "ipiCae": <optional>, "countryId": <optional> }` from the publisher column group (columns 7–9) on `7) Comp ContributorPublisher li`.
+     - `name`: `Publisher Name`.
+     - `ipiCae`: Pulled only from the publisher IPI/CAE column (duplicate header distinguished positionally). Normalized to 9- or 11-digit numeric string; invalid/conflicting values logged.
+     - `countryId`: Resolved via `/common/lookup/countries` from `Publisher Country`; omitted if lookup fails (warning logged).
 
 4. `/content/composer/save`
 
-   - Body: `{ "name": <Composition Contributor> }` from `7) Comp ContributorPublisher li` → `Composition Contributor`.
-   - Unused: `ISNI`, `IPI/CAE`, `Contributor Country` columns (not wired yet).
+   - Body: `{ "name": <Composition Contributor>, "isni": <optional>, "ipiCae": <optional>, "countryOfResidenceId": <optional> }` built from the contributor column group (columns 1–4) of `7) Comp ContributorPublisher li`.
+     - `name`: `Composition Contributor`.
+     - `isni`: Normalized 16-digit value (punctuation removed) when valid; conflicts logged.
+     - `ipiCae`: Taken only from contributor IPI/CAE column (distinct from publisher IPI). 9- or 11-digit normalization; invalid values logged.
+     - `countryOfResidenceId`: Resolved via `/common/lookup/countries` from `Contributor Country`; omitted if lookup fails (warning logged).
 
 5. `/content/release/save`
 
@@ -126,10 +131,14 @@ This document lists every API endpoint the current ingestion script (`ingest_par
        - `roleId`: Mapped from `ROLE` via contributorRoles lookup.
        - `share`: Numeric share from `SHARE%` scaled to percent format (stringified). Validation ensures totals ~100 or ~1.0.
        - `rightsId`: Derived from `PUBLISHING` text using heuristic (published vs self-published).
+         - `isni`: Propagated from the row when provided, otherwise filled from the composer master sheet (normalized by `normalize_isni`).
+         - `ipiCae`: Same precedence as `isni`, normalized via `normalize_ipi_cae` (9 or 11 digits only).
        - `composersLocals[0].languageId`: Track languageId; `name`: same as composerName; `version`: track `TRACK VERSION` when present.
+       - `compositions[]`: Unique ISWC values consolidated from both `5) Release_Track` (`COMPOSITION ISWC`) and `8) Track_Composition(s)` rows. Values are normalized to `T##########`; duplicates are deduped per track while preserving all distinct codes.
      - `trackProperties[]`: Mapped boolean flags from `9) Audio_Properties` columns (`NONE APPLY` defaults if no flags set). Each special property column (e.g. `REMIX or DERIVATIVE`, `SAMPLES or STOCK`) contributes an ID from `TRACK_PROP_MAP`.
      - `trackLocals[0]`: Included when both `name` and `languageId` exist. Mirrors `name`, `languageId`, and optional `version`.
-   - Not currently included: ISWC, composer ISNI/IPI/CAE, publisher IPI — those columns exist but are not yet wired.
+
+- Newly included: publisher `ipiCae` & `countryId`; composer `isni`, `ipiCae`, `countryOfResidenceId` (present in master payloads and propagated to per-track composer entries).
 
 ---
 
@@ -153,9 +162,8 @@ This document lists every API endpoint the current ingestion script (`ingest_par
 
 ## Unused (visible) columns as of current implementation
 
-- `1) Artists list`: `ISNI` (present but not added to artist payload).
-- `7) Comp ContributorPublisher li`: `ISNI`, `IPI/CAE`, contributor/publisher countries (only names used).
-- `8) Track_Composition(s)`: `TOTAL%`, `CATALOG TRACK ID` (shares validation uses `SHARE%` only), `ISWC` (if present in future template versions).
+- (Now wired) `7) Comp ContributorPublisher li`: `Contributor Country` and `Publisher Country` (used for composer `countryOfResidenceId` and publisher `countryId`).
+- `8) Track_Composition(s)`: `TOTAL%`, `CATALOG TRACK ID` (shares validation uses `SHARE%` only).
 - `9) Audio_Properties`: Helper / diagnostic columns beyond the first 12 (ignored due to column limits).
 
 ---
@@ -163,7 +171,7 @@ This document lists every API endpoint the current ingestion script (`ingest_par
 ## Summary flow
 
 1. Sheet parsing & column limiting.
-2. Lookups (labels, publishers, roles, languages, musicstyles, existing artists).
+2. Lookups (labels, publishers, roles, languages, musicstyles, countries, existing artists).
 3. Build entity payloads (artists, labels, publishers, composers) from respective sheets.
 4. Media ingestion (audio first; cover images later if live run).
 5. Assemble releases and tracks, inject contributor/composer/property data.
@@ -172,4 +180,4 @@ This document lists every API endpoint the current ingestion script (`ingest_par
 
 ---
 
-Last updated: 2025-10-27 based on current `main` branch state.
+Last updated: 2025-10-29 after wiring dual IPI columns and country lookups.

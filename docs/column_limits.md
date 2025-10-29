@@ -12,10 +12,10 @@ All indices below are **1-based**, matching Excel's column numbering. To adjust 
 | `4) Release_Artist(s)`            |                7 | `8` and onwards  |
 | `5) Release_Track`                |               16 | `17` and onwards |
 | `6) Track_Artist(s)`              |                7 | `8` and onwards  |
-| `7) Comp ContributorPublisher li` |                9 | `10` and onwards |
+| `7) Comp ContributorPublisher li` |               11 | `12` and onwards |
 | `8) Track_Composition(s)`         |               11 | `12` and onwards |
 | `9) Audio_Properties`             |               12 | `13` and onwards |
 
 > ℹ️ The sheet titled "Comp Contributor/Publisher lists" in some documentation corresponds to the Excel tab named `7) Comp ContributorPublisher li` in the bundled template.
 
-For the contributors sheet (`7) Comp ContributorPublisher li`), columns 1-4 carry composition contributor details and columns 7-9 capture publisher information. Columns 5-6 are template helpers and may be ignored during ingest.
+For the contributors sheet (`7) Comp ContributorPublisher li`), columns 1-4 carry composition contributor details (including contributor IPI/CAE) and columns 7-11 are read to allow capturing publisher information: name, country, and publisher IPI/CAE (which may appear in column 10 or 11 depending on template spacing). Columns 5-6 are template helpers and may be ignored during ingest.

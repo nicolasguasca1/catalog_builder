@@ -161,11 +161,14 @@
       "IPI/CAE",
       "IPI/CAE",
       "0",
+      "0",
       "Column_6",
       "Publisher Name",
       "Publisher Country",
       "IPI/CAE",
-      "IPI/CAE"
+      "IPI/CAE",
+      "0",
+      "0"
     ],
     "norm": [
       "composition contributor",
@@ -174,11 +177,14 @@
       "ipi/cae",
       "ipi/cae",
       "0",
+      "0",
       "column 6",
       "publisher name",
       "publisher country",
       "ipi/cae",
-      "ipi/cae"
+      "ipi/cae",
+      "0",
+      "0"
     ]
   },
   "8) Track_Composition(s)": {

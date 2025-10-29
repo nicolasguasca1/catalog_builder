@@ -1,6 +1,6 @@
 # Dry-Run HTTP Payload Simulation
 
-- Generated: 2025-10-29 10:57:48Z
+- Generated: 2025-10-29 23:38:38Z
 - Base URL: `https://api.revelator.com`
 - EnterpriseId: 691097
 - TenantId: 332920
@@ -8,7 +8,6 @@
 Full payload lists are exported as JSON under `artifacts/`. This document highlights the HTTP requests that a live run will send.
 
 Key payload artifacts:
-
 - `artifacts/artists.json`
 - `artifacts/labels.json`
 - `artifacts/publishers.json`
@@ -18,12 +17,12 @@ Key payload artifacts:
 - `artifacts/audio_urls.json`
 
 Lookup endpoints called before mutations (GET):
-
 - `https://api.revelator.com/content/label/all` (with pagination fallbacks)
 - `https://api.revelator.com/content/publisher/all`
 - `https://api.revelator.com/common/lookup/contributorRoles`
 - `https://api.revelator.com/common/lookup/languages` (on demand)
 - `https://api.revelator.com/common/lookup/musicstyles` (on demand)
+- `https://api.revelator.com/common/lookup/countries` (on demand)
 
 ## Audio ingest (pull external)
 
@@ -34,7 +33,6 @@ Lookup endpoints called before mutations (GET):
 - The isrc field shown below is informational for this report and is not part of the HTTP request body.
 
 Sample payloads:
-
 ```json
 [
   {
@@ -64,7 +62,6 @@ Sample payloads:
 - Images are uploaded prior to calling /artists. Live runs send multipart form-data with the listed filename.
 
 Sample payloads:
-
 ```json
 [
   {
@@ -90,7 +87,6 @@ Sample payloads:
 - During live execution, the placeholder image.sourceUrl shown here is replaced once the upload stage returns image.fileId values.
 
 Sample payloads:
-
 ```json
 [
   {
@@ -155,7 +151,6 @@ Sample payloads:
 - Existing labels are detected via GET /content/label/all; only unknown names trigger POST requests.
 
 Sample payloads:
-
 ```json
 [
   {
@@ -180,13 +175,15 @@ Sample payloads:
 - Requests: 2
 
 Sample payloads:
-
 ```json
 [
   {
     "endpoint": "https://api.revelator.com/content/publisher/save",
     "body": {
-      "name": "SONY ATV"
+      "name": "SONY ATV",
+      "ipiCae": "00006718450",
+      "_ipi_source_col": null,
+      "countryId": 900
     }
   },
   {
@@ -205,19 +202,22 @@ Sample payloads:
 - Requests: 2
 
 Sample payloads:
-
 ```json
 [
   {
     "endpoint": "https://api.revelator.com/content/composer/save",
     "body": {
-      "name": "Agnaldo Paulino de Jesus Júnior"
+      "name": "Agnaldo Paulino de Jesus Júnior",
+      "isni": "0000000121032684",
+      "ipiCae": "00006718449",
+      "countryOfResidenceId": 900
     }
   },
   {
     "endpoint": "https://api.revelator.com/content/composer/save",
     "body": {
-      "name": "Jackson Bertholdo Dos Santos"
+      "name": "Jackson Bertholdo Dos Santos",
+      "isni": "0000000121032685"
     }
   }
 ]
@@ -231,7 +231,6 @@ Sample payloads:
 - Successful uploads replace imageSourceUrl with image.fileId inside the release payload prior to /content/release/save.
 
 Sample payloads:
-
 ```json
 [
   {
@@ -257,7 +256,6 @@ Sample payloads:
 - On duplicate UPC responses, the script retries without the UPC value (see live logs).
 
 Sample payloads:
-
 ```json
 [
   {
@@ -376,7 +374,6 @@ Sample payloads:
 - Requests: 2
 
 Sample payloads:
-
 ```json
 [
   {
@@ -425,12 +422,19 @@ Sample payloads:
           "profileId": "697315585919469"
         }
       ],
+      "compositions": [
+        {
+          "iswc": "T1234567890"
+        }
+      ],
       "composerContentsDTO": [
         {
           "share": "60",
           "composerName": "Agnaldo Paulino de Jesus Júnior",
           "roleId": 39,
           "rightsId": 1,
+          "isni": "0000000121032684",
+          "ipiCae": "00006718449",
           "composersLocals": [
             {
               "languageId": 31,
@@ -444,6 +448,7 @@ Sample payloads:
           "composerName": "Jackson Bertholdo Dos Santos",
           "roleId": 39,
           "rightsId": 1,
+          "isni": "0000000121032685",
           "composersLocals": [
             {
               "languageId": 31,
@@ -453,7 +458,9 @@ Sample payloads:
           ]
         }
       ],
-      "trackProperties": [1],
+      "trackProperties": [
+        1
+      ],
       "trackLocals": [
         {
           "name": "Receba",
@@ -510,12 +517,18 @@ Sample payloads:
           "profileId": "697315585919468"
         }
       ],
+      "compositions": [
+        {
+          "iswc": "T1234567890"
+        }
+      ],
       "composerContentsDTO": [
         {
           "share": "50",
           "composerName": "Jackson Bertholdo Dos Santos",
           "roleId": 39,
           "rightsId": 2,
+          "isni": "0000000121032685",
           "publisherName": "SONY ATV",
           "publisherId": 90014,
           "composersLocals": [
@@ -530,6 +543,8 @@ Sample payloads:
           "composerName": "Agnaldo Paulino de Jesus Júnior",
           "roleId": 39,
           "rightsId": 2,
+          "isni": "0000000121032684",
+          "ipiCae": "00006718449",
           "publisherName": "WARNER CHAPPEL",
           "publisherId": 90015,
           "composersLocals": [
@@ -540,7 +555,9 @@ Sample payloads:
           ]
         }
       ],
-      "trackProperties": [1],
+      "trackProperties": [
+        1
+      ],
       "trackLocals": [
         {
           "name": "A Cláusula do Contrato",

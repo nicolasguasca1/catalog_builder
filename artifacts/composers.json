@@ -1,8 +1,12 @@
 [
   {
-    "name": "Agnaldo Paulino de Jesus Júnior"
+    "name": "Agnaldo Paulino de Jesus Júnior",
+    "isni": "0000000121032684",
+    "ipiCae": "00006718449",
+    "countryOfResidenceId": 900
   },
   {
-    "name": "Jackson Bertholdo Dos Santos"
+    "name": "Jackson Bertholdo Dos Santos",
+    "isni": "0000000121032685"
   }
 ]
