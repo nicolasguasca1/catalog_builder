@@ -60,6 +60,18 @@
         "fill_rate": 0.6667
       },
       {
+        "column": "Duplicate Names",
+        "notes": {
+          "row1": "EnterpriseId=",
+          "row2": "TenantId=",
+          "row3": "Duplicate Names",
+          "row4": "0"
+        },
+        "rows_with_values": 1,
+        "rows_total": 3,
+        "fill_rate": 0.3333
+      },
+      {
         "column": "ISNI",
         "notes": {
           "row1": "1",
@@ -68,6 +80,26 @@
         "rows_with_values": 1,
         "rows_total": 3,
         "fill_rate": 0.3333
+      },
+      {
+        "column": "2",
+        "notes": {
+          "row1": "2",
+          "row2": "2"
+        },
+        "rows_with_values": 0,
+        "rows_total": 3,
+        "fill_rate": 0.0
+      },
+      {
+        "column": "332920.0",
+        "notes": {
+          "row1": "691097.0",
+          "row2": "332920.0"
+        },
+        "rows_with_values": 0,
+        "rows_total": 3,
+        "fill_rate": 0.0
       },
       {
         "column": "SoundCloud ProfileId",

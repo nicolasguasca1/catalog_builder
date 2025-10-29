@@ -6,7 +6,7 @@ All indices below are **1-based**, matching Excel's column numbering. To adjust 
 
 | Sheet name (exact)                | Last column read | Columns ignored  |
 | --------------------------------- | ---------------: | ---------------- |
-| `1) Artists list`                 |                7 | `8` and onwards  |
+| `1) Artists list`                 |               10 | `11` and onwards |
 | `2) Labels list`                  |                1 | `2` and onwards  |
 | `3) Release_Label`                |               16 | `17` and onwards |
 | `4) Release_Artist(s)`            |                7 | `8` and onwards  |

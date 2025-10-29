@@ -106,6 +106,28 @@
       "unique_values_sample": [
         "0000000121032683"
       ]
+    },
+    "2": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    },
+    "Duplicate Names": {
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "insert into Images VALUES (NEWID(),'JKZTest2', '', getdate(), 0, null, 'https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1', 0, getdate(), null, null)"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "insert into Images VALUES (NEWID(),'JKZTest2', '', getdate(), 0, null, 'https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1', 0, getdate(), null, null)"
+      ]
+    },
+    "332920.0": {
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
     }
   },
   "2) Labels list": {

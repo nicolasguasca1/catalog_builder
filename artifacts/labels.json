@@ -1,8 +1,10 @@
 [
   {
-    "name": "TokyoRecordsFULLTEST"
+    "name": "TokyoRecordsFULLTEST",
+    "labelId": 1071255
   },
   {
-    "name": "PEJOTA10*FULLTEST"
+    "name": "PEJOTA10*FULLTEST",
+    "labelId": 1071256
   }
 ]

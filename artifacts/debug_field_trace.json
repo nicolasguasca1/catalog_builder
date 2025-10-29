@@ -20,7 +20,9 @@
           "distributorStoreId": 309,
           "profileId": "697315585919469"
         }
-      ]
+      ],
+      "isni": "0000000121032683",
+      "imageSourceUrl": "https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1"
     },
     {
       "name": "Flash Beats ManowTest",
@@ -42,7 +44,9 @@
           "distributorStoreId": 309,
           "profileId": "697315585919468"
         }
-      ]
+      ],
+      "isni": null,
+      "imageSourceUrl": "https://www.dropbox.com/scl/fi/wky0ryb739s0xs3wo5qop/A-Cl-usula-do-Contrato-789294962088-UPC.jpg?rlkey=91bp85llgb8ho5lnfcs56105s&st=dn12pxrd&dl=1"
     },
     {
       "name": "Various Artists",
@@ -51,7 +55,9 @@
       "spotify_id": null,
       "meta": null,
       "soundcloud": null,
-      "externalIds": []
+      "externalIds": [],
+      "isni": null,
+      "imageSourceUrl": null
     }
   ],
   "publishers_raw": [
@@ -214,13 +220,7 @@
         {
           "isrc": "QZW9M2221000",
           "recordingVersionType": 1,
-          "audioFiles": [
-            {
-              "audioId": "cebbf1a4-4dca-43bb-8bcf-0189ee561e6b",
-              "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
-              "fileFormat": 2
-            }
-          ]
+          "audioFiles": []
         }
       ]
     },
@@ -252,13 +252,7 @@
         {
           "isrc": "QZW9M2236571",
           "recordingVersionType": 1,
-          "audioFiles": [
-            {
-              "audioId": "9cb4fd8b-9d32-4bd2-a46c-86f11454bb3d",
-              "audioFilename": "Joy-Mejia-Te-Fall.wav",
-              "fileFormat": 2
-            }
-          ]
+          "audioFiles": []
         }
       ]
     }
@@ -939,16 +933,31 @@
   ],
   "sheet_account_metadata": [
     {
-      "enterpriseId": null,
-      "tenantId": null,
+      "enterpriseId": 691097,
+      "tenantId": 332920,
       "column_key": null,
       "column_name": null,
-      "rows": {},
+      "rows": {
+        "row1": 691097,
+        "row2": 332920
+      },
       "column_index_one_based": 10,
+      "fallback_error": null,
+      "enterprise_source": {
+        "row": 1,
+        "column": 10,
+        "value": 691097
+      },
+      "tenant_source": {
+        "row": 2,
+        "column": 10,
+        "value": 332920
+      },
       "input_enterpriseId": 691097,
       "input_tenantId": 332920,
       "sheet": "1) Artists list",
-      "status": "missing"
+      "status": "matched"
     }
-  ]
+  ],
+  "identifier_warnings": []
 }

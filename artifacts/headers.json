@@ -7,7 +7,10 @@
       "Spotify Artist URI",
       "Meta ArtistId",
       "SoundCloud ProfileId",
-      "ISNI"
+      "ISNI",
+      "2",
+      "Duplicate Names",
+      "332920.0"
     ],
     "norm": [
       "artist name",
@@ -16,7 +19,10 @@
       "spotify artist uri",
       "meta artistid",
       "soundcloud profileid",
-      "isni"
+      "isni",
+      "2",
+      "duplicate names",
+      "332920.0"
     ]
   },
   "2) Labels list": {

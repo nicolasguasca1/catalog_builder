@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse, os, sys, math, json, re, time, tempfile, shutil, copy
+from datetime import datetime
 from urllib.parse import urlparse, parse_qsl, urlunparse, urlencode
 from urllib.parse import urlparse
 from contextlib import contextmanager
@@ -35,7 +36,7 @@ TRACK_PROP_MAP = {
 
 # Hard column limits (1-based inclusive) to skip spreadsheet noise past the template definitions.
 SHEET_COLUMN_LIMITS: Dict[str, int] = {
-    "1) Artists list": 7,
+    "1) Artists list": 10,
     "2) Labels list": 1,
     "3) Release_Label": 16,
     "4) Release_Artist(s)": 7,
@@ -151,6 +152,40 @@ def normalize_role_key(name: Optional[str]) -> str:
     if not name:
         return ""
     return re.sub(r"[^a-z0-9]+", " ", str(name).lower()).strip()
+
+
+def normalize_isni(value: Optional[str]) -> Tuple[Optional[str], Optional[str]]:
+    s = norm_str(value)
+    if not s:
+        return None, None
+    cleaned = re.sub(r"[^0-9A-Za-z]", "", s.upper())
+    if len(cleaned) != 16:
+        return None, "invalid_length"
+    if not re.match(r"^[0-9A-Z]{15}[0-9X]$", cleaned):
+        return None, "invalid_format"
+    return cleaned, None
+
+
+def normalize_ipi_cae(value: Optional[str]) -> Tuple[Optional[str], Optional[str]]:
+    s = norm_str(value)
+    if not s:
+        return None, None
+    digits = re.sub(r"\D", "", s)
+    if len(digits) not in (9, 11):
+        return None, "invalid_length"
+    return digits, None
+
+
+def normalize_iswc(value: Optional[str]) -> Tuple[Optional[str], Optional[str]]:
+    s = norm_str(value)
+    if not s:
+        return None, None
+    cleaned = re.sub(r"[^0-9A-Za-z]", "", s.upper())
+    if not cleaned.startswith("T") or len(cleaned) != 11:
+        return None, "invalid_format"
+    if not re.match(r"^T\d{10}$", cleaned):
+        return None, "invalid_format"
+    return cleaned, None
 
 def getenv_required(name: str) -> str:
     v = os.getenv(name)
@@ -843,14 +878,27 @@ def download_file(session: requests.Session, url: str) -> Tuple[Optional[str], O
     except Exception as e:
         return None, None, str(e)
 
-def upload_image_file(session: requests.Session, base_url: str, token: str, headers_common: Dict[str,str], file_path: str, filename: str) -> Tuple[Optional[str], Dict[str,Any]]:
-    """POST multipart/form-data to /media/image/upload?cover=true. Returns (fileId, log_record)."""
+def upload_image_file(session: requests.Session, base_url: str, token: str, headers_common: Dict[str,str], file_path: str, filename: str, *, cover: bool = True) -> Tuple[Optional[str], Dict[str,Any]]:
+    """POST multipart/form-data to /media/image/upload. Returns (fileId, log_record)."""
     endpoint = f"{base_url}/media/image/upload"
-    params = {"cover": "true"}
+    params = {"cover": "true" if cover else "false"}
     headers = {"Authorization": f"Bearer {token}", **headers_common}
     try:
         with open(file_path, "rb") as f:
             files = {"file": (filename, f)}
+            try:
+                snapshot_headers = {k: v for k, v in headers.items() if k.lower().startswith("x-")}
+                SENT_HTTP_PAYLOADS.append({
+                    "timestamp": round(time.time(), 3),
+                    "method": "POST",
+                    "url": endpoint,
+                    "json": None,
+                    "params": copy.deepcopy(params),
+                    "headers": snapshot_headers,
+                    "files": {"file": filename}
+                })
+            except Exception:
+                pass
             resp = session.post(endpoint, params=params, headers=headers, files=files, timeout=TIMEOUT)
         rec = {
             "endpoint": endpoint,
@@ -1055,43 +1103,317 @@ def _extract_first_int_token(text: Any) -> Optional[int]:
     except Exception:
         return None
 
-def extract_sheet_account_ids(req_map: Dict[str, Any], column_index_one_based: int = 10) -> Dict[str, Any]:
-    notes = (req_map or {}).get("_notes_row_text") or {}
-    columns = (req_map or {}).get("_optional_columns") or []
 
-    target_rows: Dict[str, Any] = {}
-    target_name: Optional[str] = None
-    target_key: Optional[str] = None
+def _cell_value_to_int(value: Any) -> Optional[int]:
+    """Convert a spreadsheet cell value to an int, tolerating floats/strings."""
+    if value is None:
+        return None
+    if isinstance(value, int):
+        return value
+    if isinstance(value, float):
+        try:
+            return int(round(value))
+        except Exception:
+            return None
+    s = str(value).strip()
+    if not s:
+        return None
+    # Handle stray formulas like "= 332920" or "TenantId= 332920"
+    s = re.sub(r"[^0-9]+", " ", s)
+    s = s.strip()
+    if not s:
+        return None
+    try:
+        return int(float(s.split()[0]))
+    except Exception:
+        return None
 
-    for entry in columns:
-        if entry.get("column_index") == column_index_one_based - 1:
-            target_key = entry.get("key")
-            target_name = entry.get("name")
-            if target_key and target_key in notes:
-                target_rows = dict(notes.get(target_key) or {})
-            elif target_name and target_name in notes:
-                target_rows = dict(notes.get(target_name) or {})
-            break
 
-    if not target_rows:
-        suffix = f"__col{column_index_one_based}"
-        for key, rows in notes.items():
-            if key.endswith(suffix):
-                target_rows = dict(rows or {})
-                target_key = key
-                break
+def ensure_sheet_account_match(xlsx_path: str, sheet_name: str, enterprise_id: int, tenant_id: int, *, column_index_one_based: int = 10) -> Tuple[Optional[int], Optional[int]]:
+    """Hard-stop the script if the Artists sheet metadata does not match the provided IDs.
 
-    enterprise_val = _extract_first_int_token(target_rows.get("row1"))
-    tenant_val = _extract_first_int_token(target_rows.get("row2"))
+    Returns the spreadsheet enterprise and tenant identifiers for downstream logging.
+    """
+    try:
+        wb = load_workbook(xlsx_path, data_only=True, read_only=True)
+    except Exception as exc:
+        print(f"[FATAL] Could not open workbook '{xlsx_path}' for account validation: {exc}")
+        sys.exit(2)
+    try:
+        try:
+            ws = wb[sheet_name]
+        except KeyError:
+            print(f"[FATAL] Sheet '{sheet_name}' not found while validating account metadata.")
+            sys.exit(2)
 
-    return {
-        "enterpriseId": enterprise_val,
-        "tenantId": tenant_val,
-        "column_key": target_key,
-        "column_name": target_name,
-        "rows": target_rows,
-        "column_index_one_based": column_index_one_based,
-    }
+        enterprise_cell = ws.cell(row=1, column=column_index_one_based).value
+        tenant_cell = ws.cell(row=2, column=column_index_one_based).value
+    finally:
+        wb.close()
+
+    sheet_enterprise = _cell_value_to_int(enterprise_cell)
+    sheet_tenant = _cell_value_to_int(tenant_cell)
+
+    if sheet_enterprise is not None and sheet_enterprise != enterprise_id:
+        print("[FATAL] EnterpriseId mismatch between input and spreadsheet metadata.")
+        print(f"        Sheet value: {sheet_enterprise} (row 1, column {column_index_one_based})")
+        print(f"        Input value: {enterprise_id}")
+        sys.exit(2)
+
+    if sheet_tenant is None:
+        print("[FATAL] TenantId is missing in spreadsheet metadata (row 2, column 10).")
+        sys.exit(2)
+
+    if sheet_tenant != tenant_id:
+        print("[FATAL] TenantId mismatch between input and spreadsheet metadata.")
+        print(f"        Sheet value: {sheet_tenant} (row 2, column {column_index_one_based})")
+        print(f"        Input value: {tenant_id}")
+        sys.exit(2)
+
+    return sheet_enterprise, sheet_tenant
+
+
+def build_dry_run_payload_doc(
+    base_url: str,
+    enterprise_id: int,
+    tenant_id: int,
+    *,
+    artist_image_tasks: Optional[List[Dict[str, Any]]] = None,
+    artists_payload: Optional[List[Dict[str, Any]]] = None,
+    labels_payload: Optional[List[Dict[str, Any]]] = None,
+    publishers_payload: Optional[List[Dict[str, Any]]] = None,
+    composers_payload: Optional[List[Dict[str, Any]]] = None,
+    releases_payload: Optional[List[Dict[str, Any]]] = None,
+    tracks_payload: Optional[List[Tuple[str, Dict[str, Any]]]] = None,
+    audio_url_map: Optional[Dict[str, Optional[str]]] = None,
+) -> str:
+    """Return a Markdown document that outlines the HTTP payloads a live run will issue."""
+
+    timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%SZ")
+    lines: List[str] = []
+
+    lines.append("# Dry-Run HTTP Payload Simulation")
+    lines.append("")
+    lines.append(f"- Generated: {timestamp}")
+    lines.append(f"- Base URL: `{base_url}`")
+    lines.append(f"- EnterpriseId: {enterprise_id}")
+    lines.append(f"- TenantId: {tenant_id}")
+    lines.append("")
+    lines.append("Full payload lists are exported as JSON under `artifacts/`. This document highlights the HTTP requests that a live run will send.")
+    lines.append("")
+    artifact_refs = [
+        "artifacts/artists.json",
+        "artifacts/labels.json",
+        "artifacts/publishers.json",
+        "artifacts/composers.json",
+        "artifacts/releases.json",
+        "artifacts/tracks.json",
+        "artifacts/audio_urls.json",
+    ]
+    lines.append("Key payload artifacts:")
+    for ref in artifact_refs:
+        lines.append(f"- `{ref}`")
+    lines.append("")
+
+    def _add_section(title: str, method: str, endpoint_hint: str, requests: List[Dict[str, Any]], *, sample_limit: int = 2, notes: Optional[List[str]] = None) -> None:
+        lines.append(f"## {title}")
+        lines.append("")
+        if not requests:
+            lines.append("- No requests in this stage.")
+            lines.append("")
+            return
+        lines.append(f"- Method: `{method}`")
+        lines.append(f"- Endpoint: {endpoint_hint}")
+        lines.append(f"- Requests: {len(requests)}")
+        if notes:
+            for note in notes:
+                lines.append(f"- {note}")
+        sample = requests[:max(1, min(sample_limit, len(requests)))]
+        lines.append("")
+        lines.append("Sample payloads:")
+        lines.append("```json")
+        lines.append(json.dumps(sample, indent=2, ensure_ascii=False))
+        lines.append("```")
+        lines.append("")
+
+    def _safe_filename(url: Optional[str], fallback_prefix: str, index: int) -> str:
+        if not url:
+            return f"{fallback_prefix}_{index}.dat"
+        name = _filename_from_url(url)
+        return name or f"{fallback_prefix}_{index}.dat"
+
+    audio_requests: List[Dict[str, Any]] = []
+    if audio_url_map:
+        for isrc, url in audio_url_map.items():
+            if not url:
+                continue
+            normalized = normalize_audio_url(url) or url
+            ext = _audio_ext_from_url(normalized)
+            endpoint_ext = "wav" if ext in ("flac", "wav") else ext
+            raw_name = _filename_from_url(normalized)
+            if not raw_name or "." not in raw_name:
+                raw_name = f"audio.{ext}"
+            else:
+                base, dot, suffix = raw_name.rpartition(".")
+                if base and dot and suffix.lower() != ext.lower():
+                    raw_name = f"{base}.{ext}"
+            body = {
+                "externalUrl": normalized,
+                "fileName": raw_name,
+            }
+            audio_requests.append({
+                "endpoint": f"{base_url}/media/audio/pullexternal/{endpoint_ext}",
+                "body": body,
+                "isrc": isrc,
+            })
+
+    artist_image_requests: List[Dict[str, Any]] = []
+    for idx, task in enumerate(artist_image_tasks or []):
+        url = task.get("url") if isinstance(task, dict) else None
+        name = task.get("name") if isinstance(task, dict) else None
+        if not url:
+            continue
+        artist_image_requests.append({
+            "endpoint": f"{base_url}/media/image/upload?cover=false",
+            "artistName": name,
+            "filename": _safe_filename(url, "artist_image", idx + 1),
+            "sourceUrl": url,
+        })
+
+    release_image_requests: List[Dict[str, Any]] = []
+    for idx, rel in enumerate(releases_payload or []):
+        url = rel.get("imageSourceUrl") if isinstance(rel, dict) else None
+        if not url:
+            continue
+        release_image_requests.append({
+            "endpoint": f"{base_url}/media/image/upload?cover=true",
+            "releaseName": rel.get("name"),
+            "filename": _safe_filename(url, "release_image", idx + 1),
+            "sourceUrl": url,
+        })
+
+    artist_requests: List[Dict[str, Any]] = []
+    for payload in (artists_payload or []):
+        body = copy.deepcopy(payload)
+        if isinstance(body, dict):
+            body.pop("imageSourceUrl", None)
+        artist_requests.append({
+            "endpoint": f"{base_url}/artists",
+            "body": body
+        })
+
+    label_requests = [{
+        "endpoint": f"{base_url}/content/label/save",
+        "body": copy.deepcopy(payload)
+    } for payload in (labels_payload or [])]
+
+    publisher_requests = [{
+        "endpoint": f"{base_url}/content/publisher/save",
+        "body": copy.deepcopy(payload)
+    } for payload in (publishers_payload or [])]
+
+    composer_requests = [{
+        "endpoint": f"{base_url}/content/composer/save",
+        "body": copy.deepcopy(payload)
+    } for payload in (composers_payload or [])]
+
+    release_requests = [{
+        "endpoint": f"{base_url}/content/release/save",
+        "body": copy.deepcopy(rel)
+    } for rel in (releases_payload or [])]
+
+    track_requests: List[Dict[str, Any]] = []
+    for upc, track_body in tracks_payload or []:
+        entry = {
+            "endpoint": f"{base_url}/content/track/save",
+            "body": copy.deepcopy(track_body)
+        }
+        if upc:
+            entry["releaseUPC"] = upc
+        track_requests.append(entry)
+
+    lines.append("Lookup endpoints called before mutations (GET):")
+    lines.append(f"- `{base_url}/content/label/all` (with pagination fallbacks)")
+    lines.append(f"- `{base_url}/content/publisher/all`")
+    lines.append(f"- `{base_url}/common/lookup/contributorRoles`")
+    lines.append(f"- `{base_url}/common/lookup/languages` (on demand)")
+    lines.append(f"- `{base_url}/common/lookup/musicstyles` (on demand)")
+    lines.append("")
+
+    _add_section(
+        "Audio ingest (pull external)",
+        "POST",
+        "Per track → /media/audio/pullexternal/{ext}",
+        audio_requests,
+        notes=[
+            "Each ISRC uploads the referenced audio before release/track creation.",
+            "The isrc field shown below is informational for this report and is not part of the HTTP request body.",
+        ],
+    )
+
+    _add_section(
+        "Artist profile image uploads",
+        "POST",
+        "Per artist → /media/image/upload?cover=false",
+        artist_image_requests,
+        notes=["Images are uploaded prior to calling /artists. Live runs send multipart form-data with the listed filename."],
+    )
+
+    _add_section(
+        "Upsert artists",
+        "POST",
+        f"{base_url}/artists",
+        artist_requests,
+        notes=["During live execution, the placeholder image.sourceUrl shown here is replaced once the upload stage returns image.fileId values."]
+    )
+
+    _add_section(
+        "Save labels",
+        "POST",
+        f"{base_url}/content/label/save",
+        label_requests,
+        notes=["Existing labels are detected via GET /content/label/all; only unknown names trigger POST requests."]
+    )
+
+    _add_section(
+        "Save publishers",
+        "POST",
+        f"{base_url}/content/publisher/save",
+        publisher_requests,
+    )
+
+    _add_section(
+        "Save composers",
+        "POST",
+        f"{base_url}/content/composer/save",
+        composer_requests,
+    )
+
+    _add_section(
+        "Release cover image uploads",
+        "POST",
+        "Per release → /media/image/upload?cover=true",
+        release_image_requests,
+        notes=["Successful uploads replace imageSourceUrl with image.fileId inside the release payload prior to /content/release/save."],
+    )
+
+    _add_section(
+        "Create releases",
+        "POST",
+        f"{base_url}/content/release/save",
+        release_requests,
+        notes=["On duplicate UPC responses, the script retries without the UPC value (see live logs)."],
+    )
+
+    _add_section(
+        "Create tracks",
+        "POST",
+        f"{base_url}/content/track/save",
+        track_requests,
+    )
+
+    doc = "\n".join(lines).strip()
+    return doc + "\n"
 
 # ========= Main pipeline =========
 
@@ -1116,6 +1438,15 @@ def main():
         sys.exit(2)
     enterpriseId = int(ent); tenantId = int(ten)
 
+    # Simple prerequisite: spreadsheet metadata must match provided IDs before proceeding.
+    sheet_enterprise_id, sheet_tenant_id = ensure_sheet_account_match(
+        args.xlsx,
+        "1) Artists list",
+        enterpriseId,
+        tenantId,
+        column_index_one_based=10,
+    )
+
     with requests.Session() as session:
         progress = Progress()
         global SENT_HTTP_PAYLOADS
@@ -1131,7 +1462,8 @@ def main():
             "final_tracks": [],
             "final_releases": [],
             "release_copyright_debug": [],
-            "sheet_account_metadata": []
+            "sheet_account_metadata": [],
+            "identifier_warnings": []
         }
         lookup_headers = {"X-EnterpriseId": str(enterpriseId), "X-TenantId": str(tenantId)}
         composer_role_map: Dict[str, Dict[str, Any]] = {}
@@ -1261,7 +1593,17 @@ def main():
             }
             (ARTIFACTS/"headers.json").write_text(json.dumps(headers_snapshot, indent=2, ensure_ascii=False))
 
-        sheet_account_meta = extract_sheet_account_ids(req_art, column_index_one_based=10)
+        sheet_account_meta = {
+            "enterpriseId": sheet_enterprise_id,
+            "tenantId": sheet_tenant_id,
+            "column_key": None,
+            "column_name": None,
+            "rows": {"row1": sheet_enterprise_id, "row2": sheet_tenant_id},
+            "column_index_one_based": 10,
+            "fallback_error": None,
+            "enterprise_source": {"row": 1, "column": 10, "value": sheet_enterprise_id},
+            "tenant_source": {"row": 2, "column": 10, "value": sheet_tenant_id},
+        }
         sheet_metadata_entry = {
             **sheet_account_meta,
             "input_enterpriseId": enterpriseId,
@@ -1636,134 +1978,153 @@ def main():
                 progress.write_log()
                 sys.exit(1)
 
-        # ===== Build master maps (Artists, Labels, Composers, Publishers)
-        # Artists
-        with progress.step("Build artists & labels & master entities") as s:
-            cm_art = make_colmap(df_art)
-            # Try robust resolution of the artist name column with several aliases
-            art_name_col = resolve_colkey(
-                df_art,
-                "Artist Name", "ARTIST NAME", "Artist",
-                "Artist Full Name", "ArtistName", "Name"
-            )
-            # Ultimate fallback: choose the first column whose header contains 'artist' and 'name' tokens
-            if not art_name_col:
-                for c in df_art.columns:
-                    if isinstance(c, str):
-                        key = norm_colkey(c)
-                        if "artist" in key and ("name" in key or key.endswith("artist")):
-                            art_name_col = c
-                            break
-            if not art_name_col:
-                print("[WARN] Could not resolve 'Artist Name' column; artist list may be empty.")
-            artists_payload = []
-            artist_name_to_obj = {}
-            dropped_art_missing_name = 0
-            artists_with_external_ids = 0
-            artist_external_source_counts = {"apple": 0, "spotify": 0, "meta": 0, "soundcloud": 0}
-            for i,rw in df_art.iterrows():
-                # fallback: use resolved column if present
-                name = norm_str(rw.get(art_name_col)) if art_name_col else norm_str(get_val(rw, cm_art, "Artist Name", "ARTIST NAME", "Artist"))
-                if not name:
-                    dropped_art_missing_name += 1
-                    continue
-                img_url = norm_str(get_val(rw, cm_art, "Artist Image url", "Artist Image URL"))
-                apple = norm_str(get_val(rw, cm_art, "Apple ArtistId"))
-                spotify = norm_str(get_val(rw, cm_art, "Spotify Artist URI"))
-                spotify_id = extract_spotify_artist_id(spotify) if spotify else None
-                meta = norm_str(get_val(rw, cm_art, "Meta ArtistId"))
-                sc = norm_str(get_val(rw, cm_art, "SoundCloud ProfileId", "SoundCloud Profile ID"))
-                ext = []
-                sources_used: List[str] = []
-                if apple:
-                    ext.append({"distributorStoreId":1, "profileId":apple})
-                    sources_used.append("apple")
-                if spotify_id:
-                    ext.append({"distributorStoreId":9, "profileId":spotify_id})
-                    sources_used.append("spotify")
-                if sc:
-                    ext.append({"distributorStoreId":68, "profileId":sc})
-                    sources_used.append("soundcloud")
-                if meta:
-                    ext.append({"distributorStoreId":309, "profileId":meta})
-                    sources_used.append("meta")
-                if ext:
-                    artists_with_external_ids += 1
-                    for src in sources_used:
-                        if src in artist_external_source_counts:
-                            artist_external_source_counts[src] += 1
-                img = ingest_image_by_url(img_url, session, base_url, token) if img_url else None
-                payload = {"name": name}
-                if ext: payload["artistExternalIds"] = ext
-                if img: payload["image"] = {"fileId": img["fileId"], "filename": img["filename"]}
-                artists_payload.append(payload)
-                artist_name_to_obj[name.lower()] = payload
-                add_debug_sample(debug_trace["artists_raw"], {
+    # ===== Build master maps (Artists, Labels, Composers, Publishers)
+    artist_image_tasks: List[Dict[str, Any]] = []
+    # Artists
+    with progress.step("Build artists & labels & master entities") as s:
+        cm_art = make_colmap(df_art)
+        # Try robust resolution of the artist name column with several aliases
+        art_name_col = resolve_colkey(
+            df_art,
+            "Artist Name", "ARTIST NAME", "Artist",
+            "Artist Full Name", "ArtistName", "Name"
+        )
+        # Ultimate fallback: choose the first column whose header contains 'artist' and 'name' tokens
+        if not art_name_col:
+            for c in df_art.columns:
+                if isinstance(c, str):
+                    key = norm_colkey(c)
+                    if "artist" in key and ("name" in key or key.endswith("artist")):
+                        art_name_col = c
+                        break
+        if not art_name_col:
+            print("[WARN] Could not resolve 'Artist Name' column; artist list may be empty.")
+        artists_payload = []
+        artist_name_to_obj = {}
+        dropped_art_missing_name = 0
+        artists_with_external_ids = 0
+        artist_external_source_counts = {"apple": 0, "spotify": 0, "meta": 0, "soundcloud": 0}
+        for i, rw in df_art.iterrows():
+            # fallback: use resolved column if present
+            name = norm_str(rw.get(art_name_col)) if art_name_col else norm_str(get_val(rw, cm_art, "Artist Name", "ARTIST NAME", "Artist"))
+            if not name:
+                dropped_art_missing_name += 1
+                continue
+            img_url = norm_str(get_val(rw, cm_art, "Artist Image url", "Artist Image URL"))
+            apple = norm_str(get_val(rw, cm_art, "Apple ArtistId"))
+            spotify = norm_str(get_val(rw, cm_art, "Spotify Artist URI"))
+            spotify_id = extract_spotify_artist_id(spotify) if spotify else None
+            meta = norm_str(get_val(rw, cm_art, "Meta ArtistId"))
+            sc = norm_str(get_val(rw, cm_art, "SoundCloud ProfileId", "SoundCloud Profile ID"))
+            isni_raw = norm_str(get_val(rw, cm_art, "ISNI"))
+            isni, isni_issue = normalize_isni(isni_raw)
+            ext = []
+            sources_used: List[str] = []
+            if apple:
+                ext.append({"distributorStoreId": 1, "profileId": apple})
+                sources_used.append("apple")
+            if spotify_id:
+                ext.append({"distributorStoreId": 9, "profileId": spotify_id})
+                sources_used.append("spotify")
+            if sc:
+                ext.append({"distributorStoreId": 68, "profileId": sc})
+                sources_used.append("soundcloud")
+            if meta:
+                ext.append({"distributorStoreId": 309, "profileId": meta})
+                sources_used.append("meta")
+            if ext:
+                artists_with_external_ids += 1
+                for src in sources_used:
+                    if src in artist_external_source_counts:
+                        artist_external_source_counts[src] += 1
+            payload = {"name": name}
+            if ext:
+                payload["artistExternalIds"] = ext
+            if isni:
+                payload["isni"] = isni
+            elif isni_raw and isni_issue:
+                debug_trace["identifier_warnings"].append({
+                    "entity": "artist",
                     "name": name,
-                    "apple": apple,
-                    "spotify_raw": spotify,
-                    "spotify_id": spotify_id,
-                    "meta": meta,
-                    "soundcloud": sc,
-                    "externalIds": ext
+                    "field": "isni",
+                    "value": isni_raw,
+                    "issue": isni_issue
                 })
+            if img_url:
+                artist_image_tasks.append({"name": name, "url": img_url, "payload": payload})
+                # Dry-run visibility: include placeholder filename/source
+                if not args.live:
+                    payload.setdefault("image", {"fileId": None, "filename": _filename_from_url(img_url), "sourceUrl": img_url})
+            artists_payload.append(payload)
+            artist_name_to_obj[name.lower()] = payload
+            add_debug_sample(debug_trace["artists_raw"], {
+                "name": name,
+                "apple": apple,
+                "spotify_raw": spotify,
+                "spotify_id": spotify_id,
+                "meta": meta,
+                "soundcloud": sc,
+                "externalIds": ext,
+                "isni": payload.get("isni"),
+                "imageSourceUrl": img_url
+            })
 
         # Labels
-            cm_lab = make_colmap(df_lab)
-            lab_name_col = resolve_colkey(df_lab, "Label Name", "LABEL NAME", "Label")
-            labels_payload = []
-            label_name_to_id = {}
-            dropped_lab_missing_name = 0
-            for i,rw in df_lab.iterrows():
-                lname = norm_str(rw.get(lab_name_col)) if lab_name_col else norm_str(get_val(rw, cm_lab, "Label Name", "LABEL NAME", "Label"))
-                if not lname:
-                    dropped_lab_missing_name += 1
-                    continue
-                labels_payload.append({"name": lname})
+        cm_lab = make_colmap(df_lab)
+        lab_name_col = resolve_colkey(df_lab, "Label Name", "LABEL NAME", "Label")
+        labels_payload = []
+        label_name_to_id = {}
+        dropped_lab_missing_name = 0
+        for i,rw in df_lab.iterrows():
+            lname = norm_str(rw.get(lab_name_col)) if lab_name_col else norm_str(get_val(rw, cm_lab, "Label Name", "LABEL NAME", "Label"))
+            if not lname:
+                dropped_lab_missing_name += 1
+                continue
+            labels_payload.append({"name": lname})
 
         # Publishers & Composers
-            cm_cm = make_colmap(df_comp_masters)
-            pub_col = resolve_colkey(df_comp_masters, "Publisher Name", "PUBLISHER NAME", "Publisher")
-            comp_col = resolve_colkey(df_comp_masters, "Composition Contributor", "COMPOSITION CONTRIBUTOR", "Contributor")
-            publishers_payload = []
-            composers_payload = []
-            pub_names = set(); comp_names = set()
-            if pub_col:
-                for _, rw in df_comp_masters.iterrows():
-                    pn = norm_str(rw.get(pub_col))
-                    if pn and pn.lower() not in pub_names:
-                        publishers_payload.append({"name": pn}); pub_names.add(pn.lower())
-                        add_debug_sample(debug_trace["publishers_raw"], {"name": pn})
-            if comp_col:
-                for _, rw in df_comp_masters.iterrows():
-                    cn = norm_str(rw.get(comp_col))
-                    if cn and cn.lower() not in comp_names:
-                        composers_payload.append({"name": cn}); comp_names.add(cn.lower())
-                        add_debug_sample(debug_trace["composer_entries"], {"composerName": cn, "source": "masters"})
-            # Include small samples in the log for quick visibility
-            art_samples = []
-            if art_name_col:
-                for i in range(min(3, len(df_art))):
-                    art_samples.append(norm_str(df_art.iloc[i].get(art_name_col)))
-            lab_samples = []
-            if lab_name_col:
-                for i in range(min(3, len(df_lab))):
-                    lab_samples.append(norm_str(df_lab.iloc[i].get(lab_name_col)))
-            pub_samples = []
-            if pub_col:
-                for i in range(min(3, len(df_comp_masters))):
-                    pub_samples.append(norm_str(df_comp_masters.iloc[i].get(pub_col)))
-            comp_samples = []
-            if comp_col:
-                for i in range(min(3, len(df_comp_masters))):
-                    comp_samples.append(norm_str(df_comp_masters.iloc[i].get(comp_col)))
-            s.info(
-                artists=len(artists_payload), labels=len(labels_payload), publishers=len(publishers_payload), composers=len(composers_payload),
-                artists_seen=len(df_art), labels_seen=len(df_lab), dropped_art_missing_name=dropped_art_missing_name, dropped_lab_missing_name=dropped_lab_missing_name,
-                artist_name_col=art_name_col, label_name_col=lab_name_col, publisher_col=pub_col, composer_col=comp_col,
-                artist_samples=art_samples, label_samples=lab_samples, publisher_samples=pub_samples, composer_samples=comp_samples,
-                artists_with_external_ids=artists_with_external_ids, external_id_sources=artist_external_source_counts
-            )
+        cm_cm = make_colmap(df_comp_masters)
+        pub_col = resolve_colkey(df_comp_masters, "Publisher Name", "PUBLISHER NAME", "Publisher")
+        comp_col = resolve_colkey(df_comp_masters, "Composition Contributor", "COMPOSITION CONTRIBUTOR", "Contributor")
+        publishers_payload = []
+        composers_payload = []
+        pub_names = set(); comp_names = set()
+        if pub_col:
+            for _, rw in df_comp_masters.iterrows():
+                pn = norm_str(rw.get(pub_col))
+                if pn and pn.lower() not in pub_names:
+                    publishers_payload.append({"name": pn}); pub_names.add(pn.lower())
+                    add_debug_sample(debug_trace["publishers_raw"], {"name": pn})
+        if comp_col:
+            for _, rw in df_comp_masters.iterrows():
+                cn = norm_str(rw.get(comp_col))
+                if cn and cn.lower() not in comp_names:
+                    composers_payload.append({"name": cn}); comp_names.add(cn.lower())
+                    add_debug_sample(debug_trace["composer_entries"], {"composerName": cn, "source": "masters"})
+        # Include small samples in the log for quick visibility
+        art_samples = []
+        if art_name_col:
+            for i in range(min(3, len(df_art))):
+                art_samples.append(norm_str(df_art.iloc[i].get(art_name_col)))
+        lab_samples = []
+        if lab_name_col:
+            for i in range(min(3, len(df_lab))):
+                lab_samples.append(norm_str(df_lab.iloc[i].get(lab_name_col)))
+        pub_samples = []
+        if pub_col:
+            for i in range(min(3, len(df_comp_masters))):
+                pub_samples.append(norm_str(df_comp_masters.iloc[i].get(pub_col)))
+        comp_samples = []
+        if comp_col:
+            for i in range(min(3, len(df_comp_masters))):
+                comp_samples.append(norm_str(df_comp_masters.iloc[i].get(comp_col)))
+        s.info(
+            artists=len(artists_payload), labels=len(labels_payload), publishers=len(publishers_payload), composers=len(composers_payload),
+            artists_seen=len(df_art), labels_seen=len(df_lab), dropped_art_missing_name=dropped_art_missing_name, dropped_lab_missing_name=dropped_lab_missing_name,
+            artist_name_col=art_name_col, label_name_col=lab_name_col, publisher_col=pub_col, composer_col=comp_col,
+            artist_samples=art_samples, label_samples=lab_samples, publisher_samples=pub_samples, composer_samples=comp_samples,
+            artists_with_external_ids=artists_with_external_ids, external_id_sources=artist_external_source_counts
+        )
 
         # ===== Releases & Tracks
         with progress.step("Build releases") as s:
@@ -2752,6 +3113,23 @@ def main():
             except Exception:
                 pass
             try:
+                payload_doc = build_dry_run_payload_doc(
+                    base_url,
+                    enterpriseId,
+                    tenantId,
+                    artist_image_tasks=artist_image_tasks,
+                    artists_payload=artists_payload,
+                    labels_payload=labels_payload,
+                    publishers_payload=publishers_payload,
+                    composers_payload=composers_payload,
+                    releases_payload=releases_payload,
+                    tracks_payload=tracks_payload,
+                    audio_url_map=audio_url_map if 'audio_url_map' in locals() else None,
+                )
+                (ARTIFACTS/"dry_run_payloads.md").write_text(payload_doc)
+            except Exception as exc:
+                print(f"[WARN] Failed to write payload simulation doc: {exc}")
+            try:
                 lookup_count = len(existing_labels) if 'existing_labels' in locals() else None
             except Exception:
                 lookup_count = None
@@ -2771,6 +3149,7 @@ def main():
 
         http_errors: List[Dict[str, Any]] = []
         image_upload_logs: List[Dict[str, Any]] = []
+        image_file_map: Dict[str, Dict[str, Any]] = {}
         def create_simple_list(items, url_path):
             created = 0; failed = 0
             for it in items:
@@ -2791,6 +3170,84 @@ def main():
                 else:
                     created += 1
             return created, failed
+        # Artist profile artwork must exist before attempting POST /artists
+        with progress.step("Download and upload artist images") as s:
+            total = len(artist_image_tasks)
+            if not artist_image_tasks:
+                s.info(total=0, downloaded=0, uploaded=0, skipped=0)
+            else:
+                artist_dir = SOURCE_ARTWORKS / "artists"
+                artist_dir.mkdir(exist_ok=True)
+                downloaded = 0; uploaded = 0; skipped = 0
+                failed_names: List[str] = []
+                for idx, task in enumerate(artist_image_tasks):
+                    name = task.get("name")
+                    url = task.get("url")
+                    payload = task.get("payload")
+                    if not url or not payload:
+                        skipped += 1
+                        failed_names.append(name or f"artist_{idx+1}")
+                        image_upload_logs.append({
+                            "when": "artist_image_missing_payload",
+                            "entity": "artist",
+                            "artistName": name,
+                            "sourceUrl": url,
+                            "error": "missing url or payload"
+                        })
+                        continue
+                    safe_name = _filename_from_url(url) or f"artist_image_{idx+1}.jpg"
+                    tmp_path, _, err = download_file(session, url)
+                    if err or not tmp_path:
+                        failed_names.append(name or safe_name)
+                        image_upload_logs.append({
+                            "when": "artist_image_download_failed",
+                            "entity": "artist",
+                            "artistName": name,
+                            "sourceUrl": url,
+                            "error": err or "download failed"
+                        })
+                        continue
+                    local_dir = artist_dir
+                    base_name = os.path.basename(safe_name) or f"artist_image_{idx+1}.jpg"
+                    stem, ext = os.path.splitext(base_name)
+                    candidate = local_dir / base_name
+                    counter = 1
+                    while candidate.exists():
+                        candidate = local_dir / f"{stem}_{counter}{ext or ''}"
+                        counter += 1
+                    shutil.move(tmp_path, candidate)
+                    downloaded += 1
+                    fid, up_log = upload_image_file(session, base_url, token, headers_common, str(candidate), candidate.name, cover=False)
+                    if up_log:
+                        up_log.update({
+                            "entity": "artist",
+                            "artistName": name,
+                            "sourceUrl": url
+                        })
+                        image_upload_logs.append(up_log)
+                    if fid:
+                        uploaded += 1
+                        payload["image"] = {"filename": candidate.name, "fileId": fid}
+                        payload.pop("imageSourceUrl", None)
+                        image_file_map[str(candidate)] = {
+                            "fileId": str(fid),
+                            "fileName": candidate.name,
+                            "entity": "artist",
+                            "name": name
+                        }
+                    else:
+                        failed_names.append(name or candidate.name)
+                        http_errors.append({
+                            "when": "artist_image_upload",
+                            "endpoint": f"{base_url}/media/image/upload",
+                            "status": up_log.get("status") if isinstance(up_log, dict) else None,
+                            "request": {"filename": candidate.name, "artist": name},
+                            "response": up_log.get("responseText")[:1000] if isinstance(up_log, dict) else None
+                        })
+                s.info(total=total, downloaded=downloaded, uploaded=uploaded, skipped=skipped, failed=len(failed_names))
+                if failed_names:
+                    names = sorted({fn for fn in failed_names if fn}) or ["unknown"]
+                    raise SystemExit("Failed to upload artist images for: " + ", ".join(names))
 
         # Upsert masters and create others
         with progress.step("Upsert masters (artists/labels) and create publishers/composers") as s:
@@ -2804,7 +3261,6 @@ def main():
 
         # Prepare source_artworks: download images locally, build mapping, then upload to get fileIds
         with progress.step("Prepare and upload cover images") as s:
-            image_file_map: Dict[str, Dict[str, str]] = {}
             downloaded = 0; uploaded = 0; skipped = 0
             for idx, rel in enumerate(releases_payload):
                 src = rel.get("imageSourceUrl")
@@ -2817,7 +3273,13 @@ def main():
                     safe_name = name or f"image_{idx}.jpg"
                     tmp_path, fn, err = download_file(session, src)
                     if err or not tmp_path:
-                        image_upload_logs.append({"when": "download_image", "sourceUrl": src, "error": err or "unknown"})
+                        image_upload_logs.append({
+                            "when": "download_image",
+                            "entity": "release",
+                            "releaseName": rel.get("name"),
+                            "sourceUrl": src,
+                            "error": err or "unknown"
+                        })
                         continue
                     local_path = SOURCE_ARTWORKS / safe_name
                     shutil.move(tmp_path, local_path)
@@ -2825,16 +3287,32 @@ def main():
                     # Upload
                     fid, up_log = upload_image_file(session, base_url, token, headers_common, str(local_path), safe_name)
                     if up_log:
+                        up_log.update({
+                            "entity": "release",
+                            "releaseName": rel.get("name"),
+                            "sourceUrl": src
+                        })
                         image_upload_logs.append(up_log)
                     if fid:
                         uploaded += 1
-                        image_file_map[str(local_path)] = {"fileId": str(fid), "fileName": safe_name}
+                        image_file_map[str(local_path)] = {
+                            "fileId": str(fid),
+                            "fileName": safe_name,
+                            "entity": "release",
+                            "name": rel.get("name")
+                        }
                         rel["image"] = {"fileId": fid, "filename": safe_name}
                         # Once we have a fileId, drop the source URL to avoid ambiguous payloads
                         if "imageSourceUrl" in rel:
                             rel.pop("imageSourceUrl", None)
                 except Exception as e:
-                    image_upload_logs.append({"when": "image_pipeline_exception", "sourceUrl": src, "error": str(e)})
+                    image_upload_logs.append({
+                        "when": "image_pipeline_exception",
+                        "entity": "release",
+                        "releaseName": rel.get("name"),
+                        "sourceUrl": src,
+                        "error": str(e)
+                    })
             # Persist mapping
             try:
                 (ARTIFACTS/"image_file_map.json").write_text(json.dumps(image_file_map, indent=2, ensure_ascii=False))
