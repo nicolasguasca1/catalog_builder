@@ -1,6 +1,6 @@
 # Dry-Run HTTP Payload Simulation
 
-- Generated: 2025-11-21 00:28:00Z
+- Generated: 2025-11-25 15:28:33Z
 - Base URL: `https://api.revelator.com`
 - EnterpriseId: 691097
 - TenantId: 332920
@@ -110,7 +110,11 @@ Sample payloads:
           "profileId": "697315585919469"
         }
       ],
-      "isni": "0000000121032683"
+      "isni": "0000000121032683",
+      "image": {
+        "filename": "Receba-789294845633-UPC.jpg",
+        "fileId": null
+      }
     }
   },
   {
@@ -130,7 +134,11 @@ Sample payloads:
           "distributorStoreId": 309,
           "profileId": "697315585919468"
         }
-      ]
+      ],
+      "image": {
+        "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+        "fileId": null
+      }
     }
   }
 ]
@@ -296,13 +304,51 @@ Sample payloads:
         {
           "roleId": 34,
           "artist": {
-            "name": "JKZTest"
+            "name": "JKZTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1532352644"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919469"
+              }
+            ],
+            "isni": "0000000121032683",
+            "image": {
+              "filename": "Receba-789294845633-UPC.jpg",
+              "fileId": null
+            }
           }
         },
         {
           "roleId": 19,
           "artist": {
-            "name": "JKZTest"
+            "name": "JKZTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1532352644"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919469"
+              }
+            ],
+            "isni": "0000000121032683",
+            "image": {
+              "filename": "Receba-789294845633-UPC.jpg",
+              "fileId": null
+            }
           }
         }
       ]
@@ -349,13 +395,49 @@ Sample payloads:
         {
           "roleId": 34,
           "artist": {
-            "name": "Flash Beats ManowTest"
+            "name": "Flash Beats ManowTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1601139620"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919468"
+              }
+            ],
+            "image": {
+              "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+              "fileId": null
+            }
           }
         },
         {
           "roleId": 19,
           "artist": {
-            "name": "Flash Beats ManowTest"
+            "name": "Flash Beats ManowTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1601139620"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919468"
+              }
+            ],
+            "image": {
+              "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+              "fileId": null
+            }
           }
         }
       ]
@@ -389,7 +471,7 @@ Sample payloads:
           "recordingVersionType": 1,
           "audioFiles": [
             {
-              "audioId": "8686ba76-8c12-4f22-955b-2ef763de87a0",
+              "audioId": "95173ab7-22e5-4d87-afb9-bbc04b116b5c",
               "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
               "fileFormat": 2
             }
@@ -461,13 +543,51 @@ Sample payloads:
         {
           "roleId": 34,
           "artist": {
-            "name": "JKZTest"
+            "name": "JKZTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1532352644"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919469"
+              }
+            ],
+            "isni": "0000000121032683",
+            "image": {
+              "filename": "Receba-789294845633-UPC.jpg",
+              "fileId": null
+            }
           }
         },
         {
           "roleId": 19,
           "artist": {
-            "name": "JKZTest"
+            "name": "JKZTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1532352644"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919469"
+              }
+            ],
+            "isni": "0000000121032683",
+            "image": {
+              "filename": "Receba-789294845633-UPC.jpg",
+              "fileId": null
+            }
           }
         },
         {
@@ -502,7 +622,7 @@ Sample payloads:
           "recordingVersionType": 1,
           "audioFiles": [
             {
-              "audioId": "78c2eb1b-cfc3-43dd-8fab-e277f76a62ab",
+              "audioId": "bd2a5de8-8a8e-4015-b2bb-c5414bbd9a7a",
               "audioFilename": "Joy-Mejia-Te-Fall.wav",
               "fileFormat": 2
             }
@@ -575,13 +695,49 @@ Sample payloads:
         {
           "roleId": 34,
           "artist": {
-            "name": "Flash Beats ManowTest"
+            "name": "Flash Beats ManowTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1601139620"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919468"
+              }
+            ],
+            "image": {
+              "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+              "fileId": null
+            }
           }
         },
         {
           "roleId": 19,
           "artist": {
-            "name": "Flash Beats ManowTest"
+            "name": "Flash Beats ManowTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1601139620"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919468"
+              }
+            ],
+            "image": {
+              "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+              "fileId": null
+            }
           }
         },
         {

@@ -1,0 +1,641 @@
+{
+  "releases": [
+    {
+      "vendorReleaseId": "999294845633",
+      "upc": "999294845633",
+      "grid": null,
+      "title": "Receba",
+      "versionTitle": "Extended",
+      "artistName": "JKZTest",
+      "originalReleaseDate": "2022-11-21 00:00:00",
+      "status": null,
+      "genreDesc": "Hip Hop/Rap",
+      "metadataLanguageCode": "Portuguese",
+      "parentalAdvisory": null,
+      "pLine": "2022 TokyoP",
+      "cLine": "2022 TokyoC",
+      "totalTracks": 1,
+      "tracks": [
+        {
+          "vendorTrackId": null,
+          "isrc": "QZW9M2221000",
+          "numberInRelease": 1,
+          "title": "Receba",
+          "versionTitle": "Extended",
+          "artistName": "JKZTest",
+          "lengthSeconds": null,
+          "audioLanguageCode": "Portuguese",
+          "metadataLanguageCode": "Portuguese",
+          "genreDesc": null,
+          "parentalAdvisory": "Not Explicit",
+          "originalReleaseDate": null,
+          "contributors": [
+            {
+              "name": "JKZTest",
+              "roleName": "Producer",
+              "contributorType": null,
+              "musicianContributorType": null,
+              "rawCreditLine": null,
+              "extra": {
+                "roleId": 34
+              }
+            },
+            {
+              "name": "JKZTest",
+              "roleName": "Engineer",
+              "contributorType": null,
+              "musicianContributorType": null,
+              "rawCreditLine": null,
+              "extra": {
+                "roleId": 19
+              }
+            },
+            {
+              "name": "Agnaldo Paulino de Jesus Júnior",
+              "roleName": "Composer & Lyricist",
+              "contributorType": null,
+              "musicianContributorType": null,
+              "rawCreditLine": null,
+              "extra": {
+                "roleId": 39,
+                "share": "0.6",
+                "shareNumeric": 0.6,
+                "rightsId": 1,
+                "publisherName": null,
+                "publisherId": null,
+                "composerId": null,
+                "iswc": null,
+                "isni": "0000000121032684",
+                "ipiCae": "00006718449"
+              }
+            },
+            {
+              "name": "Jackson Bertholdo Dos Santos",
+              "roleName": "Composer & Lyricist",
+              "contributorType": null,
+              "musicianContributorType": null,
+              "rawCreditLine": null,
+              "extra": {
+                "roleId": 39,
+                "share": "0.4",
+                "shareNumeric": 0.4,
+                "rightsId": 1,
+                "publisherName": null,
+                "publisherId": null,
+                "composerId": null,
+                "iswc": null,
+                "isni": "0000000121032685",
+                "ipiCae": null
+              }
+            }
+          ],
+          "extra": {
+            "languageId": 31,
+            "explicit": false,
+            "trackType": 1,
+            "previewStartSeconds": 140,
+            "trackRecordingVersions": [
+              {
+                "isrc": "QZW9M2221000",
+                "recordingVersionType": 1,
+                "audioFiles": [
+                  {
+                    "audioId": "95173ab7-22e5-4d87-afb9-bbc04b116b5c",
+                    "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
+                    "fileFormat": 2
+                  }
+                ]
+              }
+            ],
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1532352644"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919469"
+              }
+            ],
+            "trackProperties": [
+              1
+            ],
+            "compositions": [
+              {
+                "iswc": "T1234567890"
+              }
+            ],
+            "composerContentsDTO": [
+              {
+                "share": "60",
+                "composerName": "Agnaldo Paulino de Jesus Júnior",
+                "roleId": 39,
+                "rightsId": 1,
+                "isni": "0000000121032684",
+                "ipiCae": "00006718449",
+                "composersLocals": [
+                  {
+                    "languageId": 31,
+                    "name": "Agnaldo Paulino de Jesus Júnior",
+                    "version": "Extended"
+                  }
+                ]
+              },
+              {
+                "share": "40",
+                "composerName": "Jackson Bertholdo Dos Santos",
+                "roleId": 39,
+                "rightsId": 1,
+                "isni": "0000000121032685",
+                "composersLocals": [
+                  {
+                    "languageId": 31,
+                    "name": "Jackson Bertholdo Dos Santos",
+                    "version": "Extended"
+                  }
+                ]
+              }
+            ],
+            "trackLocals": [
+              {
+                "name": "Receba",
+                "languageId": 31,
+                "version": "Extended"
+              }
+            ],
+            "audioUrl": "https://www.dropbox.com/scl/fi/sjv55c5eqq0utzgy15ojq/Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav?rlkey=6j5ruxil4gc3vxonuf8ownxvi&st=8kysye3f&dl=1",
+            "audioType": "flac",
+            "upc": "999294845633",
+            "contributorsPayload": [
+              {
+                "roleId": 34,
+                "artist": {
+                  "name": "JKZTest",
+                  "artistExternalIds": [
+                    {
+                      "distributorStoreId": 1,
+                      "profileId": "1532352644"
+                    },
+                    {
+                      "distributorStoreId": 9,
+                      "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+                    },
+                    {
+                      "distributorStoreId": 309,
+                      "profileId": "697315585919469"
+                    }
+                  ],
+                  "isni": "0000000121032683"
+                }
+              },
+              {
+                "roleId": 19,
+                "artist": {
+                  "name": "JKZTest",
+                  "artistExternalIds": [
+                    {
+                      "distributorStoreId": 1,
+                      "profileId": "1532352644"
+                    },
+                    {
+                      "distributorStoreId": 9,
+                      "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+                    },
+                    {
+                      "distributorStoreId": 309,
+                      "profileId": "697315585919469"
+                    }
+                  ],
+                  "isni": "0000000121032683"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "contributors": [
+        {
+          "name": "JKZTest",
+          "roleName": "Producer",
+          "contributorType": null,
+          "musicianContributorType": null,
+          "rawCreditLine": null,
+          "extra": {
+            "roleId": 34
+          }
+        },
+        {
+          "name": "JKZTest",
+          "roleName": "Engineer",
+          "contributorType": null,
+          "musicianContributorType": null,
+          "rawCreditLine": null,
+          "extra": {
+            "roleId": 19
+          }
+        }
+      ],
+      "extra": {
+        "previouslyReleased": true,
+        "releaseDate": "2022-11-21 00:00:00",
+        "languageId": 31,
+        "releaseLocals": [
+          {
+            "languageId": 31,
+            "name": "Receba"
+          }
+        ],
+        "primaryMusicStyleId": 41,
+        "secondaryMusicStyleId": 555,
+        "hasRecordLabel": true,
+        "labelName": "TokyoRecordsFULLTEST",
+        "image": null,
+        "imageSourceUrl": "https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1",
+        "artistExternalIds": [
+          {
+            "distributorStoreId": 1,
+            "profileId": "1532352644"
+          },
+          {
+            "distributorStoreId": 9,
+            "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+          },
+          {
+            "distributorStoreId": 309,
+            "profileId": "697315585919469"
+          }
+        ],
+        "artistExternalIdsSource": null,
+        "languageName": "Portuguese",
+        "primaryGenreDesc": "Hip Hop/Rap",
+        "secondaryGenreDesc": "African Reggae",
+        "sheetRow": 5,
+        "contributorsPayload": [
+          {
+            "roleId": 34,
+            "artist": {
+              "name": "JKZTest",
+              "artistExternalIds": [
+                {
+                  "distributorStoreId": 1,
+                  "profileId": "1532352644"
+                },
+                {
+                  "distributorStoreId": 9,
+                  "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+                },
+                {
+                  "distributorStoreId": 309,
+                  "profileId": "697315585919469"
+                }
+              ],
+              "isni": "0000000121032683"
+            }
+          },
+          {
+            "roleId": 19,
+            "artist": {
+              "name": "JKZTest",
+              "artistExternalIds": [
+                {
+                  "distributorStoreId": 1,
+                  "profileId": "1532352644"
+                },
+                {
+                  "distributorStoreId": 9,
+                  "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+                },
+                {
+                  "distributorStoreId": 309,
+                  "profileId": "697315585919469"
+                }
+              ],
+              "isni": "0000000121032683"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "vendorReleaseId": "999294962088",
+      "upc": "999294962088",
+      "grid": null,
+      "title": "A Cláusula do Contrato",
+      "versionTitle": null,
+      "artistName": "Flash Beats ManowTest",
+      "originalReleaseDate": "2022-11-24 00:00:00",
+      "status": null,
+      "genreDesc": "Hip Hop/Rap",
+      "metadataLanguageCode": "Portuguese",
+      "parentalAdvisory": null,
+      "pLine": "2022 PEJOTAP",
+      "cLine": "2022 PEJOTAC",
+      "totalTracks": 1,
+      "tracks": [
+        {
+          "vendorTrackId": null,
+          "isrc": "QZW9M2236571",
+          "numberInRelease": 1,
+          "title": "A Cláusula do Contrato",
+          "versionTitle": null,
+          "artistName": "Flash Beats ManowTest",
+          "lengthSeconds": null,
+          "audioLanguageCode": "Portuguese",
+          "metadataLanguageCode": "Portuguese",
+          "genreDesc": null,
+          "parentalAdvisory": "Not Explicit",
+          "originalReleaseDate": null,
+          "contributors": [
+            {
+              "name": "Flash Beats ManowTest",
+              "roleName": "Producer",
+              "contributorType": null,
+              "musicianContributorType": null,
+              "rawCreditLine": null,
+              "extra": {
+                "roleId": 34
+              }
+            },
+            {
+              "name": "Flash Beats ManowTest",
+              "roleName": "Engineer",
+              "contributorType": null,
+              "musicianContributorType": null,
+              "rawCreditLine": null,
+              "extra": {
+                "roleId": 19
+              }
+            },
+            {
+              "name": "Jackson Bertholdo Dos Santos",
+              "roleName": "Composer & Lyricist",
+              "contributorType": null,
+              "musicianContributorType": null,
+              "rawCreditLine": null,
+              "extra": {
+                "roleId": 39,
+                "share": "0.5",
+                "shareNumeric": 0.5,
+                "rightsId": 2,
+                "publisherName": "SONY ATV",
+                "publisherId": 90322,
+                "composerId": null,
+                "iswc": null,
+                "isni": "0000000121032685",
+                "ipiCae": null
+              }
+            },
+            {
+              "name": "Agnaldo Paulino de Jesus Júnior",
+              "roleName": "Composer & Lyricist",
+              "contributorType": null,
+              "musicianContributorType": null,
+              "rawCreditLine": null,
+              "extra": {
+                "roleId": 39,
+                "share": "0.5",
+                "shareNumeric": 0.5,
+                "rightsId": 2,
+                "publisherName": "WARNER CHAPPEL",
+                "publisherId": 90323,
+                "composerId": null,
+                "iswc": null,
+                "isni": "0000000121032684",
+                "ipiCae": "00006718449"
+              }
+            }
+          ],
+          "extra": {
+            "languageId": 31,
+            "explicit": false,
+            "trackType": 1,
+            "previewStartSeconds": 200,
+            "trackRecordingVersions": [
+              {
+                "isrc": "QZW9M2236571",
+                "recordingVersionType": 1,
+                "audioFiles": [
+                  {
+                    "audioId": "bd2a5de8-8a8e-4015-b2bb-c5414bbd9a7a",
+                    "audioFilename": "Joy-Mejia-Te-Fall.wav",
+                    "fileFormat": 2
+                  }
+                ]
+              }
+            ],
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1601139620"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919468"
+              }
+            ],
+            "trackProperties": [
+              1
+            ],
+            "compositions": [
+              {
+                "iswc": "T1234567890"
+              }
+            ],
+            "composerContentsDTO": [
+              {
+                "share": "50",
+                "composerName": "Jackson Bertholdo Dos Santos",
+                "roleId": 39,
+                "rightsId": 2,
+                "isni": "0000000121032685",
+                "publisherName": "SONY ATV",
+                "publisherId": 90322,
+                "composersLocals": [
+                  {
+                    "languageId": 31,
+                    "name": "Jackson Bertholdo Dos Santos"
+                  }
+                ]
+              },
+              {
+                "share": "50",
+                "composerName": "Agnaldo Paulino de Jesus Júnior",
+                "roleId": 39,
+                "rightsId": 2,
+                "isni": "0000000121032684",
+                "ipiCae": "00006718449",
+                "publisherName": "WARNER CHAPPEL",
+                "publisherId": 90323,
+                "composersLocals": [
+                  {
+                    "languageId": 31,
+                    "name": "Agnaldo Paulino de Jesus Júnior"
+                  }
+                ]
+              }
+            ],
+            "trackLocals": [
+              {
+                "name": "A Cláusula do Contrato",
+                "languageId": 31
+              }
+            ],
+            "audioUrl": "https://www.dropbox.com/scl/fi/ncgo2nf5srfafm0odhequ/Joy-Mejia-Te-Fall.wav?rlkey=6jl64vr3v0w4tn6km1sbhlxux&st=um08pokf&dl=1",
+            "audioType": "flac",
+            "upc": "999294962088",
+            "contributorsPayload": [
+              {
+                "roleId": 34,
+                "artist": {
+                  "name": "Flash Beats ManowTest",
+                  "artistExternalIds": [
+                    {
+                      "distributorStoreId": 1,
+                      "profileId": "1601139620"
+                    },
+                    {
+                      "distributorStoreId": 9,
+                      "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+                    },
+                    {
+                      "distributorStoreId": 309,
+                      "profileId": "697315585919468"
+                    }
+                  ]
+                }
+              },
+              {
+                "roleId": 19,
+                "artist": {
+                  "name": "Flash Beats ManowTest",
+                  "artistExternalIds": [
+                    {
+                      "distributorStoreId": 1,
+                      "profileId": "1601139620"
+                    },
+                    {
+                      "distributorStoreId": 9,
+                      "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+                    },
+                    {
+                      "distributorStoreId": 309,
+                      "profileId": "697315585919468"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "contributors": [
+        {
+          "name": "Flash Beats ManowTest",
+          "roleName": "Producer",
+          "contributorType": null,
+          "musicianContributorType": null,
+          "rawCreditLine": null,
+          "extra": {
+            "roleId": 34
+          }
+        },
+        {
+          "name": "Flash Beats ManowTest",
+          "roleName": "Engineer",
+          "contributorType": null,
+          "musicianContributorType": null,
+          "rawCreditLine": null,
+          "extra": {
+            "roleId": 19
+          }
+        }
+      ],
+      "extra": {
+        "previouslyReleased": true,
+        "releaseDate": "2022-11-24 00:00:00",
+        "languageId": 31,
+        "releaseLocals": [
+          {
+            "languageId": 31,
+            "name": "A Cláusula do Contrato"
+          }
+        ],
+        "primaryMusicStyleId": 41,
+        "secondaryMusicStyleId": 555,
+        "hasRecordLabel": true,
+        "labelName": "PEJOTA10*FULLTEST",
+        "image": null,
+        "imageSourceUrl": "https://www.dropbox.com/scl/fi/wky0ryb739s0xs3wo5qop/A-Cl-usula-do-Contrato-789294962088-UPC.jpg?rlkey=91bp85llgb8ho5lnfcs56105s&st=dn12pxrd&dl=1",
+        "artistExternalIds": [
+          {
+            "distributorStoreId": 1,
+            "profileId": "1601139620"
+          },
+          {
+            "distributorStoreId": 9,
+            "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+          },
+          {
+            "distributorStoreId": 309,
+            "profileId": "697315585919468"
+          }
+        ],
+        "artistExternalIdsSource": null,
+        "languageName": "Portuguese",
+        "primaryGenreDesc": "Hip Hop/Rap",
+        "secondaryGenreDesc": "African Reggae",
+        "sheetRow": 6,
+        "contributorsPayload": [
+          {
+            "roleId": 34,
+            "artist": {
+              "name": "Flash Beats ManowTest",
+              "artistExternalIds": [
+                {
+                  "distributorStoreId": 1,
+                  "profileId": "1601139620"
+                },
+                {
+                  "distributorStoreId": 9,
+                  "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+                },
+                {
+                  "distributorStoreId": 309,
+                  "profileId": "697315585919468"
+                }
+              ]
+            }
+          },
+          {
+            "roleId": 19,
+            "artist": {
+              "name": "Flash Beats ManowTest",
+              "artistExternalIds": [
+                {
+                  "distributorStoreId": 1,
+                  "profileId": "1601139620"
+                },
+                {
+                  "distributorStoreId": 9,
+                  "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+                },
+                {
+                  "distributorStoreId": 309,
+                  "profileId": "697315585919468"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

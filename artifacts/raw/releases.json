@@ -38,13 +38,51 @@
       {
         "roleId": 34,
         "artist": {
-          "name": "JKZTest"
+          "name": "JKZTest",
+          "artistExternalIds": [
+            {
+              "distributorStoreId": 1,
+              "profileId": "1532352644"
+            },
+            {
+              "distributorStoreId": 9,
+              "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+            },
+            {
+              "distributorStoreId": 309,
+              "profileId": "697315585919469"
+            }
+          ],
+          "isni": "0000000121032683",
+          "image": {
+            "filename": "Receba-789294845633-UPC.jpg",
+            "fileId": null
+          }
         }
       },
       {
         "roleId": 19,
         "artist": {
-          "name": "JKZTest"
+          "name": "JKZTest",
+          "artistExternalIds": [
+            {
+              "distributorStoreId": 1,
+              "profileId": "1532352644"
+            },
+            {
+              "distributorStoreId": 9,
+              "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+            },
+            {
+              "distributorStoreId": 309,
+              "profileId": "697315585919469"
+            }
+          ],
+          "isni": "0000000121032683",
+          "image": {
+            "filename": "Receba-789294845633-UPC.jpg",
+            "fileId": null
+          }
         }
       }
     ]
@@ -88,13 +126,49 @@
       {
         "roleId": 34,
         "artist": {
-          "name": "Flash Beats ManowTest"
+          "name": "Flash Beats ManowTest",
+          "artistExternalIds": [
+            {
+              "distributorStoreId": 1,
+              "profileId": "1601139620"
+            },
+            {
+              "distributorStoreId": 9,
+              "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+            },
+            {
+              "distributorStoreId": 309,
+              "profileId": "697315585919468"
+            }
+          ],
+          "image": {
+            "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+            "fileId": null
+          }
         }
       },
       {
         "roleId": 19,
         "artist": {
-          "name": "Flash Beats ManowTest"
+          "name": "Flash Beats ManowTest",
+          "artistExternalIds": [
+            {
+              "distributorStoreId": 1,
+              "profileId": "1601139620"
+            },
+            {
+              "distributorStoreId": 9,
+              "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+            },
+            {
+              "distributorStoreId": 309,
+              "profileId": "697315585919468"
+            }
+          ],
+          "image": {
+            "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+            "fileId": null
+          }
         }
       }
     ]

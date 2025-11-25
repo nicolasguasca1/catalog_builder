@@ -2,13 +2,59 @@
   {
     "endpoint": "https://api.revelator.com/media/image/upload",
     "params": {
+      "cover": "false"
+    },
+    "filename": "Receba-789294845633-UPC.jpg",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "responseText": "\"94e24975-82a3-41a5-9e18-8cddb163cff3\"",
+    "requestId": "req-1764084516602-00020",
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67",
+      "phase": "image_upload"
+    },
+    "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3",
+    "entity": "artist",
+    "artistName": "JKZTest",
+    "sourceUrl": "https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1"
+  },
+  {
+    "endpoint": "https://api.revelator.com/media/image/upload",
+    "params": {
+      "cover": "false"
+    },
+    "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "responseText": "\"5f9a5a1e-002b-4c23-9600-a18fdb51aeee\"",
+    "requestId": "req-1764084520296-00021",
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67",
+      "phase": "image_upload"
+    },
+    "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee",
+    "entity": "artist",
+    "artistName": "Flash Beats ManowTest",
+    "sourceUrl": "https://www.dropbox.com/scl/fi/wky0ryb739s0xs3wo5qop/A-Cl-usula-do-Contrato-789294962088-UPC.jpg?rlkey=91bp85llgb8ho5lnfcs56105s&st=dn12pxrd&dl=1"
+  },
+  {
+    "endpoint": "https://api.revelator.com/media/image/upload",
+    "params": {
       "cover": "true"
     },
     "filename": "Receba-789294845633-UPC.jpg",
     "status": 200,
     "contentType": "application/json; charset=utf-8",
-    "responseText": "\"a86fba75-9955-4d24-94a7-7cd825ff9106\"",
-    "fileId": "a86fba75-9955-4d24-94a7-7cd825ff9106"
+    "responseText": "\"56b6342d-0244-4264-a964-368fe17a38f9\"",
+    "requestId": "req-1764084531751-00028",
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67",
+      "phase": "image_upload"
+    },
+    "fileId": "56b6342d-0244-4264-a964-368fe17a38f9",
+    "entity": "release",
+    "releaseName": "Receba",
+    "sourceUrl": "https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1"
   },
   {
     "endpoint": "https://api.revelator.com/media/image/upload",
@@ -18,7 +64,15 @@
     "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
     "status": 200,
     "contentType": "application/json; charset=utf-8",
-    "responseText": "\"18d89114-08e9-47c5-80e1-44e81b5963d9\"",
-    "fileId": "18d89114-08e9-47c5-80e1-44e81b5963d9"
+    "responseText": "\"d2e51aa6-531f-453d-bb73-6da7b81929e4\"",
+    "requestId": "req-1764084535479-00029",
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67",
+      "phase": "image_upload"
+    },
+    "fileId": "d2e51aa6-531f-453d-bb73-6da7b81929e4",
+    "entity": "release",
+    "releaseName": "A Cláusula do Contrato",
+    "sourceUrl": "https://www.dropbox.com/scl/fi/wky0ryb739s0xs3wo5qop/A-Cl-usula-do-Contrato-789294962088-UPC.jpg?rlkey=91bp85llgb8ho5lnfcs56105s&st=dn12pxrd&dl=1"
   }
 ]

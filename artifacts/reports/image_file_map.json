@@ -1,0 +1,32 @@
+[
+  {
+    "entity": "artist",
+    "name": "JKZTest",
+    "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3",
+    "fileName": "Receba-789294845633-UPC.jpg",
+    "sourceUrl": "https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1"
+  },
+  {
+    "entity": "artist",
+    "name": "Flash Beats ManowTest",
+    "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee",
+    "fileName": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+    "sourceUrl": "https://www.dropbox.com/scl/fi/wky0ryb739s0xs3wo5qop/A-Cl-usula-do-Contrato-789294962088-UPC.jpg?rlkey=91bp85llgb8ho5lnfcs56105s&st=dn12pxrd&dl=1"
+  },
+  {
+    "entity": "release",
+    "name": "Receba",
+    "upc": "999294845633",
+    "fileId": "56b6342d-0244-4264-a964-368fe17a38f9",
+    "fileName": "Receba-789294845633-UPC.jpg",
+    "sourceUrl": "https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1"
+  },
+  {
+    "entity": "release",
+    "name": "A Cláusula do Contrato",
+    "upc": "999294962088",
+    "fileId": "d2e51aa6-531f-453d-bb73-6da7b81929e4",
+    "fileName": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+    "sourceUrl": "https://www.dropbox.com/scl/fi/wky0ryb739s0xs3wo5qop/A-Cl-usula-do-Contrato-789294962088-UPC.jpg?rlkey=91bp85llgb8ho5lnfcs56105s&st=dn12pxrd&dl=1"
+  }
+]

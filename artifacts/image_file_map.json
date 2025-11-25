@@ -1,10 +1,26 @@
-{
-  "source_artworks/Receba-789294845633-UPC.jpg": {
-    "fileId": "a86fba75-9955-4d24-94a7-7cd825ff9106",
+[
+  {
+    "entity": "artist",
+    "name": "JKZTest",
+    "fileId": "f2316b72-8005-4ed9-aa60-9d1f31c73921",
+    "fileName": "Receba-789294845633-UPC_19.jpg"
+  },
+  {
+    "entity": "artist",
+    "name": "Flash Beats ManowTest",
+    "fileId": "2d86bb33-a4b8-4f8b-9a76-e4ba90f01bc2",
+    "fileName": "A-Cl-usula-do-Contrato-789294962088-UPC_19.jpg"
+  },
+  {
+    "entity": "release",
+    "name": "Receba",
+    "fileId": "3cd11e24-e91e-4a3b-98d5-82e686005e32",
     "fileName": "Receba-789294845633-UPC.jpg"
   },
-  "source_artworks/A-Cl-usula-do-Contrato-789294962088-UPC.jpg": {
-    "fileId": "18d89114-08e9-47c5-80e1-44e81b5963d9",
+  {
+    "entity": "release",
+    "name": "A Cláusula do Contrato",
+    "fileId": "ca010f32-01fb-4be7-8760-50c6f3cc1c1e",
     "fileName": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg"
   }
-}
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "when": "reuse_artist[Flash Beats ManowTest]",
+    "endpoint": "https://api.revelator.com/artists",
+    "status": 400,
+    "request": {
+      "name": "Flash Beats ManowTest",
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1601139620"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919468"
+        }
+      ],
+      "image": {
+        "filename": "A-Cl-usula-do-Contrato-789294962088-UPC_18.jpg",
+        "fileId": "050addb2-e220-4894-ac5b-be70f7a56719"
+      },
+      "artistId": 1773789
+    },
+    "response": "{\"message\":\"An error has occured\",\"statusCode\":400,\"error\":\"The artist can't be modified because it has been archived.\"}",
+    "requestId": "req-1763684643434-00027"
+  }
+]

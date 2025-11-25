@@ -1,0 +1,384 @@
+[
+  {
+    "timestamp": 1764084494.458,
+    "requestId": "req-1764084494457-00001",
+    "method": "GET",
+    "url": "https://api.revelator.com/enterprise/clients/691097",
+    "json": null,
+    "params": null,
+    "headers": {},
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084495.582,
+    "requestId": "req-1764084495581-00002",
+    "method": "GET",
+    "url": "https://api.revelator.com/common/lookup/contributorRoles",
+    "json": null,
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084495.643,
+    "requestId": "req-1764084495642-00003",
+    "method": "GET",
+    "url": "https://api.revelator.com/content/publisher/all",
+    "json": null,
+    "params": {
+      "pageNumber": 1,
+      "pageSize": 100
+    },
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084495.725,
+    "requestId": "req-1764084495724-00004",
+    "method": "GET",
+    "url": "https://api.revelator.com/content/publisher/all",
+    "json": null,
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084495.93,
+    "requestId": "req-1764084495929-00005",
+    "method": "GET",
+    "url": "https://api.revelator.com/content/composer/all",
+    "json": null,
+    "params": {
+      "pageNumber": 1,
+      "pageSize": 100
+    },
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084496.026,
+    "requestId": "req-1764084496026-00006",
+    "method": "GET",
+    "url": "https://api.revelator.com/content/composer/all",
+    "json": null,
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084496.32,
+    "requestId": "req-1764084496320-00007",
+    "method": "GET",
+    "url": "https://api.revelator.com/common/lookup/countries",
+    "json": null,
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084504.336,
+    "requestId": "req-1764084504336-00008",
+    "method": "GET",
+    "url": "https://api.revelator.com/common/lookup/languages",
+    "json": null,
+    "params": null,
+    "headers": {},
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084504.583,
+    "requestId": "req-1764084504582-00009",
+    "method": "GET",
+    "url": "https://api.revelator.com/common/lookup/musicstyles",
+    "json": null,
+    "params": null,
+    "headers": {},
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084504.655,
+    "requestId": "req-1764084504654-00010",
+    "method": "GET",
+    "url": "https://api.revelator.com/common/lookup/musicstyles",
+    "json": null,
+    "params": null,
+    "headers": {},
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084504.724,
+    "requestId": "req-1764084504723-00011",
+    "method": "GET",
+    "url": "https://api.revelator.com/common/lookup/languages",
+    "json": null,
+    "params": null,
+    "headers": {},
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084504.832,
+    "requestId": "req-1764084504831-00012",
+    "method": "GET",
+    "url": "https://api.revelator.com/common/lookup/musicstyles",
+    "json": null,
+    "params": null,
+    "headers": {},
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084504.898,
+    "requestId": "req-1764084504897-00013",
+    "method": "GET",
+    "url": "https://api.revelator.com/common/lookup/musicstyles",
+    "json": null,
+    "params": null,
+    "headers": {},
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084504.966,
+    "requestId": "req-1764084504966-00014",
+    "method": "GET",
+    "url": "https://api.revelator.com/common/lookup/languages",
+    "json": null,
+    "params": null,
+    "headers": {},
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084508.108,
+    "requestId": "req-1764084508108-00016",
+    "method": "GET",
+    "url": "https://api.revelator.com/common/lookup/languages",
+    "json": null,
+    "params": null,
+    "headers": {},
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084513.508,
+    "requestId": "req-1764084513508-00018",
+    "method": "GET",
+    "url": "https://api.revelator.com/content/label/all",
+    "json": null,
+    "params": {
+      "pageNumber": 1,
+      "pageSize": 100
+    },
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084513.641,
+    "requestId": "req-1764084513640-00019",
+    "method": "GET",
+    "url": "https://api.revelator.com/content/label/all",
+    "json": null,
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084527.157,
+    "requestId": "req-1764084527156-00022",
+    "method": "GET",
+    "url": "https://api.revelator.com/content/label/all",
+    "json": null,
+    "params": {
+      "pageNumber": 1,
+      "pageSize": 100
+    },
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084527.249,
+    "requestId": "req-1764084527249-00023",
+    "method": "GET",
+    "url": "https://api.revelator.com/content/label/all",
+    "json": null,
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084527.556,
+    "requestId": "req-1764084527555-00024",
+    "method": "GET",
+    "url": "https://api.revelator.com/api/enterprises/691097/artists",
+    "json": null,
+    "params": {
+      "name": "JKZTest",
+      "pageSize": 1
+    },
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084528.652,
+    "requestId": "req-1764084528652-00026",
+    "method": "GET",
+    "url": "https://api.revelator.com/api/enterprises/691097/artists",
+    "json": null,
+    "params": {
+      "name": "Flash Beats ManowTest",
+      "pageSize": 1
+    },
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084536.708,
+    "requestId": "req-1764084536707-00030",
+    "method": "GET",
+    "url": "https://api.revelator.com/content/release/all",
+    "json": null,
+    "params": {
+      "searchText": "Receba",
+      "pageNumber": 1,
+      "pageSize": 25
+    },
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084563.239,
+    "requestId": "req-1764084563238-00033",
+    "method": "GET",
+    "url": "https://api.revelator.com/content/release/all",
+    "json": null,
+    "params": {
+      "searchText": "A Cláusula do Contrato",
+      "pageNumber": 1,
+      "pageSize": 25
+    },
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084592.702,
+    "requestId": "req-1764084592702-00036",
+    "method": "GET",
+    "url": "https://api.revelator.com/content/track/all",
+    "json": null,
+    "params": {
+      "searchText": "Receba",
+      "pageNumber": 1,
+      "pageSize": 25
+    },
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084605.146,
+    "requestId": "req-1764084605145-00038",
+    "method": "GET",
+    "url": "https://api.revelator.com/content/track/all",
+    "json": null,
+    "params": {
+      "searchText": "A Cláusula do Contrato",
+      "pageNumber": 1,
+      "pageSize": 25
+    },
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  }
+]

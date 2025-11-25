@@ -1,0 +1,3038 @@
+{
+  "generated": 1764084704.477,
+  "artists_by_name": {
+    "jkztest": 1787281,
+    "flash beats manowtest": 1787282
+  },
+  "labels_by_name": {
+    "tokyorecordsfulltest": 1071255,
+    "pejota10*fulltest": 1071256
+  },
+  "publishers_by_name": {
+    "sony atv": 90322,
+    "warner chappel": 90323
+  },
+  "composers_by_name": {
+    "agnaldo paulino de jesus júnior": 1440495,
+    "jackson bertholdo dos santos": 1440496
+  },
+  "upc_skipped": [
+    "999294845633",
+    "999294962088"
+  ],
+  "created_entities": {
+    "releases": [
+      {
+        "request": {
+          "name": "Receba",
+          "version": "Extended",
+          "previouslyReleased": true,
+          "releaseDate": "2022-11-21 00:00:00",
+          "copyrightP": "2022 TokyoP",
+          "copyrightC": "2022 TokyoC",
+          "releaseLocals": [
+            {
+              "languageId": 31,
+              "name": "Receba"
+            }
+          ],
+          "languageId": 31,
+          "primaryMusicStyleId": 41,
+          "secondaryMusicStyleId": 555,
+          "hasRecordLabel": true,
+          "labelName": "TokyoRecordsFULLTEST",
+          "artistExternalIds": [
+            {
+              "distributorStoreId": 1,
+              "profileId": "1532352644"
+            },
+            {
+              "distributorStoreId": 9,
+              "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+            },
+            {
+              "distributorStoreId": 309,
+              "profileId": "697315585919469"
+            }
+          ],
+          "contributors": [
+            {
+              "roleId": 34,
+              "artist": {
+                "name": "JKZTest",
+                "artistExternalIds": [
+                  {
+                    "distributorStoreId": 1,
+                    "profileId": "1532352644"
+                  },
+                  {
+                    "distributorStoreId": 9,
+                    "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+                  },
+                  {
+                    "distributorStoreId": 309,
+                    "profileId": "697315585919469"
+                  }
+                ],
+                "isni": "0000000121032683",
+                "image": {
+                  "filename": "Receba-789294845633-UPC.jpg",
+                  "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+                },
+                "artistId": 1787281
+              }
+            },
+            {
+              "roleId": 19,
+              "artist": {
+                "name": "JKZTest",
+                "artistExternalIds": [
+                  {
+                    "distributorStoreId": 1,
+                    "profileId": "1532352644"
+                  },
+                  {
+                    "distributorStoreId": 9,
+                    "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+                  },
+                  {
+                    "distributorStoreId": 309,
+                    "profileId": "697315585919469"
+                  }
+                ],
+                "isni": "0000000121032683",
+                "image": {
+                  "filename": "Receba-789294845633-UPC.jpg",
+                  "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+                },
+                "artistId": 1787281
+              }
+            }
+          ],
+          "image": {
+            "fileId": "56b6342d-0244-4264-a964-368fe17a38f9",
+            "filename": "Receba-789294845633-UPC.jpg"
+          },
+          "labelId": 1071255,
+          "artistId": 1787281,
+          "tracks": [
+            {
+              "name": "Receba",
+              "version": "Extended",
+              "languageId": 31,
+              "explicit": false,
+              "trackType": 1,
+              "trackNumber": 1,
+              "previewStartSeconds": 140,
+              "trackRecordingVersions": [
+                {
+                  "isrc": "QZW9M2221000",
+                  "recordingVersionType": 1,
+                  "audioFiles": [
+                    {
+                      "audioId": "95173ab7-22e5-4d87-afb9-bbc04b116b5c",
+                      "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
+                      "fileFormat": 2
+                    }
+                  ]
+                }
+              ],
+              "artistExternalIds": [
+                {
+                  "distributorStoreId": 1,
+                  "profileId": "1532352644"
+                },
+                {
+                  "distributorStoreId": 9,
+                  "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+                },
+                {
+                  "distributorStoreId": 309,
+                  "profileId": "697315585919469"
+                }
+              ],
+              "trackProperties": [
+                1
+              ],
+              "compositions": [
+                {
+                  "iswc": "T1234567890"
+                }
+              ],
+              "composerContentsDTO": [
+                {
+                  "share": "60",
+                  "composerName": "Agnaldo Paulino de Jesus Júnior",
+                  "roleId": 39,
+                  "rightsId": 1,
+                  "isni": "0000000121032684",
+                  "ipiCae": "00006718449",
+                  "composersLocals": [
+                    {
+                      "languageId": 31,
+                      "name": "Agnaldo Paulino de Jesus Júnior",
+                      "version": "Extended"
+                    }
+                  ],
+                  "composerId": 1440495
+                },
+                {
+                  "share": "40",
+                  "composerName": "Jackson Bertholdo Dos Santos",
+                  "roleId": 39,
+                  "rightsId": 1,
+                  "isni": "0000000121032685",
+                  "composersLocals": [
+                    {
+                      "languageId": 31,
+                      "name": "Jackson Bertholdo Dos Santos",
+                      "version": "Extended"
+                    }
+                  ],
+                  "composerId": 1440496
+                }
+              ],
+              "trackLocals": [
+                {
+                  "name": "Receba",
+                  "languageId": 31,
+                  "version": "Extended"
+                }
+              ],
+              "contributors": [
+                {
+                  "roleId": 34,
+                  "artist": {
+                    "name": "JKZTest",
+                    "artistExternalIds": [
+                      {
+                        "distributorStoreId": 1,
+                        "profileId": "1532352644"
+                      },
+                      {
+                        "distributorStoreId": 9,
+                        "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+                      },
+                      {
+                        "distributorStoreId": 309,
+                        "profileId": "697315585919469"
+                      }
+                    ],
+                    "isni": "0000000121032683",
+                    "image": {
+                      "filename": "Receba-789294845633-UPC.jpg",
+                      "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+                    },
+                    "artistId": 1787281
+                  }
+                },
+                {
+                  "roleId": 19,
+                  "artist": {
+                    "name": "JKZTest",
+                    "artistExternalIds": [
+                      {
+                        "distributorStoreId": 1,
+                        "profileId": "1532352644"
+                      },
+                      {
+                        "distributorStoreId": 9,
+                        "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+                      },
+                      {
+                        "distributorStoreId": 309,
+                        "profileId": "697315585919469"
+                      }
+                    ],
+                    "isni": "0000000121032683",
+                    "image": {
+                      "filename": "Receba-789294845633-UPC.jpg",
+                      "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+                    },
+                    "artistId": 1787281
+                  }
+                },
+                {
+                  "roleId": 39,
+                  "artist": {
+                    "name": "Agnaldo Paulino de Jesus Júnior"
+                  }
+                },
+                {
+                  "roleId": 39,
+                  "artist": {
+                    "name": "Jackson Bertholdo Dos Santos"
+                  }
+                }
+              ],
+              "artistId": 1787281
+            }
+          ]
+        },
+        "response": {
+          "createdBy": "9303192f-c437-46b3-3234-08de0caebfd5",
+          "createdByEmail": "nicolas.g@revelator.com",
+          "createdByUserId": "9303192f-c437-46b3-3234-08de0caebfd5",
+          "enterpriseEmail": "nicolas.g@revelator.com",
+          "enterpriseOwnerId": "9303192f-c437-46b3-3234-08de0caebfd5",
+          "lastPayeePaymentDate": "",
+          "lastPayeePaymentAmount": 0.0,
+          "isEnterpriseVip": false,
+          "isEnterpriseWhiteListed": false,
+          "payeeReferrerName": null,
+          "description": null,
+          "descriptionTitle": null,
+          "tags": null,
+          "languageId": 31,
+          "copyrightC": "2022 TokyoC",
+          "copyrightP": "2022 TokyoP",
+          "recordingLocation": null,
+          "recordingDate": null,
+          "parentalAdvisory": null,
+          "producedBy": null,
+          "mixedBy": null,
+          "masteredBy": null,
+          "masteredDate": null,
+          "productionCredits": null,
+          "totalSales": 0.0,
+          "enterpriseId": 691097,
+          "payeeOwner": 758662,
+          "hasRecordLabel": true,
+          "previouslyReleased": true,
+          "releasesLocals": [],
+          "contributors": [
+            {
+              "contributorId": "5ad90d6f-3ee4-42a9-baed-fce576308596",
+              "roleId": 34,
+              "isPrimary": false,
+              "trackId": null,
+              "releaseId": 3121012,
+              "contributorRoleGroupId": 3,
+              "artist": {
+                "labelId": null,
+                "labelName": "",
+                "contactId": null,
+                "contact": null,
+                "biography": null,
+                "yearsActive": [],
+                "influencers": [],
+                "contemporaries": [],
+                "tags": [],
+                "isSigned": false,
+                "musicStyles": [],
+                "artistExternalIds": [
+                  {
+                    "profileId": "1532352644",
+                    "distributorStoreId": 1
+                  },
+                  {
+                    "profileId": "1Gn8eEXtOWHA7XU8wEWXOb",
+                    "distributorStoreId": 9
+                  },
+                  {
+                    "profileId": "697315585919469",
+                    "distributorStoreId": 309
+                  },
+                  {
+                    "profileId": "697315585919469",
+                    "distributorStoreId": 310
+                  }
+                ],
+                "socialUrls": [],
+                "artistLocals": [],
+                "artistsWebsites": [],
+                "webAlias": null,
+                "enterpriseId": 691097,
+                "activeFromDate": null,
+                "activeToDate": null,
+                "artistId": 1787281,
+                "name": "JKZTest",
+                "firstName": null,
+                "lastName": null,
+                "middleName": null,
+                "isni": "0000000121032683",
+                "releasesCount": 1,
+                "tracksCount": 1,
+                "archivedAt": null,
+                "image": {
+                  "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3",
+                  "isTemp": false,
+                  "filename": "Receba-789294845633-UPC.jpg",
+                  "externalUrl": null,
+                  "lastUpdateDate": "2025-11-25T15:28:48.107"
+                }
+              }
+            },
+            {
+              "contributorId": "86cd62f8-dbb5-4101-ad5d-7fc5a143c680",
+              "roleId": 19,
+              "isPrimary": false,
+              "trackId": null,
+              "releaseId": 3121012,
+              "contributorRoleGroupId": 3,
+              "artist": {
+                "labelId": null,
+                "labelName": "",
+                "contactId": null,
+                "contact": null,
+                "biography": null,
+                "yearsActive": [],
+                "influencers": [],
+                "contemporaries": [],
+                "tags": [],
+                "isSigned": false,
+                "musicStyles": [],
+                "artistExternalIds": [
+                  {
+                    "profileId": "1532352644",
+                    "distributorStoreId": 1
+                  },
+                  {
+                    "profileId": "1Gn8eEXtOWHA7XU8wEWXOb",
+                    "distributorStoreId": 9
+                  },
+                  {
+                    "profileId": "697315585919469",
+                    "distributorStoreId": 309
+                  },
+                  {
+                    "profileId": "697315585919469",
+                    "distributorStoreId": 310
+                  }
+                ],
+                "socialUrls": [],
+                "artistLocals": [],
+                "artistsWebsites": [],
+                "webAlias": null,
+                "enterpriseId": 691097,
+                "activeFromDate": null,
+                "activeToDate": null,
+                "artistId": 1787281,
+                "name": "JKZTest",
+                "firstName": null,
+                "lastName": null,
+                "middleName": null,
+                "isni": "0000000121032683",
+                "releasesCount": 1,
+                "tracksCount": 1,
+                "archivedAt": null,
+                "image": {
+                  "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3",
+                  "isTemp": false,
+                  "filename": "Receba-789294845633-UPC.jpg",
+                  "externalUrl": null,
+                  "lastUpdateDate": "2025-11-25T15:28:48.107"
+                }
+              }
+            }
+          ],
+          "artistLocals": [],
+          "tracks": [
+            {
+              "enterpriseName": "Test for MUV",
+              "enterpriseId": 691097,
+              "trackId": 7269962,
+              "name": "Receba",
+              "artistId": 1787281,
+              "artistName": "JKZTest",
+              "artistAppleId": "1532352644",
+              "artistSpotifyId": "1Gn8eEXtOWHA7XU8wEWXOb",
+              "artistExternalIds": [
+                {
+                  "profileId": "1532352644",
+                  "distributorStoreId": 1
+                },
+                {
+                  "profileId": "1Gn8eEXtOWHA7XU8wEWXOb",
+                  "distributorStoreId": 9
+                },
+                {
+                  "profileId": "697315585919469",
+                  "distributorStoreId": 309
+                },
+                {
+                  "profileId": "697315585919469",
+                  "distributorStoreId": 310
+                }
+              ],
+              "labelId": 1071255,
+              "labelName": "TokyoRecordsFULLTEST",
+              "discNumber": null,
+              "trackLength": 256,
+              "channels": 2,
+              "sampleRate": 44100,
+              "bitDepth": 16,
+              "bitrate": 1413959,
+              "trackVendorId": null,
+              "isrc": "QZW9M2221000",
+              "version": "Extended",
+              "copyrightC": null,
+              "copyrightP": null,
+              "description": null,
+              "languageId": 31,
+              "explicit": false,
+              "clearedForSale": true,
+              "lyrics": null,
+              "playingCount": 0,
+              "priceTierId": null,
+              "previewStartSeconds": 140,
+              "totalSales": 0.0,
+              "image": null,
+              "wav": {
+                "fileId": "95173ab7-22e5-4d87-afb9-bbc04b116b5c",
+                "isTemp": false,
+                "filename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
+                "externalUrl": null,
+                "lastUpdateDate": "0001-01-01T00:00:00"
+              },
+              "flac": null,
+              "trackRecordingVersions": [
+                {
+                  "isrc": "QZW9M2221000",
+                  "recordingVersionType": 1,
+                  "audioFiles": [
+                    {
+                      "audioId": "95173ab7-22e5-4d87-afb9-bbc04b116b5c",
+                      "fileFormat": 1,
+                      "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
+                      "audioChannels": 2,
+                      "audioBitDepth": 16,
+                      "audioSampleRate": 44100,
+                      "audioBitrate": 1413959,
+                      "audioSeconds": 256,
+                      "audioSize": 45072298
+                    }
+                  ]
+                }
+              ],
+              "fileExtension": ".wav",
+              "isLockedForDistribution": false,
+              "isDolbyAtmosReadOnly": false,
+              "primaryMusicStyleId": null,
+              "secondaryMusicStyleId": null,
+              "previouslyReleased": true,
+              "trackType": 1,
+              "licenseRequestStatus": null,
+              "isAudioValid": null,
+              "tracksLocals": [],
+              "artistLocals": [],
+              "contributors": [
+                {
+                  "contributorId": "66ded977-5a2d-4c38-ba08-300a05e0f289",
+                  "roleId": 34,
+                  "isPrimary": false,
+                  "trackId": 7269962,
+                  "releaseId": null,
+                  "contributorRoleGroupId": 3,
+                  "artist": {
+                    "labelId": null,
+                    "labelName": "",
+                    "contactId": null,
+                    "contact": null,
+                    "biography": null,
+                    "yearsActive": [],
+                    "influencers": [],
+                    "contemporaries": [],
+                    "tags": [],
+                    "isSigned": false,
+                    "musicStyles": [],
+                    "artistExternalIds": [
+                      {
+                        "profileId": "1532352644",
+                        "distributorStoreId": 1
+                      },
+                      {
+                        "profileId": "1Gn8eEXtOWHA7XU8wEWXOb",
+                        "distributorStoreId": 9
+                      },
+                      {
+                        "profileId": "697315585919469",
+                        "distributorStoreId": 309
+                      },
+                      {
+                        "profileId": "697315585919469",
+                        "distributorStoreId": 310
+                      }
+                    ],
+                    "socialUrls": [],
+                    "artistLocals": [],
+                    "artistsWebsites": [],
+                    "webAlias": null,
+                    "enterpriseId": 691097,
+                    "activeFromDate": null,
+                    "activeToDate": null,
+                    "artistId": 1787281,
+                    "name": "JKZTest",
+                    "firstName": null,
+                    "lastName": null,
+                    "middleName": null,
+                    "isni": "0000000121032683",
+                    "releasesCount": 1,
+                    "tracksCount": 1,
+                    "archivedAt": null,
+                    "image": {
+                      "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3",
+                      "isTemp": false,
+                      "filename": "Receba-789294845633-UPC.jpg",
+                      "externalUrl": null,
+                      "lastUpdateDate": "2025-11-25T15:28:48.107"
+                    }
+                  }
+                },
+                {
+                  "contributorId": "4ef94fc8-5e0f-4b8f-abf7-cfe621b00ffa",
+                  "roleId": 19,
+                  "isPrimary": false,
+                  "trackId": 7269962,
+                  "releaseId": null,
+                  "contributorRoleGroupId": 3,
+                  "artist": {
+                    "labelId": null,
+                    "labelName": "",
+                    "contactId": null,
+                    "contact": null,
+                    "biography": null,
+                    "yearsActive": [],
+                    "influencers": [],
+                    "contemporaries": [],
+                    "tags": [],
+                    "isSigned": false,
+                    "musicStyles": [],
+                    "artistExternalIds": [
+                      {
+                        "profileId": "1532352644",
+                        "distributorStoreId": 1
+                      },
+                      {
+                        "profileId": "1Gn8eEXtOWHA7XU8wEWXOb",
+                        "distributorStoreId": 9
+                      },
+                      {
+                        "profileId": "697315585919469",
+                        "distributorStoreId": 309
+                      },
+                      {
+                        "profileId": "697315585919469",
+                        "distributorStoreId": 310
+                      }
+                    ],
+                    "socialUrls": [],
+                    "artistLocals": [],
+                    "artistsWebsites": [],
+                    "webAlias": null,
+                    "enterpriseId": 691097,
+                    "activeFromDate": null,
+                    "activeToDate": null,
+                    "artistId": 1787281,
+                    "name": "JKZTest",
+                    "firstName": null,
+                    "lastName": null,
+                    "middleName": null,
+                    "isni": "0000000121032683",
+                    "releasesCount": 1,
+                    "tracksCount": 1,
+                    "archivedAt": null,
+                    "image": {
+                      "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3",
+                      "isTemp": false,
+                      "filename": "Receba-789294845633-UPC.jpg",
+                      "externalUrl": null,
+                      "lastUpdateDate": "2025-11-25T15:28:48.107"
+                    }
+                  }
+                },
+                {
+                  "contributorId": "873749cb-22f9-4dcc-9e80-1b5db58083ab",
+                  "roleId": 39,
+                  "isPrimary": false,
+                  "trackId": 7269962,
+                  "releaseId": null,
+                  "contributorRoleGroupId": 4,
+                  "artist": {
+                    "labelId": null,
+                    "labelName": "",
+                    "contactId": null,
+                    "contact": null,
+                    "biography": null,
+                    "yearsActive": [],
+                    "influencers": [],
+                    "contemporaries": [],
+                    "tags": [],
+                    "isSigned": false,
+                    "musicStyles": [],
+                    "artistExternalIds": [],
+                    "socialUrls": [],
+                    "artistLocals": [],
+                    "artistsWebsites": [],
+                    "webAlias": null,
+                    "enterpriseId": 691097,
+                    "activeFromDate": null,
+                    "activeToDate": null,
+                    "artistId": 1773493,
+                    "name": "Agnaldo Paulino de Jesus Júnior",
+                    "firstName": null,
+                    "lastName": null,
+                    "middleName": null,
+                    "isni": null,
+                    "releasesCount": 0,
+                    "tracksCount": 0,
+                    "archivedAt": null,
+                    "image": null
+                  }
+                },
+                {
+                  "contributorId": "c636558d-f4cd-4fa5-8f81-78a207bed7fb",
+                  "roleId": 39,
+                  "isPrimary": false,
+                  "trackId": 7269962,
+                  "releaseId": null,
+                  "contributorRoleGroupId": 4,
+                  "artist": {
+                    "labelId": null,
+                    "labelName": "",
+                    "contactId": null,
+                    "contact": null,
+                    "biography": null,
+                    "yearsActive": [],
+                    "influencers": [],
+                    "contemporaries": [],
+                    "tags": [],
+                    "isSigned": false,
+                    "musicStyles": [],
+                    "artistExternalIds": [],
+                    "socialUrls": [],
+                    "artistLocals": [],
+                    "artistsWebsites": [],
+                    "webAlias": null,
+                    "enterpriseId": 691097,
+                    "activeFromDate": null,
+                    "activeToDate": null,
+                    "artistId": 1773494,
+                    "name": "Jackson Bertholdo Dos Santos",
+                    "firstName": null,
+                    "lastName": null,
+                    "middleName": null,
+                    "isni": null,
+                    "releasesCount": 0,
+                    "tracksCount": 0,
+                    "archivedAt": null,
+                    "image": null
+                  }
+                }
+              ],
+              "catalog": null,
+              "compositions": [
+                {
+                  "compositionId": 287093,
+                  "trackId": 7269962,
+                  "originalTitle": "",
+                  "originalComposers": null,
+                  "originalRecordingArtist": null,
+                  "sourceAlbumTitle": null,
+                  "sourceMaterialTitle": null,
+                  "iswc": "T1234567890",
+                  "url": null,
+                  "notes": null,
+                  "isPaid": null
+                }
+              ],
+              "releaseIds": [
+                3121012
+              ],
+              "releases": [
+                {
+                  "releaseId": 3121012,
+                  "name": "Receba",
+                  "version": "Extended",
+                  "releaseDate": "2022-11-21T00:00:00",
+                  "releaseTypeId": 1,
+                  "upc": null,
+                  "isLockedForDistribution": false,
+                  "isDolbyAtmosReadOnly": false,
+                  "isIngested": false,
+                  "enterpriseName": "Test for MUV",
+                  "enterpriseId": 691097,
+                  "assetId": 14062027,
+                  "image": {
+                    "fileId": "56b6342d-0244-4264-a964-368fe17a38f9",
+                    "isTemp": false,
+                    "filename": "Receba-789294845633-UPC.jpg",
+                    "externalUrl": null,
+                    "lastUpdateDate": "2025-11-25T15:29:12.627"
+                  },
+                  "artist": {
+                    "artistId": 1787281,
+                    "name": "JKZTest",
+                    "firstName": null,
+                    "lastName": null,
+                    "middleName": null,
+                    "isni": "0000000121032683",
+                    "releasesCount": 1,
+                    "tracksCount": 1,
+                    "archivedAt": null,
+                    "image": {
+                      "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3",
+                      "isTemp": false,
+                      "filename": "Receba-789294845633-UPC.jpg",
+                      "externalUrl": null,
+                      "lastUpdateDate": "2025-11-25T15:28:48.107"
+                    }
+                  },
+                  "tracksCount": 1,
+                  "archivedAt": null,
+                  "isCompilation": false,
+                  "contributors": [
+                    {
+                      "contributorId": "86cd62f8-dbb5-4101-ad5d-7fc5a143c680",
+                      "roleId": 19,
+                      "releaseId": 3121012,
+                      "trackId": null,
+                      "artist": {
+                        "artistId": 1787281,
+                        "name": "JKZTest",
+                        "firstName": null,
+                        "lastName": null,
+                        "middleName": null,
+                        "isni": "0000000121032683",
+                        "releasesCount": 1,
+                        "tracksCount": 1,
+                        "archivedAt": null,
+                        "image": {
+                          "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3",
+                          "isTemp": false,
+                          "filename": "Receba-789294845633-UPC.jpg",
+                          "externalUrl": null,
+                          "lastUpdateDate": "2025-11-25T15:28:48.1066667"
+                        }
+                      }
+                    },
+                    {
+                      "contributorId": "5ad90d6f-3ee4-42a9-baed-fce576308596",
+                      "roleId": 34,
+                      "releaseId": 3121012,
+                      "trackId": null,
+                      "artist": {
+                        "artistId": 1787281,
+                        "name": "JKZTest",
+                        "firstName": null,
+                        "lastName": null,
+                        "middleName": null,
+                        "isni": "0000000121032683",
+                        "releasesCount": 1,
+                        "tracksCount": 1,
+                        "archivedAt": null,
+                        "image": {
+                          "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3",
+                          "isTemp": false,
+                          "filename": "Receba-789294845633-UPC.jpg",
+                          "externalUrl": null,
+                          "lastUpdateDate": "2025-11-25T15:28:48.1066667"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "composerContentsDTO": [
+                {
+                  "contributorId": 7518434,
+                  "composerId": 1440495,
+                  "composerName": "Agnaldo Paulino de Jesus Júnior",
+                  "composerImageId": null,
+                  "share": 60.0,
+                  "publisherId": null,
+                  "publisherName": "",
+                  "publisherAdminId": null,
+                  "publisherAdminName": null,
+                  "proId": null,
+                  "rightsId": 1,
+                  "proRegistrationId": null,
+                  "roleId": 39,
+                  "composersLocals": [
+                    {
+                      "composerId": 1440495,
+                      "name": "Agnaldo Paulino de Jesus Júnior",
+                      "phoneticName": null,
+                      "languageId": 31
+                    }
+                  ]
+                },
+                {
+                  "contributorId": 7518435,
+                  "composerId": 1440496,
+                  "composerName": "Jackson Bertholdo Dos Santos",
+                  "composerImageId": null,
+                  "share": 40.0,
+                  "publisherId": null,
+                  "publisherName": "",
+                  "publisherAdminId": null,
+                  "publisherAdminName": null,
+                  "proId": null,
+                  "rightsId": 1,
+                  "proRegistrationId": null,
+                  "roleId": 39,
+                  "composersLocals": [
+                    {
+                      "composerId": 1440496,
+                      "name": "Jackson Bertholdo Dos Santos",
+                      "phoneticName": null,
+                      "languageId": 31
+                    }
+                  ]
+                }
+              ],
+              "isFullyLocked": false,
+              "copyTrackId": null,
+              "isIngested": false,
+              "isLicensePaid": null,
+              "distributorStoreGenreIds": [],
+              "assetId": 14062028,
+              "archivedAt": null,
+              "monetizations": [],
+              "acrCloud": null,
+              "royaltyToken": null,
+              "trackProperties": [
+                1
+              ],
+              "releasesCount": 1,
+              "spotifyId": null,
+              "appleId": null,
+              "rdioId": null,
+              "releaseTracks": [
+                {
+                  "releaseId": 3121012,
+                  "spotifyId": null,
+                  "appleId": null,
+                  "rdioId": null,
+                  "deezerId": null
+                }
+              ]
+            }
+          ],
+          "enterpriseImageId": "00000000-0000-0000-0000-000000000000",
+          "featureFmSmartLink": null,
+          "distributorStoreGenreIds": [],
+          "upc": null,
+          "isrc": null,
+          "trackISRC": "QZW9M2221000",
+          "trackRecordingVersions": [
+            {
+              "isrc": "QZW9M2221000",
+              "recordingVersionType": 1,
+              "audioFiles": [
+                {
+                  "audioId": "95173ab7-22e5-4d87-afb9-bbc04b116b5c",
+                  "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
+                  "fileFormat": 1
+                }
+              ]
+            }
+          ],
+          "artistId": 1787281,
+          "artistName": "JKZTest",
+          "artistAppleId": "1532352644",
+          "artistSpotifyId": "1Gn8eEXtOWHA7XU8wEWXOb",
+          "artistExternalIds": [
+            {
+              "profileId": "1532352644",
+              "distributorStoreId": 1
+            },
+            {
+              "profileId": "1Gn8eEXtOWHA7XU8wEWXOb",
+              "distributorStoreId": 9
+            },
+            {
+              "profileId": "697315585919469",
+              "distributorStoreId": 309
+            },
+            {
+              "profileId": "697315585919469",
+              "distributorStoreId": 310
+            }
+          ],
+          "catalog": null,
+          "version": "Extended",
+          "artistImageId": "94e24975-82a3-41a5-9e18-8cddb163cff3",
+          "labelId": 1071255,
+          "labelName": "TokyoRecordsFULLTEST",
+          "releaseDate": "2022-11-21T00:00:00",
+          "creationDate": "2025-11-25T15:29:12.47",
+          "primaryMusicStyleId": 41,
+          "secondaryMusicStyleId": 555,
+          "notesCount": 0,
+          "payeeNotesCount": 0,
+          "approvedDate": null,
+          "kountStatusId": null,
+          "kountStatusName": null,
+          "isFullyLocked": false,
+          "releaseId": 3121012,
+          "name": "Receba",
+          "releaseTypeId": 1,
+          "isLockedForDistribution": false,
+          "isDolbyAtmosReadOnly": false,
+          "isIngested": false,
+          "enterpriseName": "Test for MUV",
+          "assetId": 14062027,
+          "image": {
+            "fileId": "56b6342d-0244-4264-a964-368fe17a38f9",
+            "isTemp": false,
+            "filename": "Receba-789294845633-UPC.jpg",
+            "externalUrl": null,
+            "lastUpdateDate": "2025-11-25T15:29:12.627"
+          },
+          "artist": null,
+          "tracksCount": 1,
+          "archivedAt": null,
+          "isCompilation": false
+        }
+      },
+      {
+        "request": {
+          "name": "A Cláusula do Contrato",
+          "version": null,
+          "previouslyReleased": true,
+          "releaseDate": "2022-11-24 00:00:00",
+          "copyrightP": "2022 PEJOTAP",
+          "copyrightC": "2022 PEJOTAC",
+          "releaseLocals": [
+            {
+              "languageId": 31,
+              "name": "A Cláusula do Contrato"
+            }
+          ],
+          "languageId": 31,
+          "primaryMusicStyleId": 41,
+          "secondaryMusicStyleId": 555,
+          "hasRecordLabel": true,
+          "labelName": "PEJOTA10*FULLTEST",
+          "artistExternalIds": [
+            {
+              "distributorStoreId": 1,
+              "profileId": "1601139620"
+            },
+            {
+              "distributorStoreId": 9,
+              "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+            },
+            {
+              "distributorStoreId": 309,
+              "profileId": "697315585919468"
+            }
+          ],
+          "contributors": [
+            {
+              "roleId": 34,
+              "artist": {
+                "name": "Flash Beats ManowTest",
+                "artistExternalIds": [
+                  {
+                    "distributorStoreId": 1,
+                    "profileId": "1601139620"
+                  },
+                  {
+                    "distributorStoreId": 9,
+                    "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+                  },
+                  {
+                    "distributorStoreId": 309,
+                    "profileId": "697315585919468"
+                  }
+                ],
+                "image": {
+                  "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                  "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+                },
+                "artistId": 1787282
+              }
+            },
+            {
+              "roleId": 19,
+              "artist": {
+                "name": "Flash Beats ManowTest",
+                "artistExternalIds": [
+                  {
+                    "distributorStoreId": 1,
+                    "profileId": "1601139620"
+                  },
+                  {
+                    "distributorStoreId": 9,
+                    "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+                  },
+                  {
+                    "distributorStoreId": 309,
+                    "profileId": "697315585919468"
+                  }
+                ],
+                "image": {
+                  "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                  "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+                },
+                "artistId": 1787282
+              }
+            }
+          ],
+          "image": {
+            "fileId": "d2e51aa6-531f-453d-bb73-6da7b81929e4",
+            "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg"
+          },
+          "labelId": 1071256,
+          "artistId": 1787282,
+          "tracks": [
+            {
+              "name": "A Cláusula do Contrato",
+              "version": null,
+              "languageId": 31,
+              "explicit": false,
+              "trackType": 1,
+              "trackNumber": 1,
+              "previewStartSeconds": 200,
+              "trackRecordingVersions": [
+                {
+                  "isrc": "QZW9M2236571",
+                  "recordingVersionType": 1,
+                  "audioFiles": [
+                    {
+                      "audioId": "bd2a5de8-8a8e-4015-b2bb-c5414bbd9a7a",
+                      "audioFilename": "Joy-Mejia-Te-Fall.wav",
+                      "fileFormat": 2
+                    }
+                  ]
+                }
+              ],
+              "artistExternalIds": [
+                {
+                  "distributorStoreId": 1,
+                  "profileId": "1601139620"
+                },
+                {
+                  "distributorStoreId": 9,
+                  "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+                },
+                {
+                  "distributorStoreId": 309,
+                  "profileId": "697315585919468"
+                }
+              ],
+              "trackProperties": [
+                1
+              ],
+              "compositions": [
+                {
+                  "iswc": "T1234567890"
+                }
+              ],
+              "composerContentsDTO": [
+                {
+                  "share": "50",
+                  "composerName": "Jackson Bertholdo Dos Santos",
+                  "roleId": 39,
+                  "rightsId": 2,
+                  "isni": "0000000121032685",
+                  "publisherName": "SONY ATV",
+                  "publisherId": 90322,
+                  "composersLocals": [
+                    {
+                      "languageId": 31,
+                      "name": "Jackson Bertholdo Dos Santos"
+                    }
+                  ],
+                  "composerId": 1440496
+                },
+                {
+                  "share": "50",
+                  "composerName": "Agnaldo Paulino de Jesus Júnior",
+                  "roleId": 39,
+                  "rightsId": 2,
+                  "isni": "0000000121032684",
+                  "ipiCae": "00006718449",
+                  "publisherName": "WARNER CHAPPEL",
+                  "publisherId": 90323,
+                  "composersLocals": [
+                    {
+                      "languageId": 31,
+                      "name": "Agnaldo Paulino de Jesus Júnior"
+                    }
+                  ],
+                  "composerId": 1440495
+                }
+              ],
+              "trackLocals": [
+                {
+                  "name": "A Cláusula do Contrato",
+                  "languageId": 31
+                }
+              ],
+              "contributors": [
+                {
+                  "roleId": 34,
+                  "artist": {
+                    "name": "Flash Beats ManowTest",
+                    "artistExternalIds": [
+                      {
+                        "distributorStoreId": 1,
+                        "profileId": "1601139620"
+                      },
+                      {
+                        "distributorStoreId": 9,
+                        "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+                      },
+                      {
+                        "distributorStoreId": 309,
+                        "profileId": "697315585919468"
+                      }
+                    ],
+                    "image": {
+                      "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                      "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+                    },
+                    "artistId": 1787282
+                  }
+                },
+                {
+                  "roleId": 19,
+                  "artist": {
+                    "name": "Flash Beats ManowTest",
+                    "artistExternalIds": [
+                      {
+                        "distributorStoreId": 1,
+                        "profileId": "1601139620"
+                      },
+                      {
+                        "distributorStoreId": 9,
+                        "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+                      },
+                      {
+                        "distributorStoreId": 309,
+                        "profileId": "697315585919468"
+                      }
+                    ],
+                    "image": {
+                      "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                      "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+                    },
+                    "artistId": 1787282
+                  }
+                },
+                {
+                  "roleId": 39,
+                  "artist": {
+                    "name": "Jackson Bertholdo Dos Santos"
+                  }
+                },
+                {
+                  "roleId": 39,
+                  "artist": {
+                    "name": "Agnaldo Paulino de Jesus Júnior"
+                  }
+                }
+              ],
+              "artistId": 1787282
+            }
+          ]
+        },
+        "response": {
+          "createdBy": "9303192f-c437-46b3-3234-08de0caebfd5",
+          "createdByEmail": "nicolas.g@revelator.com",
+          "createdByUserId": "9303192f-c437-46b3-3234-08de0caebfd5",
+          "enterpriseEmail": "nicolas.g@revelator.com",
+          "enterpriseOwnerId": "9303192f-c437-46b3-3234-08de0caebfd5",
+          "lastPayeePaymentDate": "",
+          "lastPayeePaymentAmount": 0.0,
+          "isEnterpriseVip": false,
+          "isEnterpriseWhiteListed": false,
+          "payeeReferrerName": null,
+          "description": null,
+          "descriptionTitle": null,
+          "tags": null,
+          "languageId": 31,
+          "copyrightC": "2022 PEJOTAC",
+          "copyrightP": "2022 PEJOTAP",
+          "recordingLocation": null,
+          "recordingDate": null,
+          "parentalAdvisory": null,
+          "producedBy": null,
+          "mixedBy": null,
+          "masteredBy": null,
+          "masteredDate": null,
+          "productionCredits": null,
+          "totalSales": 0.0,
+          "enterpriseId": 691097,
+          "payeeOwner": 758662,
+          "hasRecordLabel": true,
+          "previouslyReleased": true,
+          "releasesLocals": [],
+          "contributors": [
+            {
+              "contributorId": "8850105a-04cb-4783-a456-802b3457e122",
+              "roleId": 34,
+              "isPrimary": false,
+              "trackId": null,
+              "releaseId": 3121013,
+              "contributorRoleGroupId": 3,
+              "artist": {
+                "labelId": null,
+                "labelName": "",
+                "contactId": null,
+                "contact": null,
+                "biography": null,
+                "yearsActive": [],
+                "influencers": [],
+                "contemporaries": [],
+                "tags": [],
+                "isSigned": false,
+                "musicStyles": [],
+                "artistExternalIds": [
+                  {
+                    "profileId": "1601139620",
+                    "distributorStoreId": 1
+                  },
+                  {
+                    "profileId": "0ZIlwtVZkqtMZUpbHrz8TL",
+                    "distributorStoreId": 9
+                  },
+                  {
+                    "profileId": "697315585919468",
+                    "distributorStoreId": 309
+                  },
+                  {
+                    "profileId": "697315585919468",
+                    "distributorStoreId": 310
+                  }
+                ],
+                "socialUrls": [],
+                "artistLocals": [],
+                "artistsWebsites": [],
+                "webAlias": null,
+                "enterpriseId": 691097,
+                "activeFromDate": null,
+                "activeToDate": null,
+                "artistId": 1787282,
+                "name": "Flash Beats ManowTest",
+                "firstName": null,
+                "lastName": null,
+                "middleName": null,
+                "isni": null,
+                "releasesCount": 1,
+                "tracksCount": 1,
+                "archivedAt": null,
+                "image": {
+                  "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee",
+                  "isTemp": false,
+                  "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                  "externalUrl": null,
+                  "lastUpdateDate": "2025-11-25T15:28:49.18"
+                }
+              }
+            },
+            {
+              "contributorId": "c624529c-3f05-4520-b029-4573e5e41f58",
+              "roleId": 19,
+              "isPrimary": false,
+              "trackId": null,
+              "releaseId": 3121013,
+              "contributorRoleGroupId": 3,
+              "artist": {
+                "labelId": null,
+                "labelName": "",
+                "contactId": null,
+                "contact": null,
+                "biography": null,
+                "yearsActive": [],
+                "influencers": [],
+                "contemporaries": [],
+                "tags": [],
+                "isSigned": false,
+                "musicStyles": [],
+                "artistExternalIds": [
+                  {
+                    "profileId": "1601139620",
+                    "distributorStoreId": 1
+                  },
+                  {
+                    "profileId": "0ZIlwtVZkqtMZUpbHrz8TL",
+                    "distributorStoreId": 9
+                  },
+                  {
+                    "profileId": "697315585919468",
+                    "distributorStoreId": 309
+                  },
+                  {
+                    "profileId": "697315585919468",
+                    "distributorStoreId": 310
+                  }
+                ],
+                "socialUrls": [],
+                "artistLocals": [],
+                "artistsWebsites": [],
+                "webAlias": null,
+                "enterpriseId": 691097,
+                "activeFromDate": null,
+                "activeToDate": null,
+                "artistId": 1787282,
+                "name": "Flash Beats ManowTest",
+                "firstName": null,
+                "lastName": null,
+                "middleName": null,
+                "isni": null,
+                "releasesCount": 1,
+                "tracksCount": 1,
+                "archivedAt": null,
+                "image": {
+                  "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee",
+                  "isTemp": false,
+                  "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                  "externalUrl": null,
+                  "lastUpdateDate": "2025-11-25T15:28:49.18"
+                }
+              }
+            }
+          ],
+          "artistLocals": [],
+          "tracks": [
+            {
+              "enterpriseName": "Test for MUV",
+              "enterpriseId": 691097,
+              "trackId": 7269963,
+              "name": "A Cláusula do Contrato",
+              "artistId": 1787282,
+              "artistName": "Flash Beats ManowTest",
+              "artistAppleId": "1601139620",
+              "artistSpotifyId": "0ZIlwtVZkqtMZUpbHrz8TL",
+              "artistExternalIds": [
+                {
+                  "profileId": "1601139620",
+                  "distributorStoreId": 1
+                },
+                {
+                  "profileId": "0ZIlwtVZkqtMZUpbHrz8TL",
+                  "distributorStoreId": 9
+                },
+                {
+                  "profileId": "697315585919468",
+                  "distributorStoreId": 309
+                },
+                {
+                  "profileId": "697315585919468",
+                  "distributorStoreId": 310
+                }
+              ],
+              "labelId": 1071256,
+              "labelName": "PEJOTA10*FULLTEST",
+              "discNumber": null,
+              "trackLength": 229,
+              "channels": 2,
+              "sampleRate": 44100,
+              "bitDepth": 16,
+              "bitrate": 1413959,
+              "trackVendorId": null,
+              "isrc": "QZW9M2236571",
+              "version": null,
+              "copyrightC": null,
+              "copyrightP": null,
+              "description": null,
+              "languageId": 31,
+              "explicit": false,
+              "clearedForSale": true,
+              "lyrics": null,
+              "playingCount": 0,
+              "priceTierId": null,
+              "previewStartSeconds": 200,
+              "totalSales": 0.0,
+              "image": null,
+              "wav": {
+                "fileId": "bd2a5de8-8a8e-4015-b2bb-c5414bbd9a7a",
+                "isTemp": false,
+                "filename": "Joy-Mejia-Te-Fall.wav",
+                "externalUrl": null,
+                "lastUpdateDate": "0001-01-01T00:00:00"
+              },
+              "flac": null,
+              "trackRecordingVersions": [
+                {
+                  "isrc": "QZW9M2236571",
+                  "recordingVersionType": 1,
+                  "audioFiles": [
+                    {
+                      "audioId": "bd2a5de8-8a8e-4015-b2bb-c5414bbd9a7a",
+                      "fileFormat": 1,
+                      "audioFilename": "Joy-Mejia-Te-Fall.wav",
+                      "audioChannels": 2,
+                      "audioBitDepth": 16,
+                      "audioSampleRate": 44100,
+                      "audioBitrate": 1413959,
+                      "audioSeconds": 229,
+                      "audioSize": 40329236
+                    }
+                  ]
+                }
+              ],
+              "fileExtension": ".wav",
+              "isLockedForDistribution": false,
+              "isDolbyAtmosReadOnly": false,
+              "primaryMusicStyleId": null,
+              "secondaryMusicStyleId": null,
+              "previouslyReleased": true,
+              "trackType": 1,
+              "licenseRequestStatus": null,
+              "isAudioValid": null,
+              "tracksLocals": [],
+              "artistLocals": [],
+              "contributors": [
+                {
+                  "contributorId": "70ce5dbd-8538-49fb-8ec5-e9f5dc3b4bfb",
+                  "roleId": 34,
+                  "isPrimary": false,
+                  "trackId": 7269963,
+                  "releaseId": null,
+                  "contributorRoleGroupId": 3,
+                  "artist": {
+                    "labelId": null,
+                    "labelName": "",
+                    "contactId": null,
+                    "contact": null,
+                    "biography": null,
+                    "yearsActive": [],
+                    "influencers": [],
+                    "contemporaries": [],
+                    "tags": [],
+                    "isSigned": false,
+                    "musicStyles": [],
+                    "artistExternalIds": [
+                      {
+                        "profileId": "1601139620",
+                        "distributorStoreId": 1
+                      },
+                      {
+                        "profileId": "0ZIlwtVZkqtMZUpbHrz8TL",
+                        "distributorStoreId": 9
+                      },
+                      {
+                        "profileId": "697315585919468",
+                        "distributorStoreId": 309
+                      },
+                      {
+                        "profileId": "697315585919468",
+                        "distributorStoreId": 310
+                      }
+                    ],
+                    "socialUrls": [],
+                    "artistLocals": [],
+                    "artistsWebsites": [],
+                    "webAlias": null,
+                    "enterpriseId": 691097,
+                    "activeFromDate": null,
+                    "activeToDate": null,
+                    "artistId": 1787282,
+                    "name": "Flash Beats ManowTest",
+                    "firstName": null,
+                    "lastName": null,
+                    "middleName": null,
+                    "isni": null,
+                    "releasesCount": 1,
+                    "tracksCount": 1,
+                    "archivedAt": null,
+                    "image": {
+                      "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee",
+                      "isTemp": false,
+                      "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                      "externalUrl": null,
+                      "lastUpdateDate": "2025-11-25T15:28:49.18"
+                    }
+                  }
+                },
+                {
+                  "contributorId": "6f1a7800-1d90-4d6e-9041-0846f4a1affe",
+                  "roleId": 19,
+                  "isPrimary": false,
+                  "trackId": 7269963,
+                  "releaseId": null,
+                  "contributorRoleGroupId": 3,
+                  "artist": {
+                    "labelId": null,
+                    "labelName": "",
+                    "contactId": null,
+                    "contact": null,
+                    "biography": null,
+                    "yearsActive": [],
+                    "influencers": [],
+                    "contemporaries": [],
+                    "tags": [],
+                    "isSigned": false,
+                    "musicStyles": [],
+                    "artistExternalIds": [
+                      {
+                        "profileId": "1601139620",
+                        "distributorStoreId": 1
+                      },
+                      {
+                        "profileId": "0ZIlwtVZkqtMZUpbHrz8TL",
+                        "distributorStoreId": 9
+                      },
+                      {
+                        "profileId": "697315585919468",
+                        "distributorStoreId": 309
+                      },
+                      {
+                        "profileId": "697315585919468",
+                        "distributorStoreId": 310
+                      }
+                    ],
+                    "socialUrls": [],
+                    "artistLocals": [],
+                    "artistsWebsites": [],
+                    "webAlias": null,
+                    "enterpriseId": 691097,
+                    "activeFromDate": null,
+                    "activeToDate": null,
+                    "artistId": 1787282,
+                    "name": "Flash Beats ManowTest",
+                    "firstName": null,
+                    "lastName": null,
+                    "middleName": null,
+                    "isni": null,
+                    "releasesCount": 1,
+                    "tracksCount": 1,
+                    "archivedAt": null,
+                    "image": {
+                      "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee",
+                      "isTemp": false,
+                      "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                      "externalUrl": null,
+                      "lastUpdateDate": "2025-11-25T15:28:49.18"
+                    }
+                  }
+                },
+                {
+                  "contributorId": "8dc4673c-d5b9-48fb-ae98-3ae96dfc2864",
+                  "roleId": 39,
+                  "isPrimary": false,
+                  "trackId": 7269963,
+                  "releaseId": null,
+                  "contributorRoleGroupId": 4,
+                  "artist": {
+                    "labelId": null,
+                    "labelName": "",
+                    "contactId": null,
+                    "contact": null,
+                    "biography": null,
+                    "yearsActive": [],
+                    "influencers": [],
+                    "contemporaries": [],
+                    "tags": [],
+                    "isSigned": false,
+                    "musicStyles": [],
+                    "artistExternalIds": [],
+                    "socialUrls": [],
+                    "artistLocals": [],
+                    "artistsWebsites": [],
+                    "webAlias": null,
+                    "enterpriseId": 691097,
+                    "activeFromDate": null,
+                    "activeToDate": null,
+                    "artistId": 1773494,
+                    "name": "Jackson Bertholdo Dos Santos",
+                    "firstName": null,
+                    "lastName": null,
+                    "middleName": null,
+                    "isni": null,
+                    "releasesCount": 0,
+                    "tracksCount": 0,
+                    "archivedAt": null,
+                    "image": null
+                  }
+                },
+                {
+                  "contributorId": "ca14f743-6d69-4c23-a1c4-43242f5fc590",
+                  "roleId": 39,
+                  "isPrimary": false,
+                  "trackId": 7269963,
+                  "releaseId": null,
+                  "contributorRoleGroupId": 4,
+                  "artist": {
+                    "labelId": null,
+                    "labelName": "",
+                    "contactId": null,
+                    "contact": null,
+                    "biography": null,
+                    "yearsActive": [],
+                    "influencers": [],
+                    "contemporaries": [],
+                    "tags": [],
+                    "isSigned": false,
+                    "musicStyles": [],
+                    "artistExternalIds": [],
+                    "socialUrls": [],
+                    "artistLocals": [],
+                    "artistsWebsites": [],
+                    "webAlias": null,
+                    "enterpriseId": 691097,
+                    "activeFromDate": null,
+                    "activeToDate": null,
+                    "artistId": 1773493,
+                    "name": "Agnaldo Paulino de Jesus Júnior",
+                    "firstName": null,
+                    "lastName": null,
+                    "middleName": null,
+                    "isni": null,
+                    "releasesCount": 0,
+                    "tracksCount": 0,
+                    "archivedAt": null,
+                    "image": null
+                  }
+                }
+              ],
+              "catalog": null,
+              "compositions": [
+                {
+                  "compositionId": 287094,
+                  "trackId": 7269963,
+                  "originalTitle": "",
+                  "originalComposers": null,
+                  "originalRecordingArtist": null,
+                  "sourceAlbumTitle": null,
+                  "sourceMaterialTitle": null,
+                  "iswc": "T1234567890",
+                  "url": null,
+                  "notes": null,
+                  "isPaid": null
+                }
+              ],
+              "releaseIds": [
+                3121013
+              ],
+              "releases": [
+                {
+                  "releaseId": 3121013,
+                  "name": "A Cláusula do Contrato",
+                  "version": null,
+                  "releaseDate": "2022-11-24T00:00:00",
+                  "releaseTypeId": 1,
+                  "upc": null,
+                  "isLockedForDistribution": false,
+                  "isDolbyAtmosReadOnly": false,
+                  "isIngested": false,
+                  "enterpriseName": "Test for MUV",
+                  "enterpriseId": 691097,
+                  "assetId": 14062030,
+                  "image": {
+                    "fileId": "d2e51aa6-531f-453d-bb73-6da7b81929e4",
+                    "isTemp": false,
+                    "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                    "externalUrl": null,
+                    "lastUpdateDate": "2025-11-25T15:29:40.823"
+                  },
+                  "artist": {
+                    "artistId": 1787282,
+                    "name": "Flash Beats ManowTest",
+                    "firstName": null,
+                    "lastName": null,
+                    "middleName": null,
+                    "isni": null,
+                    "releasesCount": 1,
+                    "tracksCount": 1,
+                    "archivedAt": null,
+                    "image": {
+                      "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee",
+                      "isTemp": false,
+                      "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                      "externalUrl": null,
+                      "lastUpdateDate": "2025-11-25T15:28:49.18"
+                    }
+                  },
+                  "tracksCount": 1,
+                  "archivedAt": null,
+                  "isCompilation": false,
+                  "contributors": [
+                    {
+                      "contributorId": "c624529c-3f05-4520-b029-4573e5e41f58",
+                      "roleId": 19,
+                      "releaseId": 3121013,
+                      "trackId": null,
+                      "artist": {
+                        "artistId": 1787282,
+                        "name": "Flash Beats ManowTest",
+                        "firstName": null,
+                        "lastName": null,
+                        "middleName": null,
+                        "isni": null,
+                        "releasesCount": 1,
+                        "tracksCount": 1,
+                        "archivedAt": null,
+                        "image": {
+                          "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee",
+                          "isTemp": false,
+                          "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                          "externalUrl": null,
+                          "lastUpdateDate": "2025-11-25T15:28:49.18"
+                        }
+                      }
+                    },
+                    {
+                      "contributorId": "8850105a-04cb-4783-a456-802b3457e122",
+                      "roleId": 34,
+                      "releaseId": 3121013,
+                      "trackId": null,
+                      "artist": {
+                        "artistId": 1787282,
+                        "name": "Flash Beats ManowTest",
+                        "firstName": null,
+                        "lastName": null,
+                        "middleName": null,
+                        "isni": null,
+                        "releasesCount": 1,
+                        "tracksCount": 1,
+                        "archivedAt": null,
+                        "image": {
+                          "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee",
+                          "isTemp": false,
+                          "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                          "externalUrl": null,
+                          "lastUpdateDate": "2025-11-25T15:28:49.18"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "composerContentsDTO": [
+                {
+                  "contributorId": 7518437,
+                  "composerId": 1440495,
+                  "composerName": "Agnaldo Paulino de Jesus Júnior",
+                  "composerImageId": null,
+                  "share": 50.0,
+                  "publisherId": 90323,
+                  "publisherName": "WARNER CHAPPEL",
+                  "publisherAdminId": null,
+                  "publisherAdminName": null,
+                  "proId": null,
+                  "rightsId": 2,
+                  "proRegistrationId": null,
+                  "roleId": 39,
+                  "composersLocals": [
+                    {
+                      "composerId": 1440495,
+                      "name": "Agnaldo Paulino de Jesus Júnior",
+                      "phoneticName": null,
+                      "languageId": 31
+                    }
+                  ]
+                },
+                {
+                  "contributorId": 7518436,
+                  "composerId": 1440496,
+                  "composerName": "Jackson Bertholdo Dos Santos",
+                  "composerImageId": null,
+                  "share": 50.0,
+                  "publisherId": 90322,
+                  "publisherName": "SONY ATV",
+                  "publisherAdminId": null,
+                  "publisherAdminName": null,
+                  "proId": null,
+                  "rightsId": 2,
+                  "proRegistrationId": null,
+                  "roleId": 39,
+                  "composersLocals": [
+                    {
+                      "composerId": 1440496,
+                      "name": "Jackson Bertholdo Dos Santos",
+                      "phoneticName": null,
+                      "languageId": 31
+                    }
+                  ]
+                }
+              ],
+              "isFullyLocked": false,
+              "copyTrackId": null,
+              "isIngested": false,
+              "isLicensePaid": null,
+              "distributorStoreGenreIds": [],
+              "assetId": 14062031,
+              "archivedAt": null,
+              "monetizations": [],
+              "acrCloud": null,
+              "royaltyToken": null,
+              "trackProperties": [
+                1
+              ],
+              "releasesCount": 1,
+              "spotifyId": null,
+              "appleId": null,
+              "rdioId": null,
+              "releaseTracks": [
+                {
+                  "releaseId": 3121013,
+                  "spotifyId": null,
+                  "appleId": null,
+                  "rdioId": null,
+                  "deezerId": null
+                }
+              ]
+            }
+          ],
+          "enterpriseImageId": "00000000-0000-0000-0000-000000000000",
+          "featureFmSmartLink": null,
+          "distributorStoreGenreIds": [],
+          "upc": null,
+          "isrc": null,
+          "trackISRC": "QZW9M2236571",
+          "trackRecordingVersions": [
+            {
+              "isrc": "QZW9M2236571",
+              "recordingVersionType": 1,
+              "audioFiles": [
+                {
+                  "audioId": "bd2a5de8-8a8e-4015-b2bb-c5414bbd9a7a",
+                  "audioFilename": "Joy-Mejia-Te-Fall.wav",
+                  "fileFormat": 1
+                }
+              ]
+            }
+          ],
+          "artistId": 1787282,
+          "artistName": "Flash Beats ManowTest",
+          "artistAppleId": "1601139620",
+          "artistSpotifyId": "0ZIlwtVZkqtMZUpbHrz8TL",
+          "artistExternalIds": [
+            {
+              "profileId": "1601139620",
+              "distributorStoreId": 1
+            },
+            {
+              "profileId": "0ZIlwtVZkqtMZUpbHrz8TL",
+              "distributorStoreId": 9
+            },
+            {
+              "profileId": "697315585919468",
+              "distributorStoreId": 309
+            },
+            {
+              "profileId": "697315585919468",
+              "distributorStoreId": 310
+            }
+          ],
+          "catalog": null,
+          "version": null,
+          "artistImageId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee",
+          "labelId": 1071256,
+          "labelName": "PEJOTA10*FULLTEST",
+          "releaseDate": "2022-11-24T00:00:00",
+          "creationDate": "2025-11-25T15:29:40.62",
+          "primaryMusicStyleId": 41,
+          "secondaryMusicStyleId": 555,
+          "notesCount": 0,
+          "payeeNotesCount": 0,
+          "approvedDate": null,
+          "kountStatusId": null,
+          "kountStatusName": null,
+          "isFullyLocked": false,
+          "releaseId": 3121013,
+          "name": "A Cláusula do Contrato",
+          "releaseTypeId": 1,
+          "isLockedForDistribution": false,
+          "isDolbyAtmosReadOnly": false,
+          "isIngested": false,
+          "enterpriseName": "Test for MUV",
+          "assetId": 14062030,
+          "image": {
+            "fileId": "d2e51aa6-531f-453d-bb73-6da7b81929e4",
+            "isTemp": false,
+            "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+            "externalUrl": null,
+            "lastUpdateDate": "2025-11-25T15:29:40.823"
+          },
+          "artist": null,
+          "tracksCount": 1,
+          "archivedAt": null,
+          "isCompilation": false
+        }
+      }
+    ],
+    "tracks": [
+      {
+        "request": {
+          "name": "Receba",
+          "version": "Extended",
+          "languageId": 31,
+          "explicit": false,
+          "trackType": 1,
+          "trackNumber": 1,
+          "previewStartSeconds": 140,
+          "trackRecordingVersions": [
+            {
+              "isrc": "QZW9M2221000",
+              "recordingVersionType": 1,
+              "audioFiles": [
+                {
+                  "audioId": "95173ab7-22e5-4d87-afb9-bbc04b116b5c",
+                  "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
+                  "fileFormat": 2
+                }
+              ]
+            }
+          ],
+          "artistExternalIds": [
+            {
+              "distributorStoreId": 1,
+              "profileId": "1532352644"
+            },
+            {
+              "distributorStoreId": 9,
+              "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+            },
+            {
+              "distributorStoreId": 309,
+              "profileId": "697315585919469"
+            }
+          ],
+          "trackProperties": [
+            1
+          ],
+          "compositions": [
+            {
+              "iswc": "T1234567890"
+            }
+          ],
+          "composerContentsDTO": [
+            {
+              "share": "60",
+              "composerName": "Agnaldo Paulino de Jesus Júnior",
+              "roleId": 39,
+              "rightsId": 1,
+              "isni": "0000000121032684",
+              "ipiCae": "00006718449",
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Agnaldo Paulino de Jesus Júnior",
+                  "version": "Extended"
+                }
+              ],
+              "composerId": 1440495
+            },
+            {
+              "share": "40",
+              "composerName": "Jackson Bertholdo Dos Santos",
+              "roleId": 39,
+              "rightsId": 1,
+              "isni": "0000000121032685",
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Jackson Bertholdo Dos Santos",
+                  "version": "Extended"
+                }
+              ],
+              "composerId": 1440496
+            }
+          ],
+          "trackLocals": [
+            {
+              "name": "Receba",
+              "languageId": 31,
+              "version": "Extended"
+            }
+          ],
+          "contributors": [
+            {
+              "roleId": 34,
+              "artist": {
+                "name": "JKZTest",
+                "artistExternalIds": [
+                  {
+                    "distributorStoreId": 1,
+                    "profileId": "1532352644"
+                  },
+                  {
+                    "distributorStoreId": 9,
+                    "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+                  },
+                  {
+                    "distributorStoreId": 309,
+                    "profileId": "697315585919469"
+                  }
+                ],
+                "isni": "0000000121032683",
+                "image": {
+                  "filename": "Receba-789294845633-UPC.jpg",
+                  "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+                },
+                "artistId": 1787281
+              }
+            },
+            {
+              "roleId": 19,
+              "artist": {
+                "name": "JKZTest",
+                "artistExternalIds": [
+                  {
+                    "distributorStoreId": 1,
+                    "profileId": "1532352644"
+                  },
+                  {
+                    "distributorStoreId": 9,
+                    "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+                  },
+                  {
+                    "distributorStoreId": 309,
+                    "profileId": "697315585919469"
+                  }
+                ],
+                "isni": "0000000121032683",
+                "image": {
+                  "filename": "Receba-789294845633-UPC.jpg",
+                  "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+                },
+                "artistId": 1787281
+              }
+            },
+            {
+              "roleId": 39,
+              "artist": {
+                "name": "Agnaldo Paulino de Jesus Júnior"
+              }
+            },
+            {
+              "roleId": 39,
+              "artist": {
+                "name": "Jackson Bertholdo Dos Santos"
+              }
+            }
+          ],
+          "artistId": 1787281
+        },
+        "response": {
+          "enterpriseName": "Test for MUV",
+          "enterpriseId": 691097,
+          "trackId": 7269966,
+          "name": "Receba",
+          "artistId": 1787281,
+          "artistName": "JKZTest",
+          "artistAppleId": "1532352644",
+          "artistSpotifyId": "1Gn8eEXtOWHA7XU8wEWXOb",
+          "artistExternalIds": [
+            {
+              "profileId": "1532352644",
+              "distributorStoreId": 1
+            },
+            {
+              "profileId": "1Gn8eEXtOWHA7XU8wEWXOb",
+              "distributorStoreId": 9
+            },
+            {
+              "profileId": "697315585919469",
+              "distributorStoreId": 309
+            },
+            {
+              "profileId": "697315585919469",
+              "distributorStoreId": 310
+            }
+          ],
+          "labelId": 1067907,
+          "labelName": "Test for MUV",
+          "discNumber": null,
+          "trackLength": 256,
+          "channels": 2,
+          "sampleRate": 44100,
+          "bitDepth": 16,
+          "bitrate": 1413959,
+          "trackVendorId": null,
+          "isrc": "QZW9M2221000",
+          "version": "Extended",
+          "copyrightC": null,
+          "copyrightP": null,
+          "description": null,
+          "languageId": 31,
+          "explicit": false,
+          "clearedForSale": true,
+          "lyrics": null,
+          "playingCount": 0,
+          "priceTierId": null,
+          "previewStartSeconds": 140,
+          "totalSales": 0.0,
+          "image": null,
+          "wav": {
+            "fileId": "95173ab7-22e5-4d87-afb9-bbc04b116b5c",
+            "isTemp": false,
+            "filename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
+            "externalUrl": null,
+            "lastUpdateDate": "0001-01-01T00:00:00"
+          },
+          "flac": null,
+          "trackRecordingVersions": [
+            {
+              "isrc": "QZW9M2221000",
+              "recordingVersionType": 1,
+              "audioFiles": [
+                {
+                  "audioId": "95173ab7-22e5-4d87-afb9-bbc04b116b5c",
+                  "fileFormat": 1,
+                  "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
+                  "audioChannels": 2,
+                  "audioBitDepth": 16,
+                  "audioSampleRate": 44100,
+                  "audioBitrate": 1413959,
+                  "audioSeconds": 256,
+                  "audioSize": 45072298
+                }
+              ]
+            }
+          ],
+          "fileExtension": ".wav",
+          "isLockedForDistribution": false,
+          "isDolbyAtmosReadOnly": false,
+          "primaryMusicStyleId": null,
+          "secondaryMusicStyleId": null,
+          "previouslyReleased": false,
+          "trackType": 1,
+          "licenseRequestStatus": null,
+          "isAudioValid": null,
+          "tracksLocals": [],
+          "artistLocals": [],
+          "contributors": [
+            {
+              "contributorId": "d13b4c98-d639-40c0-8fc0-8584c9f6a2f1",
+              "roleId": 34,
+              "isPrimary": false,
+              "trackId": 7269966,
+              "releaseId": null,
+              "contributorRoleGroupId": 3,
+              "artist": {
+                "labelId": null,
+                "labelName": "",
+                "contactId": null,
+                "contact": null,
+                "biography": null,
+                "yearsActive": [],
+                "influencers": [],
+                "contemporaries": [],
+                "tags": [],
+                "isSigned": false,
+                "musicStyles": [],
+                "artistExternalIds": [
+                  {
+                    "profileId": "1532352644",
+                    "distributorStoreId": 1
+                  },
+                  {
+                    "profileId": "1Gn8eEXtOWHA7XU8wEWXOb",
+                    "distributorStoreId": 9
+                  },
+                  {
+                    "profileId": "697315585919469",
+                    "distributorStoreId": 309
+                  },
+                  {
+                    "profileId": "697315585919469",
+                    "distributorStoreId": 310
+                  }
+                ],
+                "socialUrls": [],
+                "artistLocals": [],
+                "artistsWebsites": [],
+                "webAlias": null,
+                "enterpriseId": 691097,
+                "activeFromDate": null,
+                "activeToDate": null,
+                "artistId": 1787281,
+                "name": "JKZTest",
+                "firstName": null,
+                "lastName": null,
+                "middleName": null,
+                "isni": "0000000121032683",
+                "releasesCount": 1,
+                "tracksCount": 2,
+                "archivedAt": null,
+                "image": {
+                  "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3",
+                  "isTemp": false,
+                  "filename": "Receba-789294845633-UPC.jpg",
+                  "externalUrl": null,
+                  "lastUpdateDate": "2025-11-25T15:28:48.107"
+                }
+              }
+            },
+            {
+              "contributorId": "6cca3f75-8b52-4cbc-b4c0-49104c68da09",
+              "roleId": 19,
+              "isPrimary": false,
+              "trackId": 7269966,
+              "releaseId": null,
+              "contributorRoleGroupId": 3,
+              "artist": {
+                "labelId": null,
+                "labelName": "",
+                "contactId": null,
+                "contact": null,
+                "biography": null,
+                "yearsActive": [],
+                "influencers": [],
+                "contemporaries": [],
+                "tags": [],
+                "isSigned": false,
+                "musicStyles": [],
+                "artistExternalIds": [
+                  {
+                    "profileId": "1532352644",
+                    "distributorStoreId": 1
+                  },
+                  {
+                    "profileId": "1Gn8eEXtOWHA7XU8wEWXOb",
+                    "distributorStoreId": 9
+                  },
+                  {
+                    "profileId": "697315585919469",
+                    "distributorStoreId": 309
+                  },
+                  {
+                    "profileId": "697315585919469",
+                    "distributorStoreId": 310
+                  }
+                ],
+                "socialUrls": [],
+                "artistLocals": [],
+                "artistsWebsites": [],
+                "webAlias": null,
+                "enterpriseId": 691097,
+                "activeFromDate": null,
+                "activeToDate": null,
+                "artistId": 1787281,
+                "name": "JKZTest",
+                "firstName": null,
+                "lastName": null,
+                "middleName": null,
+                "isni": "0000000121032683",
+                "releasesCount": 1,
+                "tracksCount": 2,
+                "archivedAt": null,
+                "image": {
+                  "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3",
+                  "isTemp": false,
+                  "filename": "Receba-789294845633-UPC.jpg",
+                  "externalUrl": null,
+                  "lastUpdateDate": "2025-11-25T15:28:48.107"
+                }
+              }
+            },
+            {
+              "contributorId": "c72f4ee4-e1b5-44f9-820b-1aabd126fe7f",
+              "roleId": 39,
+              "isPrimary": false,
+              "trackId": 7269966,
+              "releaseId": null,
+              "contributorRoleGroupId": 4,
+              "artist": {
+                "labelId": null,
+                "labelName": "",
+                "contactId": null,
+                "contact": null,
+                "biography": null,
+                "yearsActive": [],
+                "influencers": [],
+                "contemporaries": [],
+                "tags": [],
+                "isSigned": false,
+                "musicStyles": [],
+                "artistExternalIds": [],
+                "socialUrls": [],
+                "artistLocals": [],
+                "artistsWebsites": [],
+                "webAlias": null,
+                "enterpriseId": 691097,
+                "activeFromDate": null,
+                "activeToDate": null,
+                "artistId": 1773493,
+                "name": "Agnaldo Paulino de Jesus Júnior",
+                "firstName": null,
+                "lastName": null,
+                "middleName": null,
+                "isni": null,
+                "releasesCount": 0,
+                "tracksCount": 0,
+                "archivedAt": null,
+                "image": null
+              }
+            },
+            {
+              "contributorId": "5b5753a8-2c84-44c6-b0e0-255202d3e527",
+              "roleId": 39,
+              "isPrimary": false,
+              "trackId": 7269966,
+              "releaseId": null,
+              "contributorRoleGroupId": 4,
+              "artist": {
+                "labelId": null,
+                "labelName": "",
+                "contactId": null,
+                "contact": null,
+                "biography": null,
+                "yearsActive": [],
+                "influencers": [],
+                "contemporaries": [],
+                "tags": [],
+                "isSigned": false,
+                "musicStyles": [],
+                "artistExternalIds": [],
+                "socialUrls": [],
+                "artistLocals": [],
+                "artistsWebsites": [],
+                "webAlias": null,
+                "enterpriseId": 691097,
+                "activeFromDate": null,
+                "activeToDate": null,
+                "artistId": 1773494,
+                "name": "Jackson Bertholdo Dos Santos",
+                "firstName": null,
+                "lastName": null,
+                "middleName": null,
+                "isni": null,
+                "releasesCount": 0,
+                "tracksCount": 0,
+                "archivedAt": null,
+                "image": null
+              }
+            }
+          ],
+          "catalog": null,
+          "compositions": [
+            {
+              "compositionId": 287095,
+              "trackId": 7269966,
+              "originalTitle": "",
+              "originalComposers": null,
+              "originalRecordingArtist": null,
+              "sourceAlbumTitle": null,
+              "sourceMaterialTitle": null,
+              "iswc": "T1234567890",
+              "url": null,
+              "notes": null,
+              "isPaid": null
+            }
+          ],
+          "releaseIds": [],
+          "releases": [],
+          "composerContentsDTO": [
+            {
+              "contributorId": 7518441,
+              "composerId": 1440495,
+              "composerName": "Agnaldo Paulino de Jesus Júnior",
+              "composerImageId": null,
+              "share": 60.0,
+              "publisherId": null,
+              "publisherName": "",
+              "publisherAdminId": null,
+              "publisherAdminName": null,
+              "proId": null,
+              "rightsId": 1,
+              "proRegistrationId": null,
+              "roleId": 39,
+              "composersLocals": [
+                {
+                  "composerId": 1440495,
+                  "name": "Agnaldo Paulino de Jesus Júnior",
+                  "phoneticName": null,
+                  "languageId": 31
+                }
+              ]
+            },
+            {
+              "contributorId": 7518442,
+              "composerId": 1440496,
+              "composerName": "Jackson Bertholdo Dos Santos",
+              "composerImageId": null,
+              "share": 40.0,
+              "publisherId": null,
+              "publisherName": "",
+              "publisherAdminId": null,
+              "publisherAdminName": null,
+              "proId": null,
+              "rightsId": 1,
+              "proRegistrationId": null,
+              "roleId": 39,
+              "composersLocals": [
+                {
+                  "composerId": 1440496,
+                  "name": "Jackson Bertholdo Dos Santos",
+                  "phoneticName": null,
+                  "languageId": 31
+                }
+              ]
+            }
+          ],
+          "isFullyLocked": false,
+          "copyTrackId": null,
+          "isIngested": false,
+          "isLicensePaid": null,
+          "distributorStoreGenreIds": [],
+          "assetId": 14062039,
+          "archivedAt": null,
+          "monetizations": [],
+          "acrCloud": null,
+          "royaltyToken": null,
+          "trackProperties": [
+            1
+          ],
+          "releasesCount": 0,
+          "spotifyId": null,
+          "appleId": null,
+          "rdioId": null,
+          "releaseTracks": []
+        }
+      },
+      {
+        "request": {
+          "name": "A Cláusula do Contrato",
+          "version": null,
+          "languageId": 31,
+          "explicit": false,
+          "trackType": 1,
+          "trackNumber": 1,
+          "previewStartSeconds": 200,
+          "trackRecordingVersions": [
+            {
+              "isrc": "QZW9M2236571",
+              "recordingVersionType": 1,
+              "audioFiles": [
+                {
+                  "audioId": "bd2a5de8-8a8e-4015-b2bb-c5414bbd9a7a",
+                  "audioFilename": "Joy-Mejia-Te-Fall.wav",
+                  "fileFormat": 2
+                }
+              ]
+            }
+          ],
+          "artistExternalIds": [
+            {
+              "distributorStoreId": 1,
+              "profileId": "1601139620"
+            },
+            {
+              "distributorStoreId": 9,
+              "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+            },
+            {
+              "distributorStoreId": 309,
+              "profileId": "697315585919468"
+            }
+          ],
+          "trackProperties": [
+            1
+          ],
+          "compositions": [
+            {
+              "iswc": "T1234567890"
+            }
+          ],
+          "composerContentsDTO": [
+            {
+              "share": "50",
+              "composerName": "Jackson Bertholdo Dos Santos",
+              "roleId": 39,
+              "rightsId": 2,
+              "isni": "0000000121032685",
+              "publisherName": "SONY ATV",
+              "publisherId": 90322,
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Jackson Bertholdo Dos Santos"
+                }
+              ],
+              "composerId": 1440496
+            },
+            {
+              "share": "50",
+              "composerName": "Agnaldo Paulino de Jesus Júnior",
+              "roleId": 39,
+              "rightsId": 2,
+              "isni": "0000000121032684",
+              "ipiCae": "00006718449",
+              "publisherName": "WARNER CHAPPEL",
+              "publisherId": 90323,
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Agnaldo Paulino de Jesus Júnior"
+                }
+              ],
+              "composerId": 1440495
+            }
+          ],
+          "trackLocals": [
+            {
+              "name": "A Cláusula do Contrato",
+              "languageId": 31
+            }
+          ],
+          "contributors": [
+            {
+              "roleId": 34,
+              "artist": {
+                "name": "Flash Beats ManowTest",
+                "artistExternalIds": [
+                  {
+                    "distributorStoreId": 1,
+                    "profileId": "1601139620"
+                  },
+                  {
+                    "distributorStoreId": 9,
+                    "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+                  },
+                  {
+                    "distributorStoreId": 309,
+                    "profileId": "697315585919468"
+                  }
+                ],
+                "image": {
+                  "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                  "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+                },
+                "artistId": 1787282
+              }
+            },
+            {
+              "roleId": 19,
+              "artist": {
+                "name": "Flash Beats ManowTest",
+                "artistExternalIds": [
+                  {
+                    "distributorStoreId": 1,
+                    "profileId": "1601139620"
+                  },
+                  {
+                    "distributorStoreId": 9,
+                    "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+                  },
+                  {
+                    "distributorStoreId": 309,
+                    "profileId": "697315585919468"
+                  }
+                ],
+                "image": {
+                  "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                  "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+                },
+                "artistId": 1787282
+              }
+            },
+            {
+              "roleId": 39,
+              "artist": {
+                "name": "Jackson Bertholdo Dos Santos"
+              }
+            },
+            {
+              "roleId": 39,
+              "artist": {
+                "name": "Agnaldo Paulino de Jesus Júnior"
+              }
+            }
+          ],
+          "artistId": 1787282
+        },
+        "response": {
+          "enterpriseName": "Test for MUV",
+          "enterpriseId": 691097,
+          "trackId": 7269967,
+          "name": "A Cláusula do Contrato",
+          "artistId": 1787282,
+          "artistName": "Flash Beats ManowTest",
+          "artistAppleId": "1601139620",
+          "artistSpotifyId": "0ZIlwtVZkqtMZUpbHrz8TL",
+          "artistExternalIds": [
+            {
+              "profileId": "1601139620",
+              "distributorStoreId": 1
+            },
+            {
+              "profileId": "0ZIlwtVZkqtMZUpbHrz8TL",
+              "distributorStoreId": 9
+            },
+            {
+              "profileId": "697315585919468",
+              "distributorStoreId": 309
+            },
+            {
+              "profileId": "697315585919468",
+              "distributorStoreId": 310
+            }
+          ],
+          "labelId": 1067907,
+          "labelName": "Test for MUV",
+          "discNumber": null,
+          "trackLength": 229,
+          "channels": 2,
+          "sampleRate": 44100,
+          "bitDepth": 16,
+          "bitrate": 1413959,
+          "trackVendorId": null,
+          "isrc": "QZW9M2236571",
+          "version": null,
+          "copyrightC": null,
+          "copyrightP": null,
+          "description": null,
+          "languageId": 31,
+          "explicit": false,
+          "clearedForSale": true,
+          "lyrics": null,
+          "playingCount": 0,
+          "priceTierId": null,
+          "previewStartSeconds": 200,
+          "totalSales": 0.0,
+          "image": null,
+          "wav": {
+            "fileId": "bd2a5de8-8a8e-4015-b2bb-c5414bbd9a7a",
+            "isTemp": false,
+            "filename": "Joy-Mejia-Te-Fall.wav",
+            "externalUrl": null,
+            "lastUpdateDate": "0001-01-01T00:00:00"
+          },
+          "flac": null,
+          "trackRecordingVersions": [
+            {
+              "isrc": "QZW9M2236571",
+              "recordingVersionType": 1,
+              "audioFiles": [
+                {
+                  "audioId": "bd2a5de8-8a8e-4015-b2bb-c5414bbd9a7a",
+                  "fileFormat": 1,
+                  "audioFilename": "Joy-Mejia-Te-Fall.wav",
+                  "audioChannels": 2,
+                  "audioBitDepth": 16,
+                  "audioSampleRate": 44100,
+                  "audioBitrate": 1413959,
+                  "audioSeconds": 229,
+                  "audioSize": 40329236
+                }
+              ]
+            }
+          ],
+          "fileExtension": ".wav",
+          "isLockedForDistribution": false,
+          "isDolbyAtmosReadOnly": false,
+          "primaryMusicStyleId": null,
+          "secondaryMusicStyleId": null,
+          "previouslyReleased": false,
+          "trackType": 1,
+          "licenseRequestStatus": null,
+          "isAudioValid": null,
+          "tracksLocals": [],
+          "artistLocals": [],
+          "contributors": [
+            {
+              "contributorId": "1de6bf75-8f79-44c2-846f-d80ee944c256",
+              "roleId": 34,
+              "isPrimary": false,
+              "trackId": 7269967,
+              "releaseId": null,
+              "contributorRoleGroupId": 3,
+              "artist": {
+                "labelId": null,
+                "labelName": "",
+                "contactId": null,
+                "contact": null,
+                "biography": null,
+                "yearsActive": [],
+                "influencers": [],
+                "contemporaries": [],
+                "tags": [],
+                "isSigned": false,
+                "musicStyles": [],
+                "artistExternalIds": [
+                  {
+                    "profileId": "1601139620",
+                    "distributorStoreId": 1
+                  },
+                  {
+                    "profileId": "0ZIlwtVZkqtMZUpbHrz8TL",
+                    "distributorStoreId": 9
+                  },
+                  {
+                    "profileId": "697315585919468",
+                    "distributorStoreId": 309
+                  },
+                  {
+                    "profileId": "697315585919468",
+                    "distributorStoreId": 310
+                  }
+                ],
+                "socialUrls": [],
+                "artistLocals": [],
+                "artistsWebsites": [],
+                "webAlias": null,
+                "enterpriseId": 691097,
+                "activeFromDate": null,
+                "activeToDate": null,
+                "artistId": 1787282,
+                "name": "Flash Beats ManowTest",
+                "firstName": null,
+                "lastName": null,
+                "middleName": null,
+                "isni": null,
+                "releasesCount": 1,
+                "tracksCount": 2,
+                "archivedAt": null,
+                "image": {
+                  "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee",
+                  "isTemp": false,
+                  "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                  "externalUrl": null,
+                  "lastUpdateDate": "2025-11-25T15:28:49.18"
+                }
+              }
+            },
+            {
+              "contributorId": "22912d9d-4949-48f6-b942-9680e74738b6",
+              "roleId": 19,
+              "isPrimary": false,
+              "trackId": 7269967,
+              "releaseId": null,
+              "contributorRoleGroupId": 3,
+              "artist": {
+                "labelId": null,
+                "labelName": "",
+                "contactId": null,
+                "contact": null,
+                "biography": null,
+                "yearsActive": [],
+                "influencers": [],
+                "contemporaries": [],
+                "tags": [],
+                "isSigned": false,
+                "musicStyles": [],
+                "artistExternalIds": [
+                  {
+                    "profileId": "1601139620",
+                    "distributorStoreId": 1
+                  },
+                  {
+                    "profileId": "0ZIlwtVZkqtMZUpbHrz8TL",
+                    "distributorStoreId": 9
+                  },
+                  {
+                    "profileId": "697315585919468",
+                    "distributorStoreId": 309
+                  },
+                  {
+                    "profileId": "697315585919468",
+                    "distributorStoreId": 310
+                  }
+                ],
+                "socialUrls": [],
+                "artistLocals": [],
+                "artistsWebsites": [],
+                "webAlias": null,
+                "enterpriseId": 691097,
+                "activeFromDate": null,
+                "activeToDate": null,
+                "artistId": 1787282,
+                "name": "Flash Beats ManowTest",
+                "firstName": null,
+                "lastName": null,
+                "middleName": null,
+                "isni": null,
+                "releasesCount": 1,
+                "tracksCount": 2,
+                "archivedAt": null,
+                "image": {
+                  "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee",
+                  "isTemp": false,
+                  "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                  "externalUrl": null,
+                  "lastUpdateDate": "2025-11-25T15:28:49.18"
+                }
+              }
+            },
+            {
+              "contributorId": "fcbe9b9a-014d-4864-ba7e-7fff0cb91073",
+              "roleId": 39,
+              "isPrimary": false,
+              "trackId": 7269967,
+              "releaseId": null,
+              "contributorRoleGroupId": 4,
+              "artist": {
+                "labelId": null,
+                "labelName": "",
+                "contactId": null,
+                "contact": null,
+                "biography": null,
+                "yearsActive": [],
+                "influencers": [],
+                "contemporaries": [],
+                "tags": [],
+                "isSigned": false,
+                "musicStyles": [],
+                "artistExternalIds": [],
+                "socialUrls": [],
+                "artistLocals": [],
+                "artistsWebsites": [],
+                "webAlias": null,
+                "enterpriseId": 691097,
+                "activeFromDate": null,
+                "activeToDate": null,
+                "artistId": 1773494,
+                "name": "Jackson Bertholdo Dos Santos",
+                "firstName": null,
+                "lastName": null,
+                "middleName": null,
+                "isni": null,
+                "releasesCount": 0,
+                "tracksCount": 0,
+                "archivedAt": null,
+                "image": null
+              }
+            },
+            {
+              "contributorId": "248a86b9-dd75-4268-bd0e-8ec683222e3e",
+              "roleId": 39,
+              "isPrimary": false,
+              "trackId": 7269967,
+              "releaseId": null,
+              "contributorRoleGroupId": 4,
+              "artist": {
+                "labelId": null,
+                "labelName": "",
+                "contactId": null,
+                "contact": null,
+                "biography": null,
+                "yearsActive": [],
+                "influencers": [],
+                "contemporaries": [],
+                "tags": [],
+                "isSigned": false,
+                "musicStyles": [],
+                "artistExternalIds": [],
+                "socialUrls": [],
+                "artistLocals": [],
+                "artistsWebsites": [],
+                "webAlias": null,
+                "enterpriseId": 691097,
+                "activeFromDate": null,
+                "activeToDate": null,
+                "artistId": 1773493,
+                "name": "Agnaldo Paulino de Jesus Júnior",
+                "firstName": null,
+                "lastName": null,
+                "middleName": null,
+                "isni": null,
+                "releasesCount": 0,
+                "tracksCount": 0,
+                "archivedAt": null,
+                "image": null
+              }
+            }
+          ],
+          "catalog": null,
+          "compositions": [
+            {
+              "compositionId": 287096,
+              "trackId": 7269967,
+              "originalTitle": "",
+              "originalComposers": null,
+              "originalRecordingArtist": null,
+              "sourceAlbumTitle": null,
+              "sourceMaterialTitle": null,
+              "iswc": "T1234567890",
+              "url": null,
+              "notes": null,
+              "isPaid": null
+            }
+          ],
+          "releaseIds": [],
+          "releases": [],
+          "composerContentsDTO": [
+            {
+              "contributorId": 7518444,
+              "composerId": 1440495,
+              "composerName": "Agnaldo Paulino de Jesus Júnior",
+              "composerImageId": null,
+              "share": 50.0,
+              "publisherId": 90323,
+              "publisherName": "WARNER CHAPPEL",
+              "publisherAdminId": null,
+              "publisherAdminName": null,
+              "proId": null,
+              "rightsId": 2,
+              "proRegistrationId": null,
+              "roleId": 39,
+              "composersLocals": [
+                {
+                  "composerId": 1440495,
+                  "name": "Agnaldo Paulino de Jesus Júnior",
+                  "phoneticName": null,
+                  "languageId": 31
+                }
+              ]
+            },
+            {
+              "contributorId": 7518443,
+              "composerId": 1440496,
+              "composerName": "Jackson Bertholdo Dos Santos",
+              "composerImageId": null,
+              "share": 50.0,
+              "publisherId": 90322,
+              "publisherName": "SONY ATV",
+              "publisherAdminId": null,
+              "publisherAdminName": null,
+              "proId": null,
+              "rightsId": 2,
+              "proRegistrationId": null,
+              "roleId": 39,
+              "composersLocals": [
+                {
+                  "composerId": 1440496,
+                  "name": "Jackson Bertholdo Dos Santos",
+                  "phoneticName": null,
+                  "languageId": 31
+                }
+              ]
+            }
+          ],
+          "isFullyLocked": false,
+          "copyTrackId": null,
+          "isIngested": false,
+          "isLicensePaid": null,
+          "distributorStoreGenreIds": [],
+          "assetId": 14062040,
+          "archivedAt": null,
+          "monetizations": [],
+          "acrCloud": null,
+          "royaltyToken": null,
+          "trackProperties": [
+            1
+          ],
+          "releasesCount": 0,
+          "spotifyId": null,
+          "appleId": null,
+          "rdioId": null,
+          "releaseTracks": []
+        }
+      }
+    ]
+  },
+  "verification_summary": {
+    "status": "completed",
+    "counts": {
+      "total": 6,
+      "matched": 0,
+      "healed": 0,
+      "failed": 6,
+      "skipped": 0
+    }
+  },
+  "exercise": {
+    "id": "20251125T152810-26d28bd47c67",
+    "startedAt": "2025-11-25T15:28:10Z",
+    "mode": "live",
+    "workbookName": "TEST MASTER  - MUV DISTRO [child accont_ TokyoRecords] Payee ID 710426 v1.16e_variant.xlsx",
+    "workbookPath": "/Users/nicolasguascasantamaria/Desktop/SQL_Queries_and_scripting_filters/catalog_builder/TEST MASTER  - MUV DISTRO [child accont_ TokyoRecords] Payee ID 710426 v1.16e_variant.xlsx"
+  },
+  "exercise_metadata": {
+    "baseUrl": "https://api.revelator.com",
+    "workbook": "TEST MASTER  - MUV DISTRO [child accont_ TokyoRecords] Payee ID 710426 v1.16e_variant.xlsx",
+    "live": true,
+    "enterpriseId": 691097,
+    "tenantId": 332920,
+    "enterpriseName": "Test for MUV"
+  }
+}

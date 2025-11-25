@@ -16,17 +16,22 @@ This document lists every API endpoint the current ingestion script (`ingest_par
    - Purpose: Fetch existing publishers.
    - Keys used: `publisher.name` (lowercased) matched against `7) Comp ContributorPublisher li` → `Publisher Name`.
 
-3. `/common/lookup/contributorRoles`
+3. `/content/composer/all` (fallback `/content/composers/all`)
+
+   - Purpose: Fetch existing composers to avoid duplicate creation.
+   - Keys used: `composer.name` (lowercased) matched against `7) Comp ContributorPublisher li` → `Composition Contributor`.
+
+4. `/common/lookup/contributorRoles`
 
    - Purpose: Resolve role names to `roleId` for contributors/composers (filters groupId == 4).
    - Source mapping: Track & release contributor rows from sheets `4) Release_Artist(s)` and `6) Track_Artist(s)` (`ARTIST ROLE`); composition roles from `8) Track_Composition(s)` (`ROLE`). Normalized text matched to returned role names.
 
-4. `/api/enterprises/{enterpriseId}/artists`
+5. `/api/enterprises/{enterpriseId}/artists`
 
    - Purpose: Attempt to find existing artist by name before creating.
    - Source mapping: Query param `name` from `1) Artists list` → `Artist Name`.
 
-5. `/common/lookup/languages`
+6. `/common/lookup/languages`
 
    - Purpose: Map language name to `languageId`.
    - Source mapping:
@@ -34,9 +39,18 @@ This document lists every API endpoint the current ingestion script (`ingest_par
      - Tracks: `5) Release_Track` → `LANGUAGE OF LYRICS` / `LANGUAGE`.
      - Composer locals: `8) Track_Composition(s)` → `TRACK VERSION` (for version) and release language for `languageId`.
 
-6. `/common/lookup/musicstyles`
+7. `/common/lookup/musicstyles`
+
    - Purpose: Map genre names to `musicStyleId`.
    - Source mapping: `3) Release_Label` → `GENRE 1` → `primaryMusicStyleId`; `GENRE 2` → `secondaryMusicStyleId`.
+
+8. `/content/release/all`
+
+   - Purpose: Live duplicate detection before releasing a payload. Queried with `searchText=<release name>`; UPC match triggers a confirmation prompt before overriding.
+
+9. `/content/track/all`
+
+   - Purpose: Live duplicate detection before track creation. Queried with `searchText=<track name>`; ISRC match triggers a confirmation prompt before overriding.
 
 ---
 
@@ -53,8 +67,8 @@ This document lists every API endpoint the current ingestion script (`ingest_par
 2. `/media/image/upload`
    - Purpose: Upload artwork assets (release covers via `cover=true`, artist profile images via `cover=false`), returning a `fileId`.
    - Source URLs:
-     - Release covers: `3) Release_Label` → `COVER IMAGE URL` downloaded to `source_artworks/` before upload.
-     - Artist images: `1) Artists list` → `Artist Image url` saved to `source_artworks/artists/` prior to upload.
+     - Release covers: `3) Release_Label` → `COVER IMAGE URL` downloaded to a temporary file just-in-time for upload (no local copy retained).
+     - Artist images: `1) Artists list` → `Artist Image url` streamed through a temporary file for upload (deleted immediately after).
    - Result used in: `image.fileId` / `image.filename` for the corresponding release or artist payload.
 
 ---
@@ -73,6 +87,7 @@ This document lists every API endpoint the current ingestion script (`ingest_par
      - `artistExternalIds`: Built from optional columns on same sheet: `Apple ArtistId`, `Spotify Artist URI` (normalized to ID), `Meta ArtistId`, `SoundCloud ProfileId` with fixed distributorStoreId mapping (Apple=1, Spotify=9, SoundCloud=68, Meta=309).
        - `image`: When `Artist Image url` is provided, the script downloads the asset, uploads it via `/media/image/upload?cover=false`, and injects `{ filename, fileId }` using the returned identifier.
        - `isni`: When the `ISNI` column contains a valid identifier it is normalized (punctuation stripped, check-digit validated) and attached; invalid values are logged to `identifier_warnings` without blocking the run.
+       - Existing artists are still POSTed for parity with dry-run output; the request body adds `artistId` when a prior lookup finds a match, and duplicate-status responses (400/409/412) are accepted so the cached ID can be reused.
 
 3. `/content/publisher/save`
 
@@ -105,8 +120,8 @@ This document lists every API endpoint the current ingestion script (`ingest_par
      - `secondaryMusicStyleId`: Resolved from `GENRE 2`.
      - `hasRecordLabel` / `labelName`: From `LABEL`.
      - `image.fileId` / `image.filename`: From cover image upload (if successful); otherwise `imageSourceUrl` (temporary before upload).
-     - `artistName`: From `4) Release_Artist(s)` row where `ARTIST ROLE` == `Main Primary Artist`.
-     - `artistExternalIds`: Copied from the artist object matched by `artistName` (Apple/Spotify/Meta/SoundCloud IDs).
+   - `artistId`: Resolved by matching the `Main Primary Artist` row from `4) Release_Artist(s)` against artists fetched/created earlier. When a name cannot be matched to an ID the issue is logged to `artist_binding_warnings` and the original name is retained only in the warning entry.
+   - `artistExternalIds`: Always sent. Before posting, the script merges the external IDs pulled from the sheet with whatever already exists on the artist (queried from `/artists/{id}` when available) so the upstream record never loses identifiers during subsequent updates.
      - `contributors[]`: Additional release-level contributors from `4) Release_Artist(s)` with `ARTIST ROLE` mapped to `roleId` (excluding primary artist).
      - `labelId`: Injected after label creation/reuse (from lookup result of `/content/label/save`).
      - `tracks[]`: Array of track payload objects (see `/content/track/save`).
@@ -123,8 +138,8 @@ This document lists every API endpoint the current ingestion script (`ingest_par
      - `trackRecordingVersions[0].isrc`: `5) Release_Track` → `ISRC/vISRC`.
      - `trackRecordingVersions[0].recordingVersionType`: Same as `trackType` mapping.
      - `trackRecordingVersions[0].audioFiles[0]`: From audio ingestion endpoint result (`audioId`, plus `audioFilename`, `fileFormat`). Only included if upload succeeded.
-     - `artistName`: Set using primary track artist where `ARTIST ROLE` == `Main Primary Artist` from `6) Track_Artist(s)`.
-     - `artistExternalIds`: Copied from matched artist (same logic as release). If primary artist found only at release level, these may propagate.
+   - `artistId`: Set using the primary track artist (`ARTIST ROLE` == `Main Primary Artist`) from `6) Track_Artist(s)` via the same lookup/creation map used for contributors. Unmatched names surface in `artist_binding_warnings`.
+   - `artistExternalIds`: Always present when known. The values are the merged union of sheet-provided IDs and those already stored on the artist in Revelator so repeated ingests do not wipe previously supplied identifiers.
      - `contributors[]`: Non-primary track artists from `6) Track_Artist(s)` with role mapping.
      - `composerContentsDTO[]`: Built from `8) Track_Composition(s)` rows grouped by ISRC:
        - `composerName`: `COMPOSITION CONTRIBUTOR`.

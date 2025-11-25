@@ -1,0 +1,36 @@
+{
+  "1) Artists list": {
+    "Artist Image url__col2": {
+      "column": "Artist Image url",
+      "values_sample": [
+        {
+          "row": 5,
+          "value": "https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1"
+        },
+        {
+          "row": 6,
+          "value": "https://www.dropbox.com/scl/fi/wky0ryb739s0xs3wo5qop/A-Cl-usula-do-Contrato-789294962088-UPC.jpg?rlkey=91bp85llgb8ho5lnfcs56105s&st=dn12pxrd&dl=1"
+        }
+      ],
+      "values_sample_capped": false,
+      "unique_values_sample": [
+        "https://www.dropbox.com/scl/fi/7safoetk4p2k4vwi29k4c/Receba-789294845633-UPC.jpg?rlkey=3vty6hb78ol10iv3y6h4md8h3&st=m30ox0p4&dl=1",
+        "https://www.dropbox.com/scl/fi/wky0ryb739s0xs3wo5qop/A-Cl-usula-do-Contrato-789294962088-UPC.jpg?rlkey=91bp85llgb8ho5lnfcs56105s&st=dn12pxrd&dl=1"
+      ]
+    },
+    "SoundCloud ProfileId__col6": {
+      "column": "SoundCloud ProfileId",
+      "values_sample": [],
+      "values_sample_capped": false,
+      "unique_values_sample": []
+    }
+  },
+  "2) Labels list": {},
+  "3) Release_Label": {},
+  "4) Release_Artist(s)": {},
+  "5) Release_Track": {},
+  "6) Track_Artist(s)": {},
+  "7) Comp ContributorPublisher li": {},
+  "8) Track_Composition(s)": {},
+  "9) Audio_Properties": {}
+}

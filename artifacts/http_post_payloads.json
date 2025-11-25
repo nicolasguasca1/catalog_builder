@@ -1,0 +1,1558 @@
+[
+  {
+    "timestamp": 1764084505.025,
+    "requestId": "req-1764084505024-00015",
+    "method": "POST",
+    "url": "https://api.revelator.com/media/audio/pullexternal/wav",
+    "json": {
+      "externalUrl": "https://www.dropbox.com/scl/fi/sjv55c5eqq0utzgy15ojq/Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav?rlkey=6j5ruxil4gc3vxonuf8ownxvi&st=8kysye3f&dl=1",
+      "fileName": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav"
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084508.222,
+    "requestId": "req-1764084508221-00017",
+    "method": "POST",
+    "url": "https://api.revelator.com/media/audio/pullexternal/wav",
+    "json": {
+      "externalUrl": "https://www.dropbox.com/scl/fi/ncgo2nf5srfafm0odhequ/Joy-Mejia-Te-Fall.wav?rlkey=6jl64vr3v0w4tn6km1sbhlxux&st=um08pokf&dl=1",
+      "fileName": "Joy-Mejia-Te-Fall.wav"
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084516.602,
+    "requestId": "req-1764084516602-00020",
+    "method": "POST",
+    "url": "https://api.revelator.com/media/image/upload",
+    "json": null,
+    "params": {
+      "cover": "false"
+    },
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "files": {
+      "file": "Receba-789294845633-UPC.jpg"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67",
+      "phase": "image_upload"
+    }
+  },
+  {
+    "timestamp": 1764084520.296,
+    "requestId": "req-1764084520296-00021",
+    "method": "POST",
+    "url": "https://api.revelator.com/media/image/upload",
+    "json": null,
+    "params": {
+      "cover": "false"
+    },
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "files": {
+      "file": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67",
+      "phase": "image_upload"
+    }
+  },
+  {
+    "timestamp": 1764084527.652,
+    "requestId": "req-1764084527652-00025",
+    "method": "POST",
+    "url": "https://api.revelator.com/artists",
+    "json": {
+      "name": "JKZTest",
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1532352644"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919469"
+        }
+      ],
+      "isni": "0000000121032683",
+      "image": {
+        "filename": "Receba-789294845633-UPC.jpg",
+        "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+      }
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084528.744,
+    "requestId": "req-1764084528743-00027",
+    "method": "POST",
+    "url": "https://api.revelator.com/artists",
+    "json": {
+      "name": "Flash Beats ManowTest",
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1601139620"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919468"
+        }
+      ],
+      "image": {
+        "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+        "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+      }
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084531.752,
+    "requestId": "req-1764084531751-00028",
+    "method": "POST",
+    "url": "https://api.revelator.com/media/image/upload",
+    "json": null,
+    "params": {
+      "cover": "true"
+    },
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "files": {
+      "file": "Receba-789294845633-UPC.jpg"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67",
+      "phase": "image_upload"
+    }
+  },
+  {
+    "timestamp": 1764084535.48,
+    "requestId": "req-1764084535479-00029",
+    "method": "POST",
+    "url": "https://api.revelator.com/media/image/upload",
+    "json": null,
+    "params": {
+      "cover": "true"
+    },
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "files": {
+      "file": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67",
+      "phase": "image_upload"
+    }
+  },
+  {
+    "timestamp": 1764084537.072,
+    "requestId": "req-1764084537071-00031",
+    "method": "POST",
+    "url": "https://api.revelator.com/content/release/save",
+    "json": {
+      "name": "Receba",
+      "version": "Extended",
+      "previouslyReleased": true,
+      "releaseDate": "2022-11-21 00:00:00",
+      "upc": "999294845633",
+      "copyrightP": "2022 TokyoP",
+      "copyrightC": "2022 TokyoC",
+      "releaseLocals": [
+        {
+          "languageId": 31,
+          "name": "Receba"
+        }
+      ],
+      "languageId": 31,
+      "primaryMusicStyleId": 41,
+      "secondaryMusicStyleId": 555,
+      "hasRecordLabel": true,
+      "labelName": "TokyoRecordsFULLTEST",
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1532352644"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919469"
+        }
+      ],
+      "contributors": [
+        {
+          "roleId": 34,
+          "artist": {
+            "name": "JKZTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1532352644"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919469"
+              }
+            ],
+            "isni": "0000000121032683",
+            "image": {
+              "filename": "Receba-789294845633-UPC.jpg",
+              "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+            },
+            "artistId": 1787281
+          }
+        },
+        {
+          "roleId": 19,
+          "artist": {
+            "name": "JKZTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1532352644"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919469"
+              }
+            ],
+            "isni": "0000000121032683",
+            "image": {
+              "filename": "Receba-789294845633-UPC.jpg",
+              "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+            },
+            "artistId": 1787281
+          }
+        }
+      ],
+      "image": {
+        "fileId": "56b6342d-0244-4264-a964-368fe17a38f9",
+        "filename": "Receba-789294845633-UPC.jpg"
+      },
+      "labelId": 1071255,
+      "artistId": 1787281,
+      "tracks": [
+        {
+          "name": "Receba",
+          "version": "Extended",
+          "languageId": 31,
+          "explicit": false,
+          "trackType": 1,
+          "trackNumber": 1,
+          "previewStartSeconds": 140,
+          "trackRecordingVersions": [
+            {
+              "isrc": "QZW9M2221000",
+              "recordingVersionType": 1,
+              "audioFiles": [
+                {
+                  "audioId": "95173ab7-22e5-4d87-afb9-bbc04b116b5c",
+                  "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
+                  "fileFormat": 2
+                }
+              ]
+            }
+          ],
+          "artistExternalIds": [
+            {
+              "distributorStoreId": 1,
+              "profileId": "1532352644"
+            },
+            {
+              "distributorStoreId": 9,
+              "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+            },
+            {
+              "distributorStoreId": 309,
+              "profileId": "697315585919469"
+            }
+          ],
+          "trackProperties": [
+            1
+          ],
+          "compositions": [
+            {
+              "iswc": "T1234567890"
+            }
+          ],
+          "composerContentsDTO": [
+            {
+              "share": "60",
+              "composerName": "Agnaldo Paulino de Jesus Júnior",
+              "roleId": 39,
+              "rightsId": 1,
+              "isni": "0000000121032684",
+              "ipiCae": "00006718449",
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Agnaldo Paulino de Jesus Júnior",
+                  "version": "Extended"
+                }
+              ],
+              "composerId": 1440495
+            },
+            {
+              "share": "40",
+              "composerName": "Jackson Bertholdo Dos Santos",
+              "roleId": 39,
+              "rightsId": 1,
+              "isni": "0000000121032685",
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Jackson Bertholdo Dos Santos",
+                  "version": "Extended"
+                }
+              ],
+              "composerId": 1440496
+            }
+          ],
+          "trackLocals": [
+            {
+              "name": "Receba",
+              "languageId": 31,
+              "version": "Extended"
+            }
+          ],
+          "contributors": [
+            {
+              "roleId": 34,
+              "artist": {
+                "name": "JKZTest",
+                "artistExternalIds": [
+                  {
+                    "distributorStoreId": 1,
+                    "profileId": "1532352644"
+                  },
+                  {
+                    "distributorStoreId": 9,
+                    "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+                  },
+                  {
+                    "distributorStoreId": 309,
+                    "profileId": "697315585919469"
+                  }
+                ],
+                "isni": "0000000121032683",
+                "image": {
+                  "filename": "Receba-789294845633-UPC.jpg",
+                  "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+                },
+                "artistId": 1787281
+              }
+            },
+            {
+              "roleId": 19,
+              "artist": {
+                "name": "JKZTest",
+                "artistExternalIds": [
+                  {
+                    "distributorStoreId": 1,
+                    "profileId": "1532352644"
+                  },
+                  {
+                    "distributorStoreId": 9,
+                    "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+                  },
+                  {
+                    "distributorStoreId": 309,
+                    "profileId": "697315585919469"
+                  }
+                ],
+                "isni": "0000000121032683",
+                "image": {
+                  "filename": "Receba-789294845633-UPC.jpg",
+                  "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+                },
+                "artistId": 1787281
+              }
+            },
+            {
+              "roleId": 39,
+              "artist": {
+                "name": "Agnaldo Paulino de Jesus Júnior"
+              }
+            },
+            {
+              "roleId": 39,
+              "artist": {
+                "name": "Jackson Bertholdo Dos Santos"
+              }
+            }
+          ],
+          "artistId": 1787281
+        }
+      ]
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084544.567,
+    "requestId": "req-1764084544566-00032",
+    "method": "POST",
+    "url": "https://api.revelator.com/content/release/save",
+    "json": {
+      "name": "Receba",
+      "version": "Extended",
+      "previouslyReleased": true,
+      "releaseDate": "2022-11-21 00:00:00",
+      "copyrightP": "2022 TokyoP",
+      "copyrightC": "2022 TokyoC",
+      "releaseLocals": [
+        {
+          "languageId": 31,
+          "name": "Receba"
+        }
+      ],
+      "languageId": 31,
+      "primaryMusicStyleId": 41,
+      "secondaryMusicStyleId": 555,
+      "hasRecordLabel": true,
+      "labelName": "TokyoRecordsFULLTEST",
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1532352644"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919469"
+        }
+      ],
+      "contributors": [
+        {
+          "roleId": 34,
+          "artist": {
+            "name": "JKZTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1532352644"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919469"
+              }
+            ],
+            "isni": "0000000121032683",
+            "image": {
+              "filename": "Receba-789294845633-UPC.jpg",
+              "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+            },
+            "artistId": 1787281
+          }
+        },
+        {
+          "roleId": 19,
+          "artist": {
+            "name": "JKZTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1532352644"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919469"
+              }
+            ],
+            "isni": "0000000121032683",
+            "image": {
+              "filename": "Receba-789294845633-UPC.jpg",
+              "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+            },
+            "artistId": 1787281
+          }
+        }
+      ],
+      "image": {
+        "fileId": "56b6342d-0244-4264-a964-368fe17a38f9",
+        "filename": "Receba-789294845633-UPC.jpg"
+      },
+      "labelId": 1071255,
+      "artistId": 1787281,
+      "tracks": [
+        {
+          "name": "Receba",
+          "version": "Extended",
+          "languageId": 31,
+          "explicit": false,
+          "trackType": 1,
+          "trackNumber": 1,
+          "previewStartSeconds": 140,
+          "trackRecordingVersions": [
+            {
+              "isrc": "QZW9M2221000",
+              "recordingVersionType": 1,
+              "audioFiles": [
+                {
+                  "audioId": "95173ab7-22e5-4d87-afb9-bbc04b116b5c",
+                  "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
+                  "fileFormat": 2
+                }
+              ]
+            }
+          ],
+          "artistExternalIds": [
+            {
+              "distributorStoreId": 1,
+              "profileId": "1532352644"
+            },
+            {
+              "distributorStoreId": 9,
+              "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+            },
+            {
+              "distributorStoreId": 309,
+              "profileId": "697315585919469"
+            }
+          ],
+          "trackProperties": [
+            1
+          ],
+          "compositions": [
+            {
+              "iswc": "T1234567890"
+            }
+          ],
+          "composerContentsDTO": [
+            {
+              "share": "60",
+              "composerName": "Agnaldo Paulino de Jesus Júnior",
+              "roleId": 39,
+              "rightsId": 1,
+              "isni": "0000000121032684",
+              "ipiCae": "00006718449",
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Agnaldo Paulino de Jesus Júnior",
+                  "version": "Extended"
+                }
+              ],
+              "composerId": 1440495
+            },
+            {
+              "share": "40",
+              "composerName": "Jackson Bertholdo Dos Santos",
+              "roleId": 39,
+              "rightsId": 1,
+              "isni": "0000000121032685",
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Jackson Bertholdo Dos Santos",
+                  "version": "Extended"
+                }
+              ],
+              "composerId": 1440496
+            }
+          ],
+          "trackLocals": [
+            {
+              "name": "Receba",
+              "languageId": 31,
+              "version": "Extended"
+            }
+          ],
+          "contributors": [
+            {
+              "roleId": 34,
+              "artist": {
+                "name": "JKZTest",
+                "artistExternalIds": [
+                  {
+                    "distributorStoreId": 1,
+                    "profileId": "1532352644"
+                  },
+                  {
+                    "distributorStoreId": 9,
+                    "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+                  },
+                  {
+                    "distributorStoreId": 309,
+                    "profileId": "697315585919469"
+                  }
+                ],
+                "isni": "0000000121032683",
+                "image": {
+                  "filename": "Receba-789294845633-UPC.jpg",
+                  "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+                },
+                "artistId": 1787281
+              }
+            },
+            {
+              "roleId": 19,
+              "artist": {
+                "name": "JKZTest",
+                "artistExternalIds": [
+                  {
+                    "distributorStoreId": 1,
+                    "profileId": "1532352644"
+                  },
+                  {
+                    "distributorStoreId": 9,
+                    "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+                  },
+                  {
+                    "distributorStoreId": 309,
+                    "profileId": "697315585919469"
+                  }
+                ],
+                "isni": "0000000121032683",
+                "image": {
+                  "filename": "Receba-789294845633-UPC.jpg",
+                  "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+                },
+                "artistId": 1787281
+              }
+            },
+            {
+              "roleId": 39,
+              "artist": {
+                "name": "Agnaldo Paulino de Jesus Júnior"
+              }
+            },
+            {
+              "roleId": 39,
+              "artist": {
+                "name": "Jackson Bertholdo Dos Santos"
+              }
+            }
+          ],
+          "artistId": 1787281
+        }
+      ]
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084563.904,
+    "requestId": "req-1764084563903-00034",
+    "method": "POST",
+    "url": "https://api.revelator.com/content/release/save",
+    "json": {
+      "name": "A Cláusula do Contrato",
+      "version": null,
+      "previouslyReleased": true,
+      "releaseDate": "2022-11-24 00:00:00",
+      "upc": "999294962088",
+      "copyrightP": "2022 PEJOTAP",
+      "copyrightC": "2022 PEJOTAC",
+      "releaseLocals": [
+        {
+          "languageId": 31,
+          "name": "A Cláusula do Contrato"
+        }
+      ],
+      "languageId": 31,
+      "primaryMusicStyleId": 41,
+      "secondaryMusicStyleId": 555,
+      "hasRecordLabel": true,
+      "labelName": "PEJOTA10*FULLTEST",
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1601139620"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919468"
+        }
+      ],
+      "contributors": [
+        {
+          "roleId": 34,
+          "artist": {
+            "name": "Flash Beats ManowTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1601139620"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919468"
+              }
+            ],
+            "image": {
+              "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+              "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+            },
+            "artistId": 1787282
+          }
+        },
+        {
+          "roleId": 19,
+          "artist": {
+            "name": "Flash Beats ManowTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1601139620"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919468"
+              }
+            ],
+            "image": {
+              "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+              "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+            },
+            "artistId": 1787282
+          }
+        }
+      ],
+      "image": {
+        "fileId": "d2e51aa6-531f-453d-bb73-6da7b81929e4",
+        "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg"
+      },
+      "labelId": 1071256,
+      "artistId": 1787282,
+      "tracks": [
+        {
+          "name": "A Cláusula do Contrato",
+          "version": null,
+          "languageId": 31,
+          "explicit": false,
+          "trackType": 1,
+          "trackNumber": 1,
+          "previewStartSeconds": 200,
+          "trackRecordingVersions": [
+            {
+              "isrc": "QZW9M2236571",
+              "recordingVersionType": 1,
+              "audioFiles": [
+                {
+                  "audioId": "bd2a5de8-8a8e-4015-b2bb-c5414bbd9a7a",
+                  "audioFilename": "Joy-Mejia-Te-Fall.wav",
+                  "fileFormat": 2
+                }
+              ]
+            }
+          ],
+          "artistExternalIds": [
+            {
+              "distributorStoreId": 1,
+              "profileId": "1601139620"
+            },
+            {
+              "distributorStoreId": 9,
+              "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+            },
+            {
+              "distributorStoreId": 309,
+              "profileId": "697315585919468"
+            }
+          ],
+          "trackProperties": [
+            1
+          ],
+          "compositions": [
+            {
+              "iswc": "T1234567890"
+            }
+          ],
+          "composerContentsDTO": [
+            {
+              "share": "50",
+              "composerName": "Jackson Bertholdo Dos Santos",
+              "roleId": 39,
+              "rightsId": 2,
+              "isni": "0000000121032685",
+              "publisherName": "SONY ATV",
+              "publisherId": 90322,
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Jackson Bertholdo Dos Santos"
+                }
+              ],
+              "composerId": 1440496
+            },
+            {
+              "share": "50",
+              "composerName": "Agnaldo Paulino de Jesus Júnior",
+              "roleId": 39,
+              "rightsId": 2,
+              "isni": "0000000121032684",
+              "ipiCae": "00006718449",
+              "publisherName": "WARNER CHAPPEL",
+              "publisherId": 90323,
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Agnaldo Paulino de Jesus Júnior"
+                }
+              ],
+              "composerId": 1440495
+            }
+          ],
+          "trackLocals": [
+            {
+              "name": "A Cláusula do Contrato",
+              "languageId": 31
+            }
+          ],
+          "contributors": [
+            {
+              "roleId": 34,
+              "artist": {
+                "name": "Flash Beats ManowTest",
+                "artistExternalIds": [
+                  {
+                    "distributorStoreId": 1,
+                    "profileId": "1601139620"
+                  },
+                  {
+                    "distributorStoreId": 9,
+                    "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+                  },
+                  {
+                    "distributorStoreId": 309,
+                    "profileId": "697315585919468"
+                  }
+                ],
+                "image": {
+                  "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                  "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+                },
+                "artistId": 1787282
+              }
+            },
+            {
+              "roleId": 19,
+              "artist": {
+                "name": "Flash Beats ManowTest",
+                "artistExternalIds": [
+                  {
+                    "distributorStoreId": 1,
+                    "profileId": "1601139620"
+                  },
+                  {
+                    "distributorStoreId": 9,
+                    "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+                  },
+                  {
+                    "distributorStoreId": 309,
+                    "profileId": "697315585919468"
+                  }
+                ],
+                "image": {
+                  "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                  "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+                },
+                "artistId": 1787282
+              }
+            },
+            {
+              "roleId": 39,
+              "artist": {
+                "name": "Jackson Bertholdo Dos Santos"
+              }
+            },
+            {
+              "roleId": 39,
+              "artist": {
+                "name": "Agnaldo Paulino de Jesus Júnior"
+              }
+            }
+          ],
+          "artistId": 1787282
+        }
+      ]
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084571.852,
+    "requestId": "req-1764084571852-00035",
+    "method": "POST",
+    "url": "https://api.revelator.com/content/release/save",
+    "json": {
+      "name": "A Cláusula do Contrato",
+      "version": null,
+      "previouslyReleased": true,
+      "releaseDate": "2022-11-24 00:00:00",
+      "copyrightP": "2022 PEJOTAP",
+      "copyrightC": "2022 PEJOTAC",
+      "releaseLocals": [
+        {
+          "languageId": 31,
+          "name": "A Cláusula do Contrato"
+        }
+      ],
+      "languageId": 31,
+      "primaryMusicStyleId": 41,
+      "secondaryMusicStyleId": 555,
+      "hasRecordLabel": true,
+      "labelName": "PEJOTA10*FULLTEST",
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1601139620"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919468"
+        }
+      ],
+      "contributors": [
+        {
+          "roleId": 34,
+          "artist": {
+            "name": "Flash Beats ManowTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1601139620"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919468"
+              }
+            ],
+            "image": {
+              "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+              "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+            },
+            "artistId": 1787282
+          }
+        },
+        {
+          "roleId": 19,
+          "artist": {
+            "name": "Flash Beats ManowTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1601139620"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919468"
+              }
+            ],
+            "image": {
+              "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+              "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+            },
+            "artistId": 1787282
+          }
+        }
+      ],
+      "image": {
+        "fileId": "d2e51aa6-531f-453d-bb73-6da7b81929e4",
+        "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg"
+      },
+      "labelId": 1071256,
+      "artistId": 1787282,
+      "tracks": [
+        {
+          "name": "A Cláusula do Contrato",
+          "version": null,
+          "languageId": 31,
+          "explicit": false,
+          "trackType": 1,
+          "trackNumber": 1,
+          "previewStartSeconds": 200,
+          "trackRecordingVersions": [
+            {
+              "isrc": "QZW9M2236571",
+              "recordingVersionType": 1,
+              "audioFiles": [
+                {
+                  "audioId": "bd2a5de8-8a8e-4015-b2bb-c5414bbd9a7a",
+                  "audioFilename": "Joy-Mejia-Te-Fall.wav",
+                  "fileFormat": 2
+                }
+              ]
+            }
+          ],
+          "artistExternalIds": [
+            {
+              "distributorStoreId": 1,
+              "profileId": "1601139620"
+            },
+            {
+              "distributorStoreId": 9,
+              "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+            },
+            {
+              "distributorStoreId": 309,
+              "profileId": "697315585919468"
+            }
+          ],
+          "trackProperties": [
+            1
+          ],
+          "compositions": [
+            {
+              "iswc": "T1234567890"
+            }
+          ],
+          "composerContentsDTO": [
+            {
+              "share": "50",
+              "composerName": "Jackson Bertholdo Dos Santos",
+              "roleId": 39,
+              "rightsId": 2,
+              "isni": "0000000121032685",
+              "publisherName": "SONY ATV",
+              "publisherId": 90322,
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Jackson Bertholdo Dos Santos"
+                }
+              ],
+              "composerId": 1440496
+            },
+            {
+              "share": "50",
+              "composerName": "Agnaldo Paulino de Jesus Júnior",
+              "roleId": 39,
+              "rightsId": 2,
+              "isni": "0000000121032684",
+              "ipiCae": "00006718449",
+              "publisherName": "WARNER CHAPPEL",
+              "publisherId": 90323,
+              "composersLocals": [
+                {
+                  "languageId": 31,
+                  "name": "Agnaldo Paulino de Jesus Júnior"
+                }
+              ],
+              "composerId": 1440495
+            }
+          ],
+          "trackLocals": [
+            {
+              "name": "A Cláusula do Contrato",
+              "languageId": 31
+            }
+          ],
+          "contributors": [
+            {
+              "roleId": 34,
+              "artist": {
+                "name": "Flash Beats ManowTest",
+                "artistExternalIds": [
+                  {
+                    "distributorStoreId": 1,
+                    "profileId": "1601139620"
+                  },
+                  {
+                    "distributorStoreId": 9,
+                    "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+                  },
+                  {
+                    "distributorStoreId": 309,
+                    "profileId": "697315585919468"
+                  }
+                ],
+                "image": {
+                  "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                  "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+                },
+                "artistId": 1787282
+              }
+            },
+            {
+              "roleId": 19,
+              "artist": {
+                "name": "Flash Beats ManowTest",
+                "artistExternalIds": [
+                  {
+                    "distributorStoreId": 1,
+                    "profileId": "1601139620"
+                  },
+                  {
+                    "distributorStoreId": 9,
+                    "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+                  },
+                  {
+                    "distributorStoreId": 309,
+                    "profileId": "697315585919468"
+                  }
+                ],
+                "image": {
+                  "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+                  "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+                },
+                "artistId": 1787282
+              }
+            },
+            {
+              "roleId": 39,
+              "artist": {
+                "name": "Jackson Bertholdo Dos Santos"
+              }
+            },
+            {
+              "roleId": 39,
+              "artist": {
+                "name": "Agnaldo Paulino de Jesus Júnior"
+              }
+            }
+          ],
+          "artistId": 1787282
+        }
+      ]
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084593.823,
+    "requestId": "req-1764084593822-00037",
+    "method": "POST",
+    "url": "https://api.revelator.com/content/track/save",
+    "json": {
+      "name": "Receba",
+      "version": "Extended",
+      "languageId": 31,
+      "explicit": false,
+      "trackType": 1,
+      "trackNumber": 1,
+      "previewStartSeconds": 140,
+      "trackRecordingVersions": [
+        {
+          "isrc": "QZW9M2221000",
+          "recordingVersionType": 1,
+          "audioFiles": [
+            {
+              "audioId": "95173ab7-22e5-4d87-afb9-bbc04b116b5c",
+              "audioFilename": "Joy-Mejia-Amarte-Es-Mi-Pasatiempo.wav",
+              "fileFormat": 2
+            }
+          ]
+        }
+      ],
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1532352644"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919469"
+        }
+      ],
+      "trackProperties": [
+        1
+      ],
+      "compositions": [
+        {
+          "iswc": "T1234567890"
+        }
+      ],
+      "composerContentsDTO": [
+        {
+          "share": "60",
+          "composerName": "Agnaldo Paulino de Jesus Júnior",
+          "roleId": 39,
+          "rightsId": 1,
+          "isni": "0000000121032684",
+          "ipiCae": "00006718449",
+          "composersLocals": [
+            {
+              "languageId": 31,
+              "name": "Agnaldo Paulino de Jesus Júnior",
+              "version": "Extended"
+            }
+          ],
+          "composerId": 1440495
+        },
+        {
+          "share": "40",
+          "composerName": "Jackson Bertholdo Dos Santos",
+          "roleId": 39,
+          "rightsId": 1,
+          "isni": "0000000121032685",
+          "composersLocals": [
+            {
+              "languageId": 31,
+              "name": "Jackson Bertholdo Dos Santos",
+              "version": "Extended"
+            }
+          ],
+          "composerId": 1440496
+        }
+      ],
+      "trackLocals": [
+        {
+          "name": "Receba",
+          "languageId": 31,
+          "version": "Extended"
+        }
+      ],
+      "contributors": [
+        {
+          "roleId": 34,
+          "artist": {
+            "name": "JKZTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1532352644"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919469"
+              }
+            ],
+            "isni": "0000000121032683",
+            "image": {
+              "filename": "Receba-789294845633-UPC.jpg",
+              "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+            },
+            "artistId": 1787281
+          }
+        },
+        {
+          "roleId": 19,
+          "artist": {
+            "name": "JKZTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1532352644"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "1Gn8eEXtOWHA7XU8wEWXOb"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919469"
+              }
+            ],
+            "isni": "0000000121032683",
+            "image": {
+              "filename": "Receba-789294845633-UPC.jpg",
+              "fileId": "94e24975-82a3-41a5-9e18-8cddb163cff3"
+            },
+            "artistId": 1787281
+          }
+        },
+        {
+          "roleId": 39,
+          "artist": {
+            "name": "Agnaldo Paulino de Jesus Júnior"
+          }
+        },
+        {
+          "roleId": 39,
+          "artist": {
+            "name": "Jackson Bertholdo Dos Santos"
+          }
+        }
+      ],
+      "artistId": 1787281
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  },
+  {
+    "timestamp": 1764084610.714,
+    "requestId": "req-1764084610713-00039",
+    "method": "POST",
+    "url": "https://api.revelator.com/content/track/save",
+    "json": {
+      "name": "A Cláusula do Contrato",
+      "version": null,
+      "languageId": 31,
+      "explicit": false,
+      "trackType": 1,
+      "trackNumber": 1,
+      "previewStartSeconds": 200,
+      "trackRecordingVersions": [
+        {
+          "isrc": "QZW9M2236571",
+          "recordingVersionType": 1,
+          "audioFiles": [
+            {
+              "audioId": "bd2a5de8-8a8e-4015-b2bb-c5414bbd9a7a",
+              "audioFilename": "Joy-Mejia-Te-Fall.wav",
+              "fileFormat": 2
+            }
+          ]
+        }
+      ],
+      "artistExternalIds": [
+        {
+          "distributorStoreId": 1,
+          "profileId": "1601139620"
+        },
+        {
+          "distributorStoreId": 9,
+          "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+        },
+        {
+          "distributorStoreId": 309,
+          "profileId": "697315585919468"
+        }
+      ],
+      "trackProperties": [
+        1
+      ],
+      "compositions": [
+        {
+          "iswc": "T1234567890"
+        }
+      ],
+      "composerContentsDTO": [
+        {
+          "share": "50",
+          "composerName": "Jackson Bertholdo Dos Santos",
+          "roleId": 39,
+          "rightsId": 2,
+          "isni": "0000000121032685",
+          "publisherName": "SONY ATV",
+          "publisherId": 90322,
+          "composersLocals": [
+            {
+              "languageId": 31,
+              "name": "Jackson Bertholdo Dos Santos"
+            }
+          ],
+          "composerId": 1440496
+        },
+        {
+          "share": "50",
+          "composerName": "Agnaldo Paulino de Jesus Júnior",
+          "roleId": 39,
+          "rightsId": 2,
+          "isni": "0000000121032684",
+          "ipiCae": "00006718449",
+          "publisherName": "WARNER CHAPPEL",
+          "publisherId": 90323,
+          "composersLocals": [
+            {
+              "languageId": 31,
+              "name": "Agnaldo Paulino de Jesus Júnior"
+            }
+          ],
+          "composerId": 1440495
+        }
+      ],
+      "trackLocals": [
+        {
+          "name": "A Cláusula do Contrato",
+          "languageId": 31
+        }
+      ],
+      "contributors": [
+        {
+          "roleId": 34,
+          "artist": {
+            "name": "Flash Beats ManowTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1601139620"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919468"
+              }
+            ],
+            "image": {
+              "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+              "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+            },
+            "artistId": 1787282
+          }
+        },
+        {
+          "roleId": 19,
+          "artist": {
+            "name": "Flash Beats ManowTest",
+            "artistExternalIds": [
+              {
+                "distributorStoreId": 1,
+                "profileId": "1601139620"
+              },
+              {
+                "distributorStoreId": 9,
+                "profileId": "0ZIlwtVZkqtMZUpbHrz8TL"
+              },
+              {
+                "distributorStoreId": 309,
+                "profileId": "697315585919468"
+              }
+            ],
+            "image": {
+              "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+              "fileId": "5f9a5a1e-002b-4c23-9600-a18fdb51aeee"
+            },
+            "artistId": 1787282
+          }
+        },
+        {
+          "roleId": 39,
+          "artist": {
+            "name": "Jackson Bertholdo Dos Santos"
+          }
+        },
+        {
+          "roleId": 39,
+          "artist": {
+            "name": "Agnaldo Paulino de Jesus Júnior"
+          }
+        }
+      ],
+      "artistId": 1787282
+    },
+    "params": null,
+    "headers": {
+      "X-EnterpriseId": "691097",
+      "X-TenantId": "332920"
+    },
+    "context": {
+      "exerciseId": "20251125T152810-26d28bd47c67"
+    }
+  }
+]

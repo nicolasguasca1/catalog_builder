@@ -15,7 +15,11 @@
         "profileId": "697315585919469"
       }
     ],
-    "isni": "0000000121032683"
+    "isni": "0000000121032683",
+    "image": {
+      "filename": "Receba-789294845633-UPC.jpg",
+      "fileId": null
+    }
   },
   {
     "name": "Flash Beats ManowTest",
@@ -32,6 +36,10 @@
         "distributorStoreId": 309,
         "profileId": "697315585919468"
       }
-    ]
+    ],
+    "image": {
+      "filename": "A-Cl-usula-do-Contrato-789294962088-UPC.jpg",
+      "fileId": null
+    }
   }
 ]
